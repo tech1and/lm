@@ -266,20 +266,31 @@ if [ ! -f "package.json" ]; then
     die "package.json не найден в frontend/"
 fi
 
-# Создаём next.config.js с standalone (ИСПРАВЛЕНО)
+# Создаём next.config.js с правильными rewrite (ИСПРАВЛЕНО)
 cat > next.config.js << 'NEXTCFG'
 /** @type {import('next').NextConfig} */
 const nextConfig = {
     reactStrictMode: false,
     eslint: { ignoreDuringBuilds: true },
     typescript: { ignoreBuildErrors: true },
-    output: 'standalone',
     images: {
         unoptimized: true,
         remotePatterns: [
             { protocol: 'http', hostname: '**' },
             { protocol: 'https', hostname: '**' },
         ],
+    },
+    async rewrites() {
+        return [
+            // Исключаем API routes Next.js
+            { source: '/api/sitemap.xml', destination: '/api/sitemap.xml' },
+            { source: '/api/robots.txt', destination: '/api/robots.txt' },
+            // Всё остальное → Django
+            {
+                source: '/api/:path*',
+                destination: `${process.env.API_URL || 'http://127.0.0.1:8000'}/api/:path*`,
+            },
+        ];
     },
     env: {
         API_URL: process.env.API_URL || 'http://localhost:8000',
@@ -330,10 +341,10 @@ stdout_logfile_backups=3
 environment=DJANGO_SETTINGS_MODULE="config.settings",PYTHONPATH="${PROJECT_DIR}/backend",HOME="/var/www",PATH="${PROJECT_DIR}/venv/bin:/usr/bin:/bin"
 SUPBACK
 
-# Конфиг для Next.js - ИСПРАВЛЕНО: env без переносов
+# Конфиг для Next.js - ИСПРАВЛЕНО: запуск через next start
 cat > /etc/supervisor/conf.d/lm-frontend.conf << SUPFRONT
 [program:lm-frontend]
-command=node ${PROJECT_DIR}/frontend/.next/standalone/server.js
+command=node ${PROJECT_DIR}/frontend/node_modules/.bin/next start -p 3000
 directory=${PROJECT_DIR}/frontend
 user=www-data
 autostart=true
@@ -350,14 +361,6 @@ SUPFRONT
 chown -R www-data:www-data "$PROJECT_DIR/backend/staticfiles" \
     "$PROJECT_DIR/backend/media" \
     "$PROJECT_DIR/frontend/.next" 2>/dev/null || true
-
-# Копируем статику Next.js для standalone
-if [ -d "$PROJECT_DIR/frontend/.next/standalone" ]; then
-    cp -r "$PROJECT_DIR/frontend/.next/static" \
-        "$PROJECT_DIR/frontend/.next/standalone/.next/static" 2>/dev/null || true
-    cp -r "$PROJECT_DIR/frontend/public" \
-        "$PROJECT_DIR/frontend/.next/standalone/public" 2>/dev/null || true
-fi
 
 systemctl enable supervisor
 systemctl restart supervisor
@@ -403,6 +406,23 @@ server {
     location /media/ {
         alias ${PROJECT_DIR}/backend/media/;
         expires 7d;
+    }
+
+    # Sitemap.xml — прокси на Next.js
+    location = /sitemap.xml {
+        proxy_pass         http://127.0.0.1:3000/api/sitemap.xml;
+        proxy_set_header   Host              \$host;
+        proxy_set_header   X-Real-IP         \$remote_addr;
+        proxy_set_header   X-Forwarded-For   \$proxy_add_x_forwarded_for;
+        proxy_set_header   X-Forwarded-Proto \$scheme;
+        expires            1h;
+    }
+
+    # robots.txt — прокси на Next.js
+    location = /robots.txt {
+        proxy_pass         http://127.0.0.1:3000/api/robots.txt;
+        proxy_set_header   Host              \$host;
+        proxy_set_header   X-Real-IP         \$remote_addr;
     }
 
     # Django Admin

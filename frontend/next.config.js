@@ -21,6 +21,16 @@ const nextConfig = {
   // 🔹 Проксирование API-запросов на Django-бэкенд
   async rewrites() {
     return [
+      // Исключаем API routes Next.js (sitemap.xml, robots.txt)
+      {
+        source: '/api/sitemap.xml',
+        destination: '/api/sitemap.xml', // остаётся на Next.js
+      },
+      {
+        source: '/api/robots.txt',
+        destination: '/api/robots.txt', // остаётся на Next.js
+      },
+      // Всё остальное → Django
       {
         source: '/api/:path*',
         destination: `${process.env.API_URL || 'http://127.0.0.1:8000'}/api/:path*`,
