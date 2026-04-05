@@ -6,10 +6,10 @@ from django.db.models import F, Count, Q
 from django.core.cache import cache
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.filters import OrderingFilter
-from .models import TaxiPark, Like, Comment
+from .models import Shop, Like, Comment
 from .serializers import (
-    TaxiParkListSerializer,
-    TaxiParkDetailSerializer,
+    ShopListSerializer,
+    ShopDetailSerializer,
     CommentSerializer,
 )
 import logging
@@ -30,9 +30,9 @@ def get_client_ip(request):
     return request.META.get('REMOTE_ADDR')
 
 
-class TaxiParkViewSet(viewsets.ReadOnlyModelViewSet):
-    """ViewSet для таксопарков"""
-    queryset = TaxiPark.objects.filter(is_active=True)
+class ShopViewSet(viewsets.ReadOnlyModelViewSet):
+    """ViewSet для магазинов"""
+    queryset = Shop.objects.filter(is_active=True)
     lookup_field = 'slug'  # 🔥 Используем slug вместо pk в URL
     filter_backends = [DjangoFilterBackend, OrderingFilter]
     filterset_fields = ['district']
@@ -41,8 +41,8 @@ class TaxiParkViewSet(viewsets.ReadOnlyModelViewSet):
 
     def get_serializer_class(self):
         if self.action == 'retrieve':
-            return TaxiParkDetailSerializer
-        return TaxiParkListSerializer
+            return ShopDetailSerializer
+        return ShopListSerializer
 
     def get_queryset(self):
         qs = super().get_queryset()
@@ -65,7 +65,7 @@ class TaxiParkViewSet(viewsets.ReadOnlyModelViewSet):
         cache_key = f'view_{instance.pk}_{ip}'
         
         if not cache.get(cache_key):
-            TaxiPark.objects.filter(pk=instance.pk).update(
+            Shop.objects.filter(pk=instance.pk).update(
                 views_count=F('views_count') + 1
             )
             cache.set(cache_key, True, 60 * 60)  # Кэш на 1 час
@@ -76,35 +76,35 @@ class TaxiParkViewSet(viewsets.ReadOnlyModelViewSet):
 
     @action(detail=True, methods=['post'], url_path='like', permission_classes=[])
     def like(self, request, slug=None):
-        """Обработка лайка/дизлайка таксопарка"""
-        taxipark = self.get_object()  # 🔥 Автоматически использует lookup_field='slug'
+        """Обработка лайка/дизлайка магазина"""
+        shop = self.get_object()
         ip = get_client_ip(request)
 
         like, created = Like.objects.get_or_create(
-            taxipark=taxipark,
+            shop=shop,
             ip_address=ip,
         )
 
         if not created:
             # Если лайк уже был — удаляем (дизлайк)
             like.delete()
-            TaxiPark.objects.filter(pk=taxipark.pk).update(
+            Shop.objects.filter(pk=shop.pk).update(
                 likes_count=F('likes_count') - 1
             )
-            taxipark.refresh_from_db()
+            shop.refresh_from_db()
             return Response({
                 'liked': False,
-                'likes_count': taxipark.likes_count,
+                'likes_count': shop.likes_count,
             })
 
         # Новый лайк — увеличиваем счётчик
-        TaxiPark.objects.filter(pk=taxipark.pk).update(
+        Shop.objects.filter(pk=shop.pk).update(
             likes_count=F('likes_count') + 1
         )
-        taxipark.refresh_from_db()
+        shop.refresh_from_db()
         return Response({
             'liked': True,
-            'likes_count': taxipark.likes_count,
+            'likes_count': shop.likes_count,
         })
 
     @action(
@@ -115,8 +115,8 @@ class TaxiParkViewSet(viewsets.ReadOnlyModelViewSet):
         permission_classes=[]
     )
     def add_comment(self, request, slug=None):
-        """Добавление комментария к таксопарку"""
-        taxipark = self.get_object()
+        """Добавление комментария к магазину"""
+        shop = self.get_object()
         serializer = CommentSerializer(data=request.data)
         
         if serializer.is_valid():
@@ -132,7 +132,7 @@ class TaxiParkViewSet(viewsets.ReadOnlyModelViewSet):
                 pass
 
             serializer.save(
-                taxipark=taxipark,
+                shop=shop,
                 ip_address=get_client_ip(request),
             )
             return Response(serializer.data, status=status.HTTP_201_CREATED)

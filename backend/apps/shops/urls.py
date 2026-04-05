@@ -1,19 +1,19 @@
 from django.urls import path
-from .views import TaxiParkViewSet
+from .views import ShopViewSet
 
-shop_list = TaxiParkViewSet.as_view({
+shop_list = ShopViewSet.as_view({
     'get': 'list',
 })
 
-shop_detail = TaxiParkViewSet.as_view({
+shop_detail = ShopViewSet.as_view({
     'get': 'retrieve',
 })
 
-shop_like = TaxiParkViewSet.as_view({
+shop_like = ShopViewSet.as_view({
     'post': 'like',
 })
 
-shop_comment = TaxiParkViewSet.as_view({
+shop_comment = ShopViewSet.as_view({
     'post': 'add_comment',
 })
 

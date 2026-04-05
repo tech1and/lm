@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import TaxiPark, Like, Comment
+from .models import Shop, Like, Comment
 import re
 
 
@@ -60,11 +60,11 @@ class CommentSerializer(serializers.ModelSerializer):
         return value
 
 
-class TaxiParkListSerializer(serializers.ModelSerializer):
+class ShopListSerializer(serializers.ModelSerializer):
     comments_count = serializers.SerializerMethodField()
 
     class Meta:
-        model = TaxiPark
+        model = Shop
         fields = [
             'id', 'name', 'slug', 'short_description',
             'logo', 'rating', 'likes_count', 'views_count',
@@ -76,7 +76,7 @@ class TaxiParkListSerializer(serializers.ModelSerializer):
         return getattr(obj, 'approved_comments_count', obj.comments.filter(is_approved=True).count())
 
 
-class TaxiParkDetailSerializer(serializers.ModelSerializer):
+class ShopDetailSerializer(serializers.ModelSerializer):
     comments = CommentSerializer(many=True, source='approved_comments', read_only=True)
     comments_count = serializers.SerializerMethodField()
     schema_org = serializers.SerializerMethodField()
@@ -86,7 +86,7 @@ class TaxiParkDetailSerializer(serializers.ModelSerializer):
     description = serializers.SerializerMethodField()
 
     class Meta:
-        model = TaxiPark
+        model = Shop
         fields = [
             'id', 'name', 'slug', 'description', 'short_description',
             'logo', 'meta_title', 'meta_description', 'meta_keywords',

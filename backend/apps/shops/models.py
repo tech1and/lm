@@ -4,7 +4,7 @@ import uuid
 from tinymce.models import HTMLField
 
 
-class TaxiPark(models.Model):
+class Shop(models.Model):
     name = models.CharField('Название', max_length=200)
     slug = models.SlugField('URL', max_length=200, unique=True, blank=True)
     description = HTMLField('Описание')
@@ -107,19 +107,19 @@ class TaxiPark(models.Model):
 
 
 class Like(models.Model):
-    taxipark = models.ForeignKey(TaxiPark, on_delete=models.CASCADE, related_name='likes')
+    shop = models.ForeignKey(Shop, on_delete=models.CASCADE, related_name='likes')
     ip_address = models.GenericIPAddressField('IP адрес')
     session_key = models.CharField('Ключ сессии', max_length=100, blank=True)
     created_at = models.DateTimeField('Создан', auto_now_add=True)
 
     class Meta:
-        unique_together = ['taxipark', 'ip_address']
+        unique_together = ['shop', 'ip_address']
         verbose_name = 'Лайк'
         verbose_name_plural = 'Лайки'
 
 
 class Comment(models.Model):
-    taxipark = models.ForeignKey(TaxiPark, on_delete=models.CASCADE, related_name='comments')
+    shop = models.ForeignKey(Shop, on_delete=models.CASCADE, related_name='comments')
     author_name = models.CharField('Имя', max_length=100)
     author_email = models.EmailField('Email')
     text = models.TextField('Текст комментария')
@@ -138,4 +138,4 @@ class Comment(models.Model):
         ordering = ['-created_at']
 
     def __str__(self):
-        return f'{self.author_name} → {self.taxipark.name}'
+        return f'{self.author_name} → {self.shop.name}'

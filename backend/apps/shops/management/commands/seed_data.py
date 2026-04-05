@@ -1,5 +1,5 @@
 from django.core.management.base import BaseCommand
-from apps.shops.models import TaxiPark
+from apps.shops.models import Shop
 from apps.blog.models import Post, Category
 import random
 
@@ -603,16 +603,16 @@ class Command(BaseCommand):
     help = 'Заполняет базу данных тестовыми данными'
 
     def handle(self, *args, **options):
-        self.stdout.write('Создание таксопарков...')
+        self.stdout.write('Создание магазинов...')
         for data in shops_DATA:
-            taxipark, created = TaxiPark.objects.get_or_create(
+            shop, created = Shop.objects.get_or_create(
                 name=data['name'],
                 defaults=data,
             )
             if created:
-                self.stdout.write(f'  ✓ Создан: {taxipark.name}')
+                self.stdout.write(f'  ✓ Создан: {shop.name}')
             else:
-                self.stdout.write(f'  — Уже существует: {taxipark.name}')
+                self.stdout.write(f'  — Уже существует: {shop.name}')
 
         self.stdout.write('Создание категорий блога...')
         for cat_data in BLOG_CATEGORIES:

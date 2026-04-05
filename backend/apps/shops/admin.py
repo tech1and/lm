@@ -1,11 +1,11 @@
 from django.contrib import admin
-from .models import TaxiPark, Like, Comment
+from .models import Shop, Like, Comment
 from import_export.admin import ImportExportModelAdmin
 
 
 
-@admin.register(TaxiPark)
-class TaxiParkAdmin(ImportExportModelAdmin, admin.ModelAdmin):
+@admin.register(Shop)
+class ShopAdmin(ImportExportModelAdmin, admin.ModelAdmin):
     list_display = ['name', 'district', 'rating', 'likes_count', 'views_count', 'is_active']
     list_filter = ['is_active', 'district', 'has_children_seat', 'has_cargo']
     search_fields = ['name', 'description', 'address']
@@ -44,7 +44,7 @@ class TaxiParkAdmin(ImportExportModelAdmin, admin.ModelAdmin):
 
 @admin.register(Comment)
 class CommentAdmin(admin.ModelAdmin):
-    list_display = ['author_name', 'taxipark', 'rating', 'is_approved', 'created_at']
+    list_display = ['author_name', 'shop', 'rating', 'is_approved', 'created_at']
     list_filter = ['is_approved', 'rating']
     search_fields = ['author_name', 'text']
     list_editable = ['is_approved']
@@ -53,5 +53,5 @@ class CommentAdmin(admin.ModelAdmin):
 
 @admin.register(Like)
 class LikeAdmin(admin.ModelAdmin):
-    list_display = ['taxipark', 'ip_address', 'created_at']
-    readonly_fields = ['taxipark', 'ip_address', 'created_at']
+    list_display = ['shop', 'ip_address', 'created_at']
+    readonly_fields = ['shop', 'ip_address', 'created_at']
