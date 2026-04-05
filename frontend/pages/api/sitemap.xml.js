@@ -21,7 +21,7 @@ export default async function handler(req, res) {
   try {
     // Загружаем данные с бэкенда
     const [shopsRes, blogRes] = await Promise.allSettled([
-      fetch(`${API_URL}/api/shop/shop/?limit=200`, { next: { revalidate: 3600 } }),
+      fetch(`${API_URL}/api/shops/?limit=200`, { next: { revalidate: 3600 } }),
       fetch(`${API_URL}/api/blog/posts/?limit=100`, { next: { revalidate: 3600 } }),
     ]);
 

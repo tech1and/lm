@@ -16,9 +16,9 @@ export async function getStaticProps() {
     const controller = new AbortController();
     const timeout = setTimeout(() => controller.abort(), 8000);
 
-    // Правильные URL: /api/shop/shop/ (ViewSet basename='shop' + модель 'shop')
+    // Правильные URL: /api/shops/
     const [storesRes, blogRes] = await Promise.allSettled([
-      fetch(`${API_URL}/api/shop/shop/?limit=50`, { signal: controller.signal }),
+      fetch(`${API_URL}/api/shops/?limit=50`, { signal: controller.signal }),
       fetch(`${API_URL}/api/blog/posts/?limit=30`, { signal: controller.signal }),
     ]);
 
