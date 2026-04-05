@@ -521,9 +521,15 @@ supervisorctl status
 echo ""
 info "HTTP проверка:"
 sleep 3
-API=$(curl -s -o /dev/null -w '%{http_code}' http://localhost:8000/api/ 2>/dev/null || echo 000)
-WEB=$(curl -s -o /dev/null -w '%{http_code}' http://localhost:3000 2>/dev/null || echo 000)
-NGX=$(curl -s -o /dev/null -w '%{http_code}' http://localhost/ 2>/dev/null || echo 000)
+
+# Django API — проверяем напрямую (не через Nginx)
+API=$(curl -s -o /dev/null -w '%{http_code}' http://127.0.0.1:8000/api/ 2>/dev/null || echo 000)
+
+# Next.js — проверяем напрямую
+WEB=$(curl -s -o /dev/null -w '%{http_code}' http://127.0.0.1:3000 2>/dev/null || echo 000)
+
+# Nginx — проверяем с заголовком Host, чтобы совпал с server_name
+NGX=$(curl -s -o /dev/null -w '%{http_code}' -H "Host: ${DOMAIN}" http://127.0.0.1/ 2>/dev/null || echo 000)
 
 [ "$API" = "200" ] && ok "Django API:  $API" || warn "Django API:  $API"
 [ "$WEB" = "200" ] && ok "Next.js:     $WEB" || warn "Next.js:     $WEB"
