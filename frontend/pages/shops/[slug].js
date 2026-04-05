@@ -4,7 +4,7 @@ import LikeButton from '../../components/LikeButton';
 import CommentForm from '../../components/CommentForm';
 import Link from 'next/link';
 import { useState } from 'react';
-import { storesAPI } from '../../lib/api';
+import { shopsAPI } from '../../lib/api';
 
 export default function StorePage({ store, error }) {
   const router = useRouter();
@@ -411,7 +411,7 @@ export default function StorePage({ store, error }) {
 
 export async function getServerSideProps({ params }) {
   try {
-    const res = await storesAPI.getDetail(params.slug);
+    const res = await shopsAPI.getDetail(params.slug);
     return {
       props: {
         store: res.data,

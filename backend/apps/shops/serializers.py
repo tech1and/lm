@@ -73,7 +73,7 @@ class TaxiParkListSerializer(serializers.ModelSerializer):
         ]
 
     def get_comments_count(self, obj):
-        return obj.comments.filter(is_approved=True).count()
+        return getattr(obj, 'approved_comments_count', obj.comments.filter(is_approved=True).count())
 
 
 class TaxiParkDetailSerializer(serializers.ModelSerializer):
@@ -107,7 +107,7 @@ class TaxiParkDetailSerializer(serializers.ModelSerializer):
         return clean_html_whitespace(obj.description)
 
     def get_comments_count(self, obj):
-        return obj.comments.filter(is_approved=True).count()
+        return getattr(obj, 'approved_comments_count', obj.comments.filter(is_approved=True).count())
 
     def get_schema_org(self, obj):
         return obj.get_schema_org()

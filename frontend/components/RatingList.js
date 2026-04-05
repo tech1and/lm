@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { storesAPI } from '../lib/api';
+import { shopsAPI } from '../lib/api';
 import StoreCard from './StoreCard';
 
 const SORT_OPTIONS = [
@@ -25,7 +25,7 @@ export default function RatingList() {
         params.ordering = `-${sort}`;
       }
 
-      const res = await storesAPI.getList(params);
+      const res = await shopsAPI.getList(params);
       const results = res.data.results || res.data;
 
       setTimeout(() => {

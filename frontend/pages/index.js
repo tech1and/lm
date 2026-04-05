@@ -1,7 +1,7 @@
 import Layout from '../components/Layout';
 import RatingList from '../components/RatingList';
 import Link from 'next/link';
-import { storesAPI, blogAPI } from '../lib/api';
+import { shopsAPI, blogAPI } from '../lib/api';
 
 export default function HomePage({ topshops, latestPosts, stats }) {
   const homeSchema = {

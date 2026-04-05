@@ -51,7 +51,7 @@ api.interceptors.response.use(
   }
 );
 
-export const storesAPI = {
+export const shopsAPI = {
   getList: (params = {}) =>
     api.get('/api/shops/', { params }),
   

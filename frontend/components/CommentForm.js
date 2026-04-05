@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import { storesAPI } from '../lib/api';
+import { shopsAPI } from '../lib/api';
 
 export default function CommentForm({ slug, onCommentAdded }) {
   const [formData, setFormData] = useState({
