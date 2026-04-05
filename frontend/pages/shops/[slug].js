@@ -56,7 +56,7 @@ export default function StorePage({ store, error }) {
   ].filter(Boolean);
 
   const siteUrl = 'https://lemanas.ru';
-  const canonical = `${siteUrl}/stores/${store.slug}`;
+  const canonical = `${siteUrl}/shops/${store.slug}`;
 
   const breadcrumbSchema = {
     "@context": "https://schema.org",

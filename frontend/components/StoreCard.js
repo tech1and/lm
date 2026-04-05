@@ -41,7 +41,7 @@ export default function StoreCard({ store, rank }) {
         <div className="d-flex flex-wrap align-items-start justify-content-between gap-2">
           <div>
             <Link
-              href={`/stores/${store.slug}`}
+              href={`/shops/${store.slug}`}
               className="text-decoration-none"
             >
               <h3 className="h6 fw-bold mb-1 text-dark hover-primary">
@@ -90,7 +90,7 @@ export default function StoreCard({ store, rank }) {
 
           {/* CTA */}
           <Link
-            href={`/stores/${store.slug}`}
+            href={`/shops/${store.slug}`}
             className="btn btn-sm btn-outline-warning fw-semibold ms-auto"
           >
             Подробнее <i className="bi bi-arrow-right"></i>

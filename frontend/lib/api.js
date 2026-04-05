@@ -53,16 +53,16 @@ api.interceptors.response.use(
 
 export const storesAPI = {
   getList: (params = {}) =>
-    api.get('/api/stores/', { params }),
+    api.get('/api/shop/', { params }),
   
   getDetail: (slug) =>
-    api.get(`/api/stores/${slug}/`),
+    api.get(`/api/shop/${slug}/`),
   
   like: (slug) =>
-    api.post(`/api/stores/${slug}/like/`), // Теперь будет с CSRF-токеном!
+    api.post(`/api/shop/${slug}/like/`), // Теперь будет с CSRF-токеном!
   
   addComment: (slug, data) =>
-    api.post(`/api/stores/${slug}/comment/`, data),
+    api.post(`/api/shop/${slug}/comment/`, data),
 };
 
 export const blogAPI = {

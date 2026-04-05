@@ -75,7 +75,7 @@ export default function SitemapPage({ stores, posts }) {
             <ul className="list-unstyled">
               {stores.slice(0, 30).map((store) => (
                 <li key={store.id} className="mb-1">
-                  <a href={`/stores/${store.slug}`} className="text-decoration-none">
+                  <a href={`/shops/${store.slug}`} className="text-decoration-none">
                     {store.name}
                   </a>
                 </li>

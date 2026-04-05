@@ -100,9 +100,9 @@ export default function Layout({ children, title, description, canonical, schema
             <div className="col-lg-3">
               <h6 className="text-white mb-3">Популярное</h6>
               <ul className="list-unstyled small">
-                <li><Link href="/stores/lemana-pro-moskva">Лемана Про Москва</Link></li>
-                <li><Link href="/stores/lemana-pro-spb">Лемана Про СПб</Link></li>
-                <li><Link href="/stores/lemana-pro-kazan">Лемана Про Казань</Link></li>
+                <li><Link href="/shops/lemana-pro-moskva">Лемана Про Москва</Link></li>
+                <li><Link href="/shops/lemana-pro-spb">Лемана Про СПб</Link></li>
+                <li><Link href="/shops/lemana-pro-kazan">Лемана Про Казань</Link></li>
                 <li><Link href="/blog">Статьи о магазинах</Link></li>
               </ul>
             </div>
