@@ -15,3 +15,4 @@ class PostAdmin(admin.ModelAdmin):
     search_fields = ['title', 'content']
     prepopulated_fields = {'slug': ('title',)}
     readonly_fields = ['views_count', 'created_at', 'updated_at']
+    save_on_top = True

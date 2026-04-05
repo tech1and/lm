@@ -53,8 +53,8 @@ class TaxiPark(models.Model):
     updated_at = models.DateTimeField('Обновлен', auto_now=True)
 
     class Meta:
-        verbose_name = 'Таксопарк'
-        verbose_name_plural = 'Таксопарки'
+        verbose_name = 'Магазин'
+        verbose_name_plural = 'Магазины'
         ordering = ['-rating', '-likes_count']
 
     def __str__(self):
@@ -67,10 +67,10 @@ class TaxiPark(models.Model):
                 base_slug = str(uuid.uuid4())[:8]
             self.slug = base_slug
         if not self.meta_title:
-            self.meta_title = f'{self.name} — Таксопарк Москвы | Рейтинг и отзывы'
+            self.meta_title = f'{self.name} —  Рейтинг и отзывы'
         if not self.meta_description:
             self.meta_description = (
-                f'{self.name} — таксопарк в Москве. '
+                f'{self.name} — магазин в Москве. '
                 f'{self.short_description[:200]}. '
                 f'Читайте отзывы и смотрите рейтинг.'
             )
