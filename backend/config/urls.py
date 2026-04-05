@@ -15,6 +15,6 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('tinymce/', include('tinymce.urls')),
     path('api/', api_health_check, name='api-health-check'),
-    path('api/shop/', include('apps.shops.urls')),
+    path('api/shops/', include('apps.shops.urls')),
     path('api/blog/', include('apps.blog.urls')),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
