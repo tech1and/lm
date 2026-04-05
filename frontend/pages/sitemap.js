@@ -15,20 +15,27 @@ export async function getStaticProps() {
   try {
     const controller = new AbortController();
     const timeout = setTimeout(() => controller.abort(), 8000);
-    const [storesRes, blogRes] = await Promise.all([
-      fetch(`${API_URL}/api/stores/?limit=50`, { signal: controller.signal }),
+
+    // Правильные URL: /api/shop/shop/ (ViewSet basename='shop' + модель 'shop')
+    const [storesRes, blogRes] = await Promise.allSettled([
+      fetch(`${API_URL}/api/shop/shop/?limit=50`, { signal: controller.signal }),
       fetch(`${API_URL}/api/blog/posts/?limit=30`, { signal: controller.signal }),
     ]);
 
     clearTimeout(timeout);
 
-    const storesData = await storesRes.json();
-    const blogData = await blogRes.json();
+    const stores = storesRes.status === 'fulfilled' && storesRes.value.ok
+      ? (await storesRes.value.json().catch(() => ({}))).results || []
+      : [];
+
+    const posts = blogRes.status === 'fulfilled' && blogRes.value.ok
+      ? (await blogRes.value.json().catch(() => ({}))).results || []
+      : [];
 
     return {
       props: {
-        stores: storesData.results || storesData || [],
-        posts: blogData.results || blogData || [],
+        stores,
+        posts,
       },
       revalidate: 3600,
     };

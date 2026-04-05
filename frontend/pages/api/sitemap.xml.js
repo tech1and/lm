@@ -20,13 +20,17 @@ const formatDate = (date) => {
 export default async function handler(req, res) {
   try {
     // Загружаем данные с бэкенда
-    const [shopsRes, blogRes] = await Promise.all([
-      fetch(`${API_URL}/api/shops/?limit=200`, { next: { revalidate: 3600 } }),
+    const [shopsRes, blogRes] = await Promise.allSettled([
+      fetch(`${API_URL}/api/shop/shop/?limit=200`, { next: { revalidate: 3600 } }),
       fetch(`${API_URL}/api/blog/posts/?limit=100`, { next: { revalidate: 3600 } }),
     ]);
 
-    const shopsData = await shopsRes.json().catch(() => ({ results: [] }));
-    const blogData = await blogRes.json().catch(() => ({ results: [] }));
+    const shopsData = shopsRes.status === 'fulfilled'
+      ? await shopsRes.value.json().catch(() => ({}))
+      : {};
+    const blogData = blogRes.status === 'fulfilled'
+      ? await blogRes.value.json().catch(() => ({}))
+      : {};
 
     const shops = shopsData.results || shopsData || [];
     const posts = blogData.results || blogData || [];
