@@ -5,6 +5,10 @@ import CommentForm from '../../components/CommentForm';
 import Link from 'next/link';
 import { useState } from 'react';
 import { shopsAPI } from '../../lib/api';
+import {
+  Star, MapPin, Phone, Globe, Clock, Truck, Wrench, Shield, CreditCard,
+  MapPin as MapPinIcon, ChevronRight, Home, Trophy, ThumbsUp, MessageSquare, Eye, ExternalLink
+} from 'lucide-react';
 
 export default function StorePage({ store, error }) {
   const router = useRouter();
@@ -13,11 +17,9 @@ export default function StorePage({ store, error }) {
   if (router.isFallback) {
     return (
       <Layout title="Загрузка..." description="">
-        <div className="container py-5 text-center">
-          <div className="spinner-border text-warning" role="status">
-            <span className="visually-hidden">Загрузка...</span>
-          </div>
-          <p className="mt-3 text-muted">Загрузка данных магазина...</p>
+        <div className="max-w-7xl mx-auto px-4 py-20 text-center">
+          <div className="w-12 h-12 border-4 border-primary-400 border-t-transparent rounded-full animate-spin mx-auto" />
+          <p className="mt-4 text-gray-500">Загрузка данных магазина...</p>
         </div>
       </Layout>
     );
@@ -25,19 +27,14 @@ export default function StorePage({ store, error }) {
 
   if (error || !store) {
     return (
-      <Layout
-        title="Магазин не найден"
-        description="Запрашиваемый магазин не найден"
-        canonical="https://lemanas.ru"
-      >
-        <div className="container py-5 text-center">
-          <div style={{ fontSize: '4rem' }}>😞</div>
-          <h1 className="fw-bold mb-3">Магазин не найден</h1>
-          <p className="text-muted mb-4">
-            Возможно, страница была удалена или перемещена.
-          </p>
-          <Link href="/" className="btn btn-warning btn-lg">
-            <i className="bi bi-house me-2"></i>На главную
+      <Layout title="Магазин не найден" description="Запрашиваемый магазин не найден" canonical="https://lemanas.ru">
+        <div className="max-w-7xl mx-auto px-4 py-20 text-center">
+          <div className="text-6xl mb-4">😞</div>
+          <h1 className="text-3xl font-bold mb-3">Магазин не найден</h1>
+          <p className="text-gray-500 mb-6">Возможно, страница была удалена или перемещена.</p>
+          <Link href="/" className="inline-flex items-center gap-2 bg-primary-500 hover:bg-primary-600 text-white px-6 py-3 rounded-xl font-semibold transition-colors">
+            <Home className="w-5 h-5" />
+            На главную
           </Link>
         </div>
       </Layout>
@@ -49,10 +46,10 @@ export default function StorePage({ store, error }) {
   };
 
   const features = [
-    store.has_delivery && { icon: '🚚', label: 'Доставка' },
-    store.has_installation && { icon: '🔧', label: 'Монтаж' },
-    store.has_warranty && { icon: '🛡️', label: 'Гарантия' },
-    store.has_credit && { icon: '💳', label: 'Кредит' },
+    store.has_delivery && { icon: Truck, label: 'Доставка' },
+    store.has_installation && { icon: Wrench, label: 'Монтаж' },
+    store.has_warranty && { icon: Shield, label: 'Гарантия' },
+    store.has_credit && { icon: CreditCard, label: 'Кредит' },
   ].filter(Boolean);
 
   const siteUrl = 'https://lemanas.ru';
@@ -78,62 +75,62 @@ export default function StorePage({ store, error }) {
       schema={combinedSchema}
     >
       {/* Breadcrumb */}
-      <nav className="container py-3" aria-label="breadcrumb">
-        <ol className="breadcrumb mb-0">
-          <li className="breadcrumb-item">
-            <Link href="/" className="text-decoration-none">
-              <i className="bi bi-house me-1"></i>Главная
+      <div className="bg-white border-b">
+        <div className="max-w-7xl mx-auto px-4 py-3">
+          <nav className="flex items-center gap-2 text-sm text-gray-500" aria-label="breadcrumb">
+            <Link href="/" className="hover:text-gray-700 flex items-center gap-1">
+              <Home className="w-4 h-4" />
+              Главная
             </Link>
-          </li>
-          <li className="breadcrumb-item">
-            <Link href="/rating" className="text-decoration-none">
+            <ChevronRight className="w-4 h-4" />
+            <Link href="/rating" className="hover:text-gray-700">
               Рейтинг магазинов
             </Link>
-          </li>
-          <li className="breadcrumb-item active" aria-current="page">
-            {store.name}
-          </li>
-        </ol>
-      </nav>
+            <ChevronRight className="w-4 h-4" />
+            <span className="text-gray-900 font-medium">{store.name}</span>
+          </nav>
+        </div>
+      </div>
 
-      {/* Hero */}
-      <div style={{ background: 'linear-gradient(135deg, #1a1a2e, #0f3460)', color: 'white' }} className="py-5">
-        <div className="container">
-          <div className="row align-items-center g-4">
-            <div className="col-auto">
-              <div
-                className="bg-white rounded-3 d-flex align-items-center justify-content-center"
-                style={{ width: 96, height: 96 }}
-              >
+      {/* Hero Section */}
+      <div className="bg-gradient-to-br from-dark-800 to-dark-900 text-white">
+        <div className="max-w-7xl mx-auto px-4 py-8 sm:py-12">
+          <div className="flex flex-col lg:flex-row items-start gap-6">
+            {/* Logo */}
+            <div className="flex-shrink-0">
+              <div className="bg-white rounded-2xl p-2 w-24 h-24 flex items-center justify-center">
                 {store.logo ? (
                   <img
                     src={`${process.env.NEXT_PUBLIC_API_URL}${store.logo}`}
                     alt={store.name}
-                    className="rounded-3"
-                    style={{ width: 88, height: 88, objectFit: 'cover' }}
+                    className="rounded-xl w-20 h-20 object-cover"
                   />
                 ) : (
-                  <span style={{ fontSize: '3rem' }}>🏪</span>
+                  <span className="text-4xl">🏪</span>
                 )}
               </div>
             </div>
-            <div className="col">
-              <div className="d-flex flex-wrap gap-2 mb-2">
+
+            {/* Info */}
+            <div className="flex-1 min-w-0">
+              <div className="flex flex-wrap items-center gap-3 mb-3">
                 <span className="rating-badge">
-                  <i className="bi bi-star-fill"></i>
+                  <Star className="w-4 h-4 fill-current" />
                   {Number(store.rating).toFixed(1)}
                 </span>
                 {store.district && (
-                  <span className="badge bg-white bg-opacity-25">
-                    <i className="bi bi-geo-alt-fill me-1"></i>
+                  <span className="inline-flex items-center gap-1 bg-white/20 px-3 py-1 rounded-full text-sm">
+                    <MapPin className="w-4 h-4" />
                     {store.district}
                   </span>
                 )}
               </div>
-              <h1 className="fw-black fs-2 mb-2">{store.name}</h1>
-              <p className="mb-0 opacity-75">{store.short_description}</p>
+              <h1 className="text-3xl sm:text-4xl font-black mb-2">{store.name}</h1>
+              <p className="text-gray-300 text-sm sm:text-base">{store.short_description}</p>
             </div>
-            <div className="col-auto d-none d-md-block">
+
+            {/* Like Button */}
+            <div className="hidden lg:block flex-shrink-0">
               <LikeButton
                 slug={store.slug}
                 initialLikes={store.likes_count}
@@ -144,28 +141,38 @@ export default function StorePage({ store, error }) {
         </div>
       </div>
 
-      <div className="container py-5">
-        <div className="row g-4">
-          {/* Main Content */}
-          <div className="col-lg-8">
-            {/* Stats */}
-            <div className="store-card mb-4">
-              <div className="row g-0 text-center">
-                <div className="col-4 stat-item border-end">
-                  <div className="stat-value text-danger">
-                    {store.likes_count?.toLocaleString('ru')}
+      {/* Main Content */}
+      <div className="max-w-7xl mx-auto px-4 py-8">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          {/* Left Column */}
+          <div className="lg:col-span-2 space-y-6">
+            {/* Stats Cards */}
+            <div className="lm-card p-6">
+              <div className="grid grid-cols-3 gap-4 text-center">
+                <div className="stat-item border-r border-gray-200">
+                  <div className="flex items-center justify-center gap-2 mb-1">
+                    <ThumbsUp className="w-5 h-5 text-red-500" />
+                    <span className="stat-value text-red-500">
+                      {store.likes_count?.toLocaleString('ru')}
+                    </span>
                   </div>
                   <div className="stat-label">Лайков</div>
                 </div>
-                <div className="col-4 stat-item border-end">
-                  <div className="stat-value text-primary">
-                    {store.comments_count?.toLocaleString('ru')}
+                <div className="stat-item border-r border-gray-200">
+                  <div className="flex items-center justify-center gap-2 mb-1">
+                    <MessageSquare className="w-5 h-5 text-blue-600" />
+                    <span className="stat-value text-blue-600">
+                      {store.comments_count?.toLocaleString('ru')}
+                    </span>
                   </div>
                   <div className="stat-label">Отзывов</div>
                 </div>
-                <div className="col-4 stat-item">
-                  <div className="stat-value text-success">
-                    {store.views_count?.toLocaleString('ru')}
+                <div className="stat-item">
+                  <div className="flex items-center justify-center gap-2 mb-1">
+                    <Eye className="w-5 h-5 text-green-600" />
+                    <span className="stat-value text-green-600">
+                      {store.views_count?.toLocaleString('ru')}
+                    </span>
                   </div>
                   <div className="stat-label">Просмотров</div>
                 </div>
@@ -173,7 +180,7 @@ export default function StorePage({ store, error }) {
             </div>
 
             {/* Like Button Mobile */}
-            <div className="d-md-none mb-4">
+            <div className="lg:hidden">
               <LikeButton
                 slug={store.slug}
                 initialLikes={store.likes_count}
@@ -182,112 +189,120 @@ export default function StorePage({ store, error }) {
             </div>
 
             {/* Description */}
-            <div className="store-card p-4 mb-4">
-              <h2 className="h5 fw-bold mb-3">
-                <i className="bi bi-info-circle text-primary me-2"></i>
+            <div className="lm-card p-6">
+              <h2 className="text-xl font-bold mb-4 flex items-center gap-2">
+                <span className="w-8 h-8 bg-blue-100 text-blue-600 rounded-lg flex items-center justify-center">
+                  <span className="text-sm">ℹ️</span>
+                </span>
                 О магазине
               </h2>
               <div
-                className="text-muted"
-                style={{ lineHeight: 1.8 }}
+                className="text-gray-600 leading-relaxed"
                 dangerouslySetInnerHTML={{ __html: store.description.replace(/\n/g, '<br>') }}
               />
             </div>
 
             {/* Features */}
             {features.length > 0 && (
-              <div className="store-card p-4 mb-4">
-                <h2 className="h5 fw-bold mb-3">
-                  <i className="bi bi-check2-circle text-success me-2"></i>
+              <div className="lm-card p-6">
+                <h2 className="text-xl font-bold mb-4 flex items-center gap-2">
+                  <span className="w-8 h-8 bg-green-100 text-green-600 rounded-lg flex items-center justify-center">
+                    <span className="text-sm">✅</span>
+                  </span>
                   Услуги
                 </h2>
-                <div className="d-flex flex-wrap gap-2">
-                  {features.map(f => (
-                    <span key={f.label} className="feature-badge">
-                      {f.icon} {f.label}
-                    </span>
-                  ))}
+                <div className="flex flex-wrap gap-3">
+                  {features.map(f => {
+                    const Icon = f.icon;
+                    return (
+                      <span key={f.label} className="feature-badge">
+                        <Icon className="w-4 h-4" />
+                        {f.label}
+                      </span>
+                    );
+                  })}
                 </div>
               </div>
             )}
 
             {/* Map */}
             {store.latitude && store.longitude && (
-              <div className="store-card p-4 mb-4">
-                <h2 className="h5 fw-bold mb-3">
-                  <i className="bi bi-map text-info me-2"></i>
+              <div className="lm-card p-6">
+                <h2 className="text-xl font-bold mb-4 flex items-center gap-2">
+                  <span className="w-8 h-8 bg-cyan-100 text-cyan-600 rounded-lg flex items-center justify-center">
+                    <MapPinIcon className="w-4 h-4" />
+                  </span>
                   Местоположение
                 </h2>
                 <div className="map-placeholder">
                   <div className="text-center">
-                    <i className="bi bi-geo-alt-fill fs-1 text-danger d-block mb-2"></i>
-                    <strong>{store.address}</strong>
+                    <MapPinIcon className="w-16 h-16 text-red-500 mx-auto mb-2" />
+                    <strong className="text-lg">{store.address}</strong>
                     <br />
-                    <small className="text-muted">
+                    <span className="text-gray-500 text-sm">
                       {store.district && `${store.district}, `}{store.city}
-                    </small>
+                    </span>
                     <br />
                     <a
                       href={`https://maps.yandex.ru/?text=${encodeURIComponent(store.address || store.name)}`}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="btn btn-sm btn-outline-primary mt-3"
+                      className="inline-flex items-center gap-2 mt-4 px-4 py-2 border border-blue-600 text-blue-600 rounded-lg hover:bg-blue-50 transition-colors text-sm"
                     >
-                      <i className="bi bi-map-fill me-1"></i>
+                      <MapPinIcon className="w-4 h-4" />
                       Открыть на Яндекс.Картах
                     </a>
                   </div>
                 </div>
-                <div className="mt-2 small text-muted">
-                  <i className="bi bi-crosshair me-1"></i>
+                <div className="mt-3 text-sm text-gray-500 flex items-center gap-1">
+                  <MapPin className="w-4 h-4" />
                   Координаты: {store.latitude}, {store.longitude}
                 </div>
               </div>
             )}
 
             {/* Comments */}
-            <div className="store-card p-4 mb-4">
-              <h2 className="h5 fw-bold mb-4">
-                <i className="bi bi-chat-quote text-warning me-2"></i>
+            <div className="lm-card p-6">
+              <h2 className="text-xl font-bold mb-6 flex items-center gap-2">
+                <span className="w-8 h-8 bg-primary-100 text-primary-600 rounded-lg flex items-center justify-center">
+                  <span className="text-sm">💬</span>
+                </span>
                 Отзывы ({comments.length})
               </h2>
 
               {comments.length === 0 ? (
-                <div className="text-center py-4 text-muted">
-                  <i className="bi bi-chat-dots fs-2 d-block mb-2"></i>
+                <div className="text-center py-8 text-gray-500">
+                  <MessageSquare className="w-12 h-12 mx-auto mb-3 text-gray-400" />
                   <p>Пока нет отзывов. Будьте первым!</p>
                 </div>
               ) : (
-                <div className="d-flex flex-column gap-3 mb-4">
+                <div className="space-y-4 mb-6">
                   {comments.map(comment => (
-                    <div key={comment.id} className="border rounded-3 p-3 bg-light">
-                      <div className="d-flex align-items-start justify-content-between mb-2">
-                        <div className="d-flex align-items-center gap-2">
-                          <div
-                            className="rounded-circle bg-warning d-flex align-items-center justify-content-center fw-bold"
-                            style={{ width: 36, height: 36, fontSize: '0.85rem' }}
-                          >
+                    <div key={comment.id} className="border border-gray-200 rounded-xl p-4 bg-gray-50">
+                      <div className="flex items-start justify-between mb-3">
+                        <div className="flex items-center gap-3">
+                          <div className="w-10 h-10 rounded-full bg-primary-400 flex items-center justify-center font-bold text-sm text-white">
                             {comment.author_name[0]?.toUpperCase()}
                           </div>
                           <div>
-                            <strong className="small">{comment.author_name}</strong>
-                            <div className="small text-muted">
+                            <strong className="text-sm">{comment.author_name}</strong>
+                            <div className="text-xs text-gray-500">
                               {new Date(comment.created_at).toLocaleDateString('ru-RU', {
                                 year: 'numeric', month: 'long', day: 'numeric'
                               })}
                             </div>
                           </div>
                         </div>
-                        <div>
+                        <div className="flex gap-0.5">
                           {Array.from({ length: 5 }).map((_, i) => (
-                            <i
+                            <Star
                               key={i}
-                              className={`bi bi-star-fill small ${i < comment.rating ? 'text-warning' : 'text-muted'}`}
+                              className={`w-4 h-4 ${i < comment.rating ? 'text-primary-400 fill-current' : 'text-gray-300'}`}
                             />
                           ))}
                         </div>
                       </div>
-                      <p className="mb-0 small">{comment.text}</p>
+                      <p className="text-sm text-gray-700">{comment.text}</p>
                     </div>
                   ))}
                 </div>
@@ -300,107 +315,113 @@ export default function StorePage({ store, error }) {
             </div>
           </div>
 
-          {/* Sidebar */}
-          <div className="col-lg-4">
-            {/* Info Card */}
-            <div className="store-card p-4 mb-4 position-sticky" style={{ top: 20 }}>
-              <h3 className="h6 fw-bold mb-3 text-muted text-uppercase" style={{ letterSpacing: 1 }}>
-                Информация
-              </h3>
+          {/* Right Sidebar */}
+          <div className="lg:col-span-1">
+            <div className="sticky top-20 space-y-6">
+              {/* Info Card */}
+              <div className="lm-card p-6">
+                <h3 className="text-sm font-bold text-gray-500 uppercase tracking-wider mb-4">
+                  Информация
+                </h3>
 
-              <ul className="list-unstyled">
-                {store.phone && (
-                  <li className="mb-3">
-                    <div className="small text-muted mb-1">Телефон</div>
-                    <a href={`tel:${store.phone}`} className="fw-semibold text-dark text-decoration-none">
-                      <i className="bi bi-telephone-fill text-success me-2"></i>
-                      {store.phone}
-                    </a>
-                  </li>
+                <ul className="space-y-4">
+                  {store.phone && (
+                    <li>
+                      <div className="text-xs text-gray-500 mb-1">Телефон</div>
+                      <a href={`tel:${store.phone}`} className="flex items-center gap-2 font-semibold text-gray-900 hover:text-green-600 transition-colors">
+                        <Phone className="w-4 h-4 text-green-600" />
+                        {store.phone}
+                      </a>
+                    </li>
+                  )}
+
+                  {store.website && (
+                    <li>
+                      <div className="text-xs text-gray-500 mb-1">Сайт</div>
+                      <a
+                        href={store.website}
+                        target="_blank"
+                        rel="noopener noreferrer nofollow"
+                        className="flex items-center gap-2 font-semibold text-blue-600 hover:underline"
+                      >
+                        <Globe className="w-4 h-4" />
+                        {store.website.replace(/https?:\/\//i, '').slice(0, 30)}
+                      </a>
+                    </li>
+                  )}
+
+                  {store.address && (
+                    <li>
+                      <div className="text-xs text-gray-500 mb-1">Адрес</div>
+                      <span className="flex items-center gap-2 font-semibold">
+                        <MapPin className="w-4 h-4 text-red-500" />
+                        {store.address}
+                      </span>
+                    </li>
+                  )}
+
+                  {store.working_hours && (
+                    <li>
+                      <div className="text-xs text-gray-500 mb-1">Часы работы</div>
+                      <span className="flex items-center gap-2 font-semibold">
+                        <Clock className="w-4 h-4 text-blue-500" />
+                        {store.working_hours}
+                      </span>
+                    </li>
+                  )}
+                </ul>
+
+                {/* Pricing */}
+                {(store.min_price || store.price_range) && (
+                  <>
+                    <hr className="my-4 border-gray-200" />
+                    <h3 className="text-sm font-bold text-gray-500 uppercase tracking-wider mb-4">
+                      Цены
+                    </h3>
+                    <div className="space-y-3">
+                      {store.min_price && (
+                        <div className="flex justify-between items-center">
+                          <span className="text-sm text-gray-500">Минимальная цена</span>
+                          <span className="px-3 py-1 bg-green-100 text-green-700 rounded-full font-semibold text-sm">
+                            от {store.min_price} ₽
+                          </span>
+                        </div>
+                      )}
+                      {store.price_range && (
+                        <div className="flex justify-between items-center">
+                          <span className="text-sm text-gray-500">Ценовой диапазон</span>
+                          <span className="px-3 py-1 bg-blue-100 text-blue-700 rounded-full font-semibold text-sm">
+                            {store.price_range}
+                          </span>
+                        </div>
+                      )}
+                    </div>
+                  </>
                 )}
 
+                {/* CTA */}
                 {store.website && (
-                  <li className="mb-3">
-                    <div className="small text-muted mb-1">Сайт</div>
-                    <a
-                      href={store.website}
-                      target="_blank"
-                      rel="noopener noreferrer nofollow"
-                      className="fw-semibold text-primary text-decoration-none"
-                    >
-                      <i className="bi bi-globe me-2"></i>
-                      {store.website.replace(/https?:\/\//i, '').slice(0, 30)}
-                    </a>
-                  </li>
+                  <a
+                    href={store.website}
+                    target="_blank"
+                    rel="noopener noreferrer nofollow"
+                    className="flex items-center justify-center gap-2 w-full mt-6 bg-primary-500 hover:bg-primary-600 text-white px-6 py-3 rounded-xl font-bold transition-colors"
+                  >
+                    <ExternalLink className="w-5 h-5" />
+                    Перейти на сайт
+                  </a>
                 )}
 
-                {store.address && (
-                  <li className="mb-3">
-                    <div className="small text-muted mb-1">Адрес</div>
-                    <span className="fw-semibold">
-                      <i className="bi bi-geo-alt-fill text-danger me-2"></i>
-                      {store.address}
-                    </span>
-                  </li>
+                {store.phone && (
+                  <a
+                    href={`tel:${store.phone}`}
+                    className="flex items-center justify-center gap-2 w-full mt-3 border-2 border-green-600 text-green-600 hover:bg-green-50 px-6 py-3 rounded-xl font-bold transition-colors"
+                  >
+                    <Phone className="w-5 h-5" />
+                    Позвонить
+                  </a>
                 )}
-
-                {store.working_hours && (
-                  <li className="mb-3">
-                    <div className="small text-muted mb-1">Часы работы</div>
-                    <span className="fw-semibold">
-                      <i className="bi bi-clock-fill text-info me-2"></i>
-                      {store.working_hours}
-                    </span>
-                  </li>
-                )}
-              </ul>
-
-              {/* Pricing */}
-              {(store.min_price || store.price_range) && (
-                <>
-                  <hr />
-                  <h3 className="h6 fw-bold mb-3 text-muted text-uppercase" style={{ letterSpacing: 1 }}>
-                    Цены
-                  </h3>
-                  <div className="d-flex flex-column gap-2">
-                    {store.min_price && (
-                      <div className="d-flex justify-content-between align-items-center">
-                        <span className="small text-muted">Минимальная цена</span>
-                        <span className="badge bg-success fs-6">от {store.min_price} ₽</span>
-                      </div>
-                    )}
-                    {store.price_range && (
-                      <div className="d-flex justify-content-between align-items-center">
-                        <span className="small text-muted">Ценовой диапазон</span>
-                        <span className="badge bg-primary fs-6">{store.price_range}</span>
-                      </div>
-                    )}
-                  </div>
-                </>
-              )}
-
-              {/* CTA */}
-              {store.website && (
-                <a
-                  href={store.website}
-                  target="_blank"
-                  rel="noopener noreferrer nofollow"
-                  className="btn btn-warning w-100 fw-bold mt-4"
-                >
-                  <i className="bi bi-box-arrow-up-right me-2"></i>
-                  Перейти на сайт
-                </a>
-              )}
-
-              {store.phone && (
-                <a
-                  href={`tel:${store.phone}`}
-                  className="btn btn-outline-success w-100 fw-bold mt-2"
-                >
-                  <i className="bi bi-telephone me-2"></i>
-                  Позвонить
-                </a>
-              )}
+              </div>
             </div>
           </div>
         </div>

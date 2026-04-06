@@ -1,6 +1,7 @@
 import Layout from '../../components/Layout';
 import Link from 'next/link';
 import { blogAPI } from '../../lib/api';
+import { Calendar, Eye, ArrowLeft, BookOpen, ChevronRight, Home } from 'lucide-react';
 
 export default function BlogPostPage({ post, error }) {
   const siteUrl = 'https://lemanas.ru';
@@ -21,18 +22,15 @@ export default function BlogPostPage({ post, error }) {
 
   if (error || !post) {
     return (
-      <Layout
-        title="Статья не найдена"
-        description="Запрашиваемая статья не найдена"
-        canonical={siteUrl}
-      >
-        <div className="container py-5 text-center">
-          <h1 className="display-4 fw-bold mb-3">Статья не найдена</h1>
-          <p className="text-muted mb-4">
+      <Layout title="Статья не найдена" description="Запрашиваемая статья не найдена" canonical={siteUrl}>
+        <div className="max-w-7xl mx-auto px-4 py-20 text-center">
+          <h1 className="text-4xl font-bold mb-3">Статья не найдена</h1>
+          <p className="text-gray-500 mb-6">
             К сожалению, запрашиваемая статья не найдена или была удалена.
           </p>
-          <Link href="/blog" className="btn btn-warning btn-lg">
-            <i className="bi bi-arrow-left me-2"></i>В блог
+          <Link href="/blog" className="inline-flex items-center gap-2 bg-primary-500 hover:bg-primary-600 text-white px-6 py-3 rounded-xl font-semibold transition-colors">
+            <ArrowLeft className="w-5 h-5" />
+            В блог
           </Link>
         </div>
       </Layout>
@@ -47,76 +45,75 @@ export default function BlogPostPage({ post, error }) {
       schema={articleSchema}
     >
       {/* Breadcrumb */}
-      <nav className="container py-3" aria-label="breadcrumb">
-        <ol className="breadcrumb mb-0">
-          <li className="breadcrumb-item">
-            <Link href="/" className="text-decoration-none">
-              <i className="bi bi-house me-1"></i>Главная
+      <div className="bg-white border-b">
+        <div className="max-w-7xl mx-auto px-4 py-3">
+          <nav className="flex items-center gap-2 text-sm text-gray-500" aria-label="breadcrumb">
+            <Link href="/" className="hover:text-gray-700 flex items-center gap-1">
+              <Home className="w-4 h-4" />
+              Главная
             </Link>
-          </li>
-          <li className="breadcrumb-item">
-            <Link href="/blog" className="text-decoration-none">
+            <ChevronRight className="w-4 h-4" />
+            <Link href="/blog" className="hover:text-gray-700">
               Блог
             </Link>
-          </li>
-          <li className="breadcrumb-item active" aria-current="page">
-            {post.title.slice(0, 40)}...
-          </li>
-        </ol>
-      </nav>
+            <ChevronRight className="w-4 h-4" />
+            <span className="text-gray-900 font-medium truncate">{post.title.slice(0, 40)}...</span>
+          </nav>
+        </div>
+      </div>
 
-      <div className="container py-5">
-        <div className="row">
-          <div className="col-lg-8 mx-auto">
-            {post.category && (
-              <span className="badge bg-warning text-dark mb-3 px-3 py-2">
-                {post.category.name}
-              </span>
-            )}
+      <div className="max-w-4xl mx-auto px-4 py-8">
+        {/* Category */}
+        {post.category && (
+          <span className="inline-block bg-primary-100 text-primary-700 px-4 py-1.5 rounded-full text-sm font-semibold mb-4">
+            {post.category.name}
+          </span>
+        )}
 
-            <h1 className="fw-black mb-3">{post.title}</h1>
+        {/* Title */}
+        <h1 className="text-3xl sm:text-4xl font-black mb-4">{post.title}</h1>
 
-            <div className="d-flex align-items-center gap-3 text-muted small mb-4">
-              <span>
-                <i className="bi bi-calendar3 me-1"></i>
-                {new Date(post.created_at).toLocaleDateString('ru-RU', {
-                  year: 'numeric',
-                  month: 'long',
-                  day: 'numeric',
-                })}
-              </span>
-              <span>
-                <i className="bi bi-eye me-1"></i>
-                {post.views_count?.toLocaleString('ru')} просмотров
-              </span>
-            </div>
+        {/* Meta */}
+        <div className="flex items-center gap-4 text-gray-500 text-sm mb-6">
+          <span className="flex items-center gap-1.5">
+            <Calendar className="w-4 h-4" />
+            {new Date(post.created_at).toLocaleDateString('ru-RU', {
+              year: 'numeric',
+              month: 'long',
+              day: 'numeric',
+            })}
+          </span>
+          <span className="flex items-center gap-1.5">
+            <Eye className="w-4 h-4" />
+            {post.views_count?.toLocaleString('ru')} просмотров
+          </span>
+        </div>
 
-            {post.image && (
-              <img
-                src={`${process.env.NEXT_PUBLIC_API_URL}${post.image}`}
-                alt={post.title}
-                className="img-fluid rounded-3 mb-4 w-100"
-                style={{ maxHeight: 400, objectFit: 'cover' }}
-              />
-            )}
+        {/* Image */}
+        {post.image && (
+          <img
+            src={`${process.env.NEXT_PUBLIC_API_URL}${post.image}`}
+            alt={post.title}
+            className="w-full h-64 sm:h-96 object-cover rounded-xl mb-8"
+          />
+        )}
 
-            <div
-              className="blog-content"
-              style={{ lineHeight: 1.9, fontSize: '1.05rem' }}
-              dangerouslySetInnerHTML={{ __html: post.content }}
-            />
+        {/* Content */}
+        <div
+          className="prose prose-lg max-w-none leading-relaxed text-gray-700"
+          dangerouslySetInnerHTML={{ __html: post.content }}
+        />
 
-            <hr className="my-5" />
-
-            <div className="d-flex justify-content-between align-items-center">
-              <Link href="/blog" className="btn btn-outline-secondary">
-                <i className="bi bi-arrow-left me-2"></i>К списку статей
-              </Link>
-              <Link href="/" className="btn btn-warning">
-                Смотреть рейтинг 🏆
-              </Link>
-            </div>
-          </div>
+        {/* Bottom CTA */}
+        <hr className="my-8 border-gray-200" />
+        <div className="flex flex-col sm:flex-row justify-between items-center gap-4">
+          <Link href="/blog" className="inline-flex items-center gap-2 border-2 border-gray-300 hover:border-gray-400 text-gray-700 px-6 py-3 rounded-xl font-semibold transition-colors">
+            <ArrowLeft className="w-5 h-5" />
+            К списку статей
+          </Link>
+          <Link href="/" className="inline-flex items-center gap-2 bg-primary-500 hover:bg-primary-600 text-white px-6 py-3 rounded-xl font-bold transition-colors">
+            Смотреть рейтинг 🏆
+          </Link>
         </div>
       </div>
     </Layout>

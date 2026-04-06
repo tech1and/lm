@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { shopsAPI } from '../lib/api';
+import { Star, Send, ShieldCheck, SquarePen, CheckCircle } from 'lucide-react';
 
 export default function CommentForm({ slug, onCommentAdded }) {
   const [formData, setFormData] = useState({
@@ -7,7 +8,7 @@ export default function CommentForm({ slug, onCommentAdded }) {
     author_email: '',
     text: '',
     rating: 5,
-    honeypot: '', // скрытое поле-ловушка
+    honeypot: '',
   });
   const [formStartTime, setFormStartTime] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -97,14 +98,14 @@ export default function CommentForm({ slug, onCommentAdded }) {
 
   if (success) {
     return (
-      <div className="alert alert-success d-flex align-items-center gap-2 fade-in-up">
-        <i className="bi bi-check-circle-fill fs-4"></i>
-        <div>
-          <strong>Спасибо за ваш отзыв!</strong>
-          <p className="mb-0 small">Комментарий успешно добавлен.</p>
+      <div className="bg-green-50 border border-green-200 rounded-xl p-4 flex items-start gap-3 animate-fade-in-up">
+        <CheckCircle className="w-6 h-6 text-green-600 flex-shrink-0 mt-0.5" />
+        <div className="flex-1">
+          <strong className="text-green-800">Спасибо за ваш отзыв!</strong>
+          <p className="text-sm text-green-700 mb-0">Комментарий успешно добавлен.</p>
         </div>
         <button
-          className="btn btn-sm btn-outline-success ms-auto"
+          className="px-3 py-1.5 text-sm border-2 border-green-600 text-green-600 rounded-lg hover:bg-green-100 transition-colors font-medium"
           onClick={() => setSuccess(false)}
         >
           Написать ещё
@@ -120,16 +121,18 @@ export default function CommentForm({ slug, onCommentAdded }) {
       className="comment-form"
       noValidate
     >
-      <h5 className="fw-bold mb-4">
-        <i className="bi bi-pencil-square me-2 text-primary"></i>
+      <h5 className="text-lg font-bold mb-4 flex items-center gap-2">
+        <SquarePen className="w-5 h-5 text-blue-600" />
         Оставить отзыв
       </h5>
 
       {errors.general && (
-        <div className="alert alert-danger">{errors.general}</div>
+        <div className="bg-red-50 border border-red-200 text-red-700 rounded-lg p-3 mb-4">
+          {errors.general}
+        </div>
       )}
 
-      {/* Honeypot поле — скрыто от пользователей, видно только ботам */}
+      {/* Honeypot поле */}
       <div style={{ position: 'absolute', left: '-9999px', opacity: 0 }} aria-hidden="true">
         <input
           type="text"
@@ -142,8 +145,8 @@ export default function CommentForm({ slug, onCommentAdded }) {
       </div>
 
       {/* Рейтинг */}
-      <div className="mb-3">
-        <label className="form-label fw-semibold">Оценка</label>
+      <div className="mb-4">
+        <label className="block font-semibold mb-2">Оценка</label>
         <div className="star-rating">
           {[5, 4, 3, 2, 1].map(star => (
             <label key={star} htmlFor={`star-${star}`} title={`${star} звёзд`}>
@@ -155,101 +158,105 @@ export default function CommentForm({ slug, onCommentAdded }) {
                 checked={parseInt(formData.rating) === star}
                 onChange={handleChange}
               />
-              <i className="bi bi-star-fill"></i>
+              <Star className="w-6 h-6" />
             </label>
           ))}
         </div>
       </div>
 
-      <div className="row g-3">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
         {/* Имя */}
-        <div className="col-md-6">
-          <label className="form-label fw-semibold" htmlFor="author_name">
-            Ваше имя <span className="text-danger">*</span>
+        <div>
+          <label className="block font-semibold mb-1.5" htmlFor="author_name">
+            Ваше имя <span className="text-red-500">*</span>
           </label>
           <input
             type="text"
             id="author_name"
             name="author_name"
-            className={`form-control ${errors.author_name ? 'is-invalid' : ''}`}
+            className={`w-full px-4 py-2.5 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors ${
+              errors.author_name ? 'border-red-500 bg-red-50' : 'border-gray-300'
+            }`}
             value={formData.author_name}
             onChange={handleChange}
             placeholder="Иван Иванов"
             maxLength={100}
           />
           {errors.author_name && (
-            <div className="invalid-feedback">{errors.author_name}</div>
+            <p className="text-red-500 text-sm mt-1">{errors.author_name}</p>
           )}
         </div>
 
         {/* Email */}
-        <div className="col-md-6">
-          <label className="form-label fw-semibold" htmlFor="author_email">
-            Email <span className="text-danger">*</span>
+        <div>
+          <label className="block font-semibold mb-1.5" htmlFor="author_email">
+            Email <span className="text-red-500">*</span>
           </label>
           <input
             type="email"
             id="author_email"
             name="author_email"
-            className={`form-control ${errors.author_email ? 'is-invalid' : ''}`}
+            className={`w-full px-4 py-2.5 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors ${
+              errors.author_email ? 'border-red-500 bg-red-50' : 'border-gray-300'
+            }`}
             value={formData.author_email}
             onChange={handleChange}
             placeholder="ivan@example.com"
           />
           {errors.author_email && (
-            <div className="invalid-feedback">{errors.author_email}</div>
+            <p className="text-red-500 text-sm mt-1">{errors.author_email}</p>
           )}
-          <div className="form-text">Email не публикуется</div>
+          <p className="text-gray-500 text-xs mt-1">Email не публикуется</p>
         </div>
       </div>
 
       {/* Текст */}
-      <div className="mt-3">
-        <label className="form-label fw-semibold" htmlFor="text">
-          Ваш отзыв <span className="text-danger">*</span>
+      <div className="mb-4">
+        <label className="block font-semibold mb-1.5" htmlFor="text">
+          Ваш отзыв <span className="text-red-500">*</span>
         </label>
         <textarea
           id="text"
           name="text"
-          className={`form-control ${errors.text ? 'is-invalid' : ''}`}
+          className={`w-full px-4 py-2.5 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors resize-none ${
+            errors.text ? 'border-red-500 bg-red-50' : 'border-gray-300'
+          }`}
           value={formData.text}
           onChange={handleChange}
           rows={4}
-          placeholder="Поделитесь своим опытом пользования данным таксопарком..."
+          placeholder="Поделитесь своим опытом пользования данным магазином..."
           maxLength={2000}
         />
-        <div className="d-flex justify-content-between">
+        <div className="flex justify-between items-center mt-1.5">
           {errors.text ? (
-            <div className="invalid-feedback d-block">{errors.text}</div>
+            <p className="text-red-500 text-sm">{errors.text}</p>
           ) : (
-            <div className="form-text">Минимум 10 символов</div>
+            <p className="text-gray-500 text-xs">Минимум 10 символов</p>
           )}
-          <div className="form-text">
-            {charCount}/2000
-          </div>
+          <p className="text-gray-500 text-xs">{charCount}/2000</p>
         </div>
       </div>
 
-      <div className="mt-4">
+      <div className="flex items-center gap-4">
         <button
           type="submit"
-          className="btn btn-warning fw-bold px-4"
+          className="inline-flex items-center gap-2 bg-primary-500 hover:bg-primary-600 disabled:opacity-50 disabled:cursor-not-allowed text-white px-6 py-2.5 rounded-lg font-bold transition-colors"
           disabled={loading}
         >
           {loading ? (
             <>
-              <span className="spinner-border spinner-border-sm me-2" role="status" />
+              <span className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
               Отправка...
             </>
           ) : (
             <>
-              <i className="bi bi-send me-2"></i>
+              <Send className="w-4 h-4" />
               Отправить отзыв
             </>
           )}
         </button>
-        <span className="small text-muted ms-3">
-          <i className="bi bi-shield-check me-1"></i>
+        <span className="text-gray-500 text-sm flex items-center gap-1">
+          <ShieldCheck className="w-4 h-4" />
           Защита от спама
         </span>
       </div>

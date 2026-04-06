@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { shopsAPI } from '../lib/api';
+import { Heart } from 'lucide-react';
 
 export default function LikeButton({ slug, initialLikes, initialLiked }) {
   const [likesCount, setLikesCount] = useState(initialLikes || 0);
@@ -32,16 +33,16 @@ export default function LikeButton({ slug, initialLikes, initialLiked }) {
       aria-label={liked ? 'Убрать лайк' : 'Поставить лайк'}
     >
       <span className={`like-icon ${animating ? 'liked' : ''}`}>
-        {liked ? '❤️' : '🤍'}
+        <Heart className={`w-5 h-5 ${liked ? 'fill-white' : ''}`} />
       </span>
-      <span className="fw-bold">
+      <span className="font-bold">
         {loading ? (
-          <span className="spinner-border spinner-border-sm" role="status" />
+          <span className="w-4 h-4 border-2 border-current border-t-transparent rounded-full animate-spin inline-block" />
         ) : (
           likesCount.toLocaleString('ru')
         )}
       </span>
-      <span className="d-none d-sm-inline">
+      <span className="hidden sm:inline">
         {liked ? 'Нравится' : 'Нравится?'}
       </span>
     </button>

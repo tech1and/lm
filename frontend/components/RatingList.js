@@ -1,12 +1,13 @@
 import { useState, useEffect } from 'react';
 import { shopsAPI } from '../lib/api';
 import StoreCard from './StoreCard';
+import { Star, Heart, MessageCircle, Eye, Inbox } from 'lucide-react';
 
 const SORT_OPTIONS = [
-  { key: 'rating', label: '⭐ Рейтинг', icon: 'bi-star-fill' },
-  { key: 'likes_count', label: '❤️ Лайки', icon: 'bi-heart-fill' },
-  { key: 'comments', label: '💬 Отзывы', icon: 'bi-chat-fill' },
-  { key: 'views_count', label: '👁 Просмотры', icon: 'bi-eye-fill' },
+  { key: 'rating', label: 'Рейтинг', icon: Star },
+  { key: 'likes_count', label: 'Лайки', icon: Heart },
+  { key: 'comments', label: 'Отзывы', icon: MessageCircle },
+  { key: 'views_count', label: 'Просмотры', icon: Eye },
 ];
 
 export default function RatingList() {
@@ -53,41 +54,44 @@ export default function RatingList() {
   return (
     <div>
       {/* Sort Controls */}
-      <div className="d-flex flex-wrap gap-2 mb-4">
-        <span className="fw-semibold text-muted me-2">Сортировка:</span>
-        {SORT_OPTIONS.map(opt => (
-          <button
-            key={opt.key}
-            onClick={() => handleSort(opt.key)}
-            className={
-              `btn btn-sm ${sortBy === opt.key ? 'btn-warning fw-bold shadow-sm' : 'btn-outline-secondary'}`
-            }
-          >
-            <i className={`bi ${opt.icon} me-1`}></i>
-            {opt.label}
-          </button>
-        ))}
+      <div className="flex flex-wrap items-center gap-2 mb-6">
+        <span className="font-semibold text-gray-500">Сортировка:</span>
+        {SORT_OPTIONS.map(opt => {
+          const Icon = opt.icon;
+          const isActive = sortBy === opt.key;
+          return (
+            <button
+              key={opt.key}
+              onClick={() => handleSort(opt.key)}
+              className={`sort-btn flex items-center gap-1.5 border-2 transition-all ${
+                isActive
+                  ? 'border-primary-400 bg-primary-50 text-primary-700 font-bold shadow-sm'
+                  : 'border-gray-200 bg-white text-gray-600 hover:border-gray-300'
+              }`}
+            >
+              <Icon className={`w-4 h-4 ${isActive ? 'fill-current' : ''}`} />
+              {opt.label}
+            </button>
+          );
+        })}
       </div>
 
       {/* List */}
       <div
-        className="d-flex flex-column gap-3"
-        style={{
-          opacity: transitioning ? 0.4 : 1,
-          transition: 'opacity 0.2s ease',
-        }}
+        className="flex flex-col gap-4 transition-opacity duration-200"
+        style={{ opacity: transitioning ? 0.4 : 1 }}
       >
         {loading ? (
           Array(5).fill(0).map((_, i) => (
-            <div key={i} className="store-card p-3">
-              <div className="d-flex gap-3 align-items-center">
-                <div className="placeholder-glow">
-                  <span className="placeholder rounded-circle" style={{ width: 48, height: 48, display: 'block' }} />
+            <div key={i} className="flex gap-4 p-4 rounded-xl border border-gray-200 bg-white animate-pulse">
+              <div className="w-12 h-12 bg-gray-200 rounded-full flex-shrink-0" />
+              <div className="flex-1">
+                <div className="flex gap-3 items-center mb-3">
+                  <div className="h-5 bg-gray-200 rounded w-32" />
+                  <div className="h-6 bg-gray-200 rounded-full w-16" />
                 </div>
-                <div className="flex-grow-1 placeholder-glow">
-                  <span className="placeholder col-6 mb-2 d-block" />
-                  <span className="placeholder col-10 small" />
-                </div>
+                <div className="h-4 bg-gray-200 rounded w-full mb-2" />
+                <div className="h-4 bg-gray-200 rounded w-48" />
               </div>
             </div>
           ))
@@ -100,8 +104,8 @@ export default function RatingList() {
             />
           ))
         ) : (
-          <div className="text-center py-5 text-muted">
-            <i className="bi bi-inbox fs-1 d-block mb-3"></i>
+          <div className="text-center py-12 text-gray-500">
+            <Inbox className="w-16 h-16 mx-auto mb-4 text-gray-400" />
             <p>Нет данных для отображения</p>
           </div>
         )}
@@ -109,7 +113,7 @@ export default function RatingList() {
 
       {/* Count info */}
       {!loading && stores.length > 0 && (
-        <p className="text-muted text-center small mt-4">
+        <p className="text-gray-500 text-sm text-center mt-6">
           Показано {stores.length} магазинов из рейтинга
         </p>
       )}
