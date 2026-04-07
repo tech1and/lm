@@ -7,7 +7,7 @@ from import_export.admin import ImportExportModelAdmin
 @admin.register(Shop)
 class ShopAdmin(ImportExportModelAdmin, admin.ModelAdmin):
     list_display = ['name', 'district', 'rating', 'likes_count', 'views_count', 'is_active']
-    list_filter = ['is_active', 'district', 'has_children_seat', 'has_cargo']
+    list_filter = ['is_active', 'district', 'has_delivery', 'has_pickup']
     search_fields = ['name', 'description', 'address']
     save_on_top = True
     prepopulated_fields = {'slug': ('name',)}
@@ -26,11 +26,14 @@ class ShopAdmin(ImportExportModelAdmin, admin.ModelAdmin):
         ('Контакты', {
             'fields': ('phone', 'email', 'website', 'working_hours'),
         }),
-        ('Тарифы', {
-            'fields': ('price_per_km', 'min_price'),
+        ('Цены', {
+            'fields': ('min_price',),
         }),
-        ('Опции', {
-            'fields': ('has_children_seat', 'has_animal_transport', 'has_cargo', 'has_minivan'),
+        ('Услуги', {
+            'fields': (
+                'has_delivery', 'has_pickup', 'has_credit', 'has_returns',
+                'has_tool_checking', 'has_service_center',
+            ),
         }),
         ('Статистика', {
             'fields': ('rating', 'views_count', 'likes_count', 'created_at', 'updated_at'),

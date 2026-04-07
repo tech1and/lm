@@ -43,10 +43,21 @@ class Shop(models.Model):
     min_price = models.DecimalField('Минимальная стоимость', max_digits=8, decimal_places=2, null=True, blank=True)
     
     # Особенности
-    has_children_seat = models.BooleanField('Детское кресло', default=False)
-    has_animal_transport = models.BooleanField('Перевозка животных', default=False)
-    has_cargo = models.BooleanField('Грузовое такси', default=False)
-    has_minivan = models.BooleanField('Минивэн', default=False)
+    has_parking = models.BooleanField('Парковка', default=True)
+    has_toilet = models.BooleanField('Туалет', default=True)
+    has_available_environment = models.BooleanField('Доступная среда', default=True)
+    has_cafe = models.BooleanField('Кафе', default=True)
+    has_wifi = models.BooleanField('Wi-Fi', default=True)
+    has_cash_machine = models.BooleanField('Банкоматы', default=True)    
+    has_cargo = models.BooleanField('Грузовое такси', default=True)
+    
+    #Сервисы
+    has_delivery = models.BooleanField('Доставка из магазина', default=True)
+    has_pickup = models.BooleanField('Самовывоз', default=True)
+    has_credit = models.BooleanField('Кредиты', default=True)
+    has_returns = models.BooleanField('Возврат товаров', default=True)
+    has_tool_checking = models.BooleanField('Проверка техники', default=True)
+    has_service_center = models.BooleanField('Сервисный центр', default=True)
     
     is_active = models.BooleanField('Активен', default=True)
     created_at = models.DateTimeField('Создан', auto_now_add=True)

@@ -68,8 +68,7 @@ class ShopListSerializer(serializers.ModelSerializer):
         fields = [
             'id', 'name', 'slug', 'short_description',
             'logo', 'rating', 'likes_count', 'views_count',
-            'comments_count', 'district', 'address',
-            'price_per_km', 'min_price',
+            'comments_count', 'district', 'address', 'min_price',
         ]
 
     def get_comments_count(self, obj):
@@ -93,9 +92,9 @@ class ShopDetailSerializer(serializers.ModelSerializer):
             'address', 'city', 'district', 'latitude', 'longitude',
             'phone', 'email', 'website', 'working_hours',
             'views_count', 'likes_count', 'comments_count',
-            'rating', 'price_per_km', 'min_price',
-            'has_children_seat', 'has_animal_transport',
-            'has_cargo', 'has_minivan',
+            'rating', 'min_price',
+            'has_delivery', 'has_pickup', 'has_credit', 'has_returns',
+            'has_tool_checking', 'has_service_center',
             'created_at', 'updated_at',
             'comments', 'schema_org', 'user_liked',
         ]
