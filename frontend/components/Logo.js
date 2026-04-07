@@ -1,0 +1,22 @@
+export default function Logo({ size = 24, className = '' }) {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 120 120"
+      width={size}
+      height={size}
+      className={className}
+    >
+      <polygon points="60,8 112,48 8,48" fill="#f0a030" />
+      <polygon points="60,8 112,48 60,48" fill="#fdd800" />
+      <rect x="8" y="48" width="52" height="18" fill="#f0a030" />
+      <rect x="60" y="48" width="52" height="18" fill="#f5c020" />
+      <rect x="8" y="70" width="52" height="12" fill="#f0a030" />
+      <rect x="60" y="70" width="52" height="12" fill="#e89020" />
+      <rect x="8" y="86" width="52" height="12" fill="#e89020" />
+      <rect x="60" y="86" width="52" height="12" fill="#f0a030" />
+      <rect x="8" y="102" width="52" height="12" fill="#f5c020" />
+      <rect x="60" y="102" width="52" height="12" fill="#e89020" />
+    </svg>
+  );
+}

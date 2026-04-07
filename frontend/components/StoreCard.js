@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { MapPin, Star, Heart, MessageCircle, Eye, ArrowRight } from 'lucide-react';
+import Logo from './Logo';
 
 export default function StoreCard({ store, rank }) {
   const getRankClass = (rank) => {
@@ -37,7 +38,7 @@ export default function StoreCard({ store, rank }) {
             className="rounded-xl object-cover"
           />
         ) : (
-          <span className="text-3xl">🏪</span>
+          <Logo size={36} />
         )}
       </div>
 

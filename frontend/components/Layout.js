@@ -2,6 +2,7 @@ import Head from 'next/head';
 import Link from 'next/link';
 import { useState } from 'react';
 import { Home, Trophy, BookOpen, Info, Menu, X, Mail, MapPin } from 'lucide-react';
+import Logo from './Logo';
 
 export default function Layout({ children, title, description, canonical, schema }) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -42,7 +43,7 @@ export default function Layout({ children, title, description, canonical, schema
           <div className="flex items-center justify-between h-16">
             {/* Logo */}
             <Link href="/" className="flex items-center gap-2 text-white font-bold text-xl">
-              <span className="text-2xl">🏪</span>
+              <Logo size={32} />
               <span>ЛеманаРейтинг</span>
             </Link>
 
@@ -105,7 +106,10 @@ export default function Layout({ children, title, description, canonical, schema
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-8">
             {/* About */}
             <div>
-              <h5 className="text-primary-400 font-bold text-lg mb-3">🏪 ЛеманаРейтинг</h5>
+              <h5 className="text-primary-400 font-bold text-lg mb-3 flex items-center gap-2">
+                <Logo size={20} />
+                ЛеманаРейтинг
+              </h5>
               <p className="text-sm text-gray-400">
                 Независимый рейтинг магазинов Лемана Про. Помогаем выбрать лучший магазин
                 по соотношению цена/качество.

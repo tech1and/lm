@@ -1,5 +1,6 @@
 import Layout from '../components/Layout';
 import RatingList from '../components/RatingList';
+import Logo from '../components/Logo';
 import Link from 'next/link';
 import { shopsAPI, blogAPI } from '../lib/api';
 import { Trophy, BookOpen, Star, RefreshCw, Search, ShieldCheck, MessageSquare, Eye } from 'lucide-react';
@@ -50,7 +51,9 @@ export default function HomePage({ topshops, latestPosts, stats }) {
               </div>
             </div>
             <div className="text-center hidden lg:block">
-              <div className="text-9xl leading-none mb-4">🏪</div>
+              <div className="mb-4">
+                <Logo size={144} />
+              </div>
               <p className="text-gray-400">Рейтинг обновляется ежедневно</p>
             </div>
           </div>
@@ -126,8 +129,8 @@ export default function HomePage({ topshops, latestPosts, stats }) {
                       className="w-full h-48 object-cover"
                     />
                   ) : (
-                    <div className="w-full h-48 bg-gray-100 flex items-center justify-center text-5xl">
-                      🏪
+                    <div className="w-full h-48 bg-gray-100 flex items-center justify-center">
+                      <Logo size={64} />
                     </div>
                   )}
                   <div className="p-5">

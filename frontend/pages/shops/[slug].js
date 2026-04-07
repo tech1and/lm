@@ -2,6 +2,7 @@ import { useRouter } from 'next/router';
 import Layout from '../../components/Layout';
 import LikeButton from '../../components/LikeButton';
 import CommentForm from '../../components/CommentForm';
+import Logo from '../../components/Logo';
 import Link from 'next/link';
 import { useState } from 'react';
 import { shopsAPI } from '../../lib/api';
@@ -106,7 +107,7 @@ export default function StorePage({ store, error }) {
                     className="rounded-xl w-20 h-20 object-cover"
                   />
                 ) : (
-                  <span className="text-4xl">🏪</span>
+                  <Logo size={64} />
                 )}
               </div>
             </div>

@@ -1,4 +1,5 @@
 import Layout from '../../components/Layout';
+import Logo from '../../components/Logo';
 import Link from 'next/link';
 import { blogAPI } from '../../lib/api';
 import { BookOpen, Calendar, ArrowRight, Inbox } from 'lucide-react';
@@ -56,8 +57,8 @@ export default function BlogPage({ posts, categories }) {
                   className="w-full h-52 object-cover"
                 />
               ) : (
-                <div className="w-full h-52 bg-gray-100 flex items-center justify-center text-6xl">
-                  🏪
+                <div className="w-full h-52 bg-gray-100 flex items-center justify-center">
+                  <Logo size={64} />
                 </div>
               )}
               <div className="p-5">

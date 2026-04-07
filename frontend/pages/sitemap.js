@@ -1,5 +1,6 @@
 // pages/sitemap.js
 import Head from 'next/head';
+import Logo from '../components/Logo';
 const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://lemanas.ru';
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
 const staticPages = [
@@ -70,7 +71,10 @@ export default function SitemapPage({ stores, posts }) {
 
         {/* Магазины */}
         <section className="mb-5">
-          <h2 className="h4 mb-3">🏪 Магазины Лемана Про ({stores.length})</h2>
+          <h2 className="h4 mb-3 flex items-center gap-2">
+            <Logo size={20} />
+            Магазины Лемана Про ({stores.length})
+          </h2>
           {stores.length > 0 ? (
             <ul className="list-unstyled">
               {stores.slice(0, 30).map((store) => (
