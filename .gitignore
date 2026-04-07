@@ -2,7 +2,8 @@
 # Next.js
 # ============================================
 # dependencies
-/node_modules
+node_modules/
+frontend/node_modules/
 /.pnp
 .pnp.js
 .js
@@ -11,7 +12,8 @@
 /coverage
 
 # Next.js
-/.next/
+.next/
+frontend/.next/
 /out/
 
 # production
