@@ -16,20 +16,21 @@ export default function CookieNotice() {
   if (accepted) return null;
 
   return (
-    <div
-      className="fixed bottom-0 left-0 right-0 z-50 bg-gray-900/95 backdrop-blur-sm border-t border-gray-200"
-      style={{ boxShadow: '0 -2px 10px rgba(0,0,0,0.1)' }}
-    >
-      <div className="container mx-auto px-4 py-4 flex flex-col sm:flex-row items-center justify-between gap-4">
-        <p className="text-sm text-white">
-          Мы используем куки и аналитику для улучшения работы сайта.
-        </p>
-        <button
-          onClick={handleAccept}
-          className="bg-blue-600 hover:bg-blue-700 px-6 py-2 rounded text-sm font-medium transition-colors whitespace-nowrap"
-        >
-          Принять
-        </button>
+    <div className="fixed bottom-0 right-0 z-50 m-6">
+      <div className="w-sm rounded-2xl bg-white custom-shadow-1 transition dark:bg-neutral-800">
+        <div className="relative p-6">
+          <div className="mt-4">
+            Мы используем куки и аналитику для улучшения работы сайта.
+          </div>
+        </div>
+        <div className="rounded-b-2xl bg-gray-50 p-5 dark:bg-white/5">
+          <button
+            onClick={handleAccept}
+            className="flex w-full items-center justify-center rounded-xl! bg-primary-600 px-4 py-2 text-sm font-medium text-white hover:bg-primary-700"
+          >
+            <span className="ms-2">Принять</span>
+          </button>
+        </div>
       </div>
     </div>
   );
