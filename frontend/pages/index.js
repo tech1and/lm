@@ -51,7 +51,7 @@ export default function HomePage({ topshops, latestPosts, stats }) {
               </div>
             </div>
             <div className="text-center hidden lg:block">
-              <div className="mb-4">
+              <div className="flex justify-center mb-4">
                 <Logo size={144} />
               </div>
               <p className="text-gray-400">Рейтинг обновляется ежедневно</p>

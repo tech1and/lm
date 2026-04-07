@@ -47,7 +47,7 @@
 
   /* Like button */
   .like-btn {
-    @apply inline-flex items-center gap-2 border-2 border-gray-200 bg-white rounded-full px-5 py-2 font-semibold transition-all duration-200 hover:border-red-500 hover:text-red-500 hover:scale-105 cursor-pointer;
+    @apply inline-flex items-center gap-2 border-2 border-gray-200 bg-white text-gray-900 rounded-full px-5 py-2 font-semibold transition-all duration-200 hover:border-red-500 hover:text-red-500 hover:scale-105 cursor-pointer;
   }
   .like-btn.liked {
     @apply bg-gradient-to-br from-red-500 to-red-600 border-red-500 text-white;
