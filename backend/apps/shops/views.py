@@ -3,6 +3,7 @@ from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework.throttling import AnonRateThrottle
 from django.db.models import F, Count, Q
+from django.db.models.functions import ACos, Cos, Sin, Radians
 from django.core.cache import cache
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.filters import OrderingFilter
@@ -138,3 +139,63 @@ class ShopViewSet(viewsets.ReadOnlyModelViewSet):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    @action(detail=True, methods=['get'], url_path='similar', permission_classes=[])
+    def similar(self, request, slug=None):
+        """Возвращает 8 ближайших магазинов по территориальной близости"""
+        shop = self.get_object()
+
+        # Если у текущего магазина нет координат — возвращаем случайные магазины
+        if not shop.latitude or not shop.longitude:
+            similar_qs = Shop.objects.filter(
+                is_active=True
+            ).exclude(
+                pk=shop.pk
+            ).annotate(
+                approved_comments_count=Count('comments', filter=Q(comments__is_approved=True))
+            ).order_by('?')[:8]
+            serializer = ShopListSerializer(similar_qs, many=True)
+            return Response(serializer.data)
+
+        # Формула Haversine для вычисления расстояния в километрах
+        # R = 6371 км (радиус Земли)
+        lat = float(shop.latitude)
+        lon = float(shop.longitude)
+
+        similar_qs = Shop.objects.filter(
+            is_active=True
+        ).exclude(
+            pk=shop.pk
+        ).filter(
+            # Только магазины с координатами
+            latitude__isnull=False,
+            longitude__isnull=False
+        ).annotate(
+            # Аннотируем расстояние
+            distance=ACos(
+                Cos(Radians(lat)) * Cos(Radians(F('latitude'))) *
+                Cos(Radians(F('longitude')) - Radians(lon)) +
+                Sin(Radians(lat)) * Sin(Radians(F('latitude')))
+            ) * 6371,
+            # Аннотируем количество комментариев
+            approved_comments_count=Count('comments', filter=Q(comments__is_approved=True))
+        )
+
+        # Сортировка по запросу (по умолчанию — по расстоянию)
+        sort_by = request.query_params.get('sort_by', '')
+        ordering = request.query_params.get('ordering', '')
+
+        if sort_by == 'comments':
+            similar_qs = similar_qs.order_by('-approved_comments_count')
+        elif ordering:
+            # Поддерживаем -rating, -likes_count, -views_count
+            similar_qs = similar_qs.order_by(ordering)
+        else:
+            # По умолчанию — по близости
+            similar_qs = similar_qs.order_by('distance')
+
+        # Ограничиваем 8 результатами
+        similar_qs = similar_qs[:8]
+
+        serializer = ShopListSerializer(similar_qs, many=True)
+        return Response(serializer.data)

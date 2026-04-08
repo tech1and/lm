@@ -2,6 +2,7 @@ import { useRouter } from 'next/router';
 import Layout from '../../components/Layout';
 import LikeButton from '../../components/LikeButton';
 import CommentForm from '../../components/CommentForm';
+import SimilarStores from '../../components/SimilarStores';
 import Logo from '../../components/Logo';
 import Link from 'next/link';
 import { useState } from 'react';
@@ -325,6 +326,17 @@ export default function StorePage({ store, error }) {
                 slug={store.slug}
                 onCommentAdded={handleCommentAdded}
               />
+            </div>
+
+            {/* Similar Stores */}
+            <div className="lm-card p-6">
+              <h2 className="text-xl font-bold mb-6 flex items-center gap-2">
+                <span className="w-8 h-8 bg-purple-100 text-purple-600 rounded-lg flex items-center justify-center">
+                  <span className="text-sm">🏪</span>
+                </span>
+                Похожие магазины
+              </h2>
+              <SimilarStores slug={store.slug} />
             </div>
           </div>
 

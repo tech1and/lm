@@ -54,13 +54,16 @@ api.interceptors.response.use(
 export const shopsAPI = {
   getList: (params = {}) =>
     api.get('/api/shops/', { params }),
-  
+
   getDetail: (slug) =>
     api.get(`/api/shops/${slug}/`),
-  
+
+  getSimilar: (slug, params = {}) =>
+    api.get(`/api/shops/${slug}/similar/`, { params }),
+
   like: (slug) =>
     api.post(`/api/shops/${slug}/like/`),
-  
+
   addComment: (slug, data) =>
     api.post(`/api/shops/${slug}/comment/`, data),
 };
