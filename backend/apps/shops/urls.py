@@ -17,9 +17,14 @@ shop_comment = ShopViewSet.as_view({
     'post': 'add_comment',
 })
 
+shop_similar = ShopViewSet.as_view({
+    'get': 'similar',
+})
+
 urlpatterns = [
     path('', shop_list, name='shop-list'),
     path('<slug:slug>/', shop_detail, name='shop-detail'),
     path('<slug:slug>/like/', shop_like, name='shop-like'),
     path('<slug:slug>/comment/', shop_comment, name='shop-comment'),
+    path('<slug:slug>/similar/', shop_similar, name='shop-similar'),
 ]
