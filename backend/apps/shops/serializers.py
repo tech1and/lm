@@ -95,6 +95,8 @@ class ShopDetailSerializer(serializers.ModelSerializer):
             'rating', 'min_price',
             'has_delivery', 'has_pickup', 'has_credit', 'has_returns',
             'has_tool_checking', 'has_service_center',
+            'has_parking', 'has_toilet', 'has_available_environment',
+            'has_cafe', 'has_wifi', 'has_cash_machine', 'has_cargo',
             'created_at', 'updated_at',
             'comments', 'schema_org', 'user_liked',
         ]

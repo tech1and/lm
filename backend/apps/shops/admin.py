@@ -29,6 +29,12 @@ class ShopAdmin(ImportExportModelAdmin, admin.ModelAdmin):
         ('Цены', {
             'fields': ('min_price',),
         }),
+        ('Особенности', {
+            'fields': (
+                'has_parking', 'has_toilet', 'has_available_environment',
+                'has_cafe', 'has_wifi', 'has_cash_machine', 'has_cargo',
+            ),
+        }),
         ('Услуги', {
             'fields': (
                 'has_delivery', 'has_pickup', 'has_credit', 'has_returns',

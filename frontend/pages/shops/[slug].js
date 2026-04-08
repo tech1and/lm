@@ -47,11 +47,23 @@ export default function StorePage({ store, error }) {
   };
 
   const features = [
-    store.has_delivery && { icon: Truck, label: 'Доставка' },
-    store.has_installation && { icon: Wrench, label: 'Монтаж' },
-    store.has_warranty && { icon: Shield, label: 'Гарантия' },
-    store.has_credit && { icon: CreditCard, label: 'Кредит' },
+    store.has_parking && { icon: MapPin, label: 'Парковка' },
+    store.has_toilet && { icon: Home, label: 'Туалет' },
+    store.has_available_environment && { icon: Shield, label: 'Доступная среда' },
+    store.has_cafe && { icon: Trophy, label: 'Кафе' },
+    store.has_wifi && { icon: Globe, label: 'Wi-Fi' },
+    store.has_cash_machine && { icon: CreditCard, label: 'Банкоматы' },
+    store.has_cargo && { icon: Truck, label: 'Грузовое такси' },
+    store.has_delivery && { icon: Truck, label: 'Доставка из магазина' },
+    store.has_pickup && { icon: Home, label: 'Самовывоз' },
+    store.has_credit && { icon: CreditCard, label: 'Кредиты' },
+    store.has_returns && { icon: Shield, label: 'Возврат товаров' },
+    store.has_tool_checking && { icon: Wrench, label: 'Проверка техники' },
+    store.has_service_center && { icon: Wrench, label: 'Сервисный центр' },
   ].filter(Boolean);
+
+  // Перемешиваем в случайном порядке
+  const shuffledFeatures = features.sort(() => Math.random() - 0.5);
 
   const siteUrl = 'https://lemanas.ru';
   const canonical = `${siteUrl}/shops/${store.slug}`;
@@ -213,7 +225,7 @@ export default function StorePage({ store, error }) {
                   Услуги
                 </h2>
                 <div className="flex flex-wrap gap-3">
-                  {features.map(f => {
+                  {shuffledFeatures.map(f => {
                     const Icon = f.icon;
                     return (
                       <span key={f.label} className="feature-badge">
