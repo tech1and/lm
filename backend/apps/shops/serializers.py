@@ -103,15 +103,15 @@ class ShopDetailSerializer(serializers.ModelSerializer):
         ]
 
     def get_external_link(self, obj):
-        """Возвращает редирект-ссылку на внешний сайт (для SEO)"""
+        """Возвращает короткую редирект-ссылку на внешний сайт (для SEO)"""
         if not obj.website:
             return None
         request = self.context.get('request')
         if request:
             return request.build_absolute_uri(
-                f'/api/shops/{obj.slug}/external-redirect/'
+                f'/go/?shop={obj.slug}'
             )
-        return f'/api/shops/{obj.slug}/external-redirect/'
+        return f'/go/?shop={obj.slug}'
 
     def get_description(self, obj):
         """Возвращает очищенное HTML-описание"""

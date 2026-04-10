@@ -1,14 +1,9 @@
-from urllib.parse import urlparse, urlencode
-import re
-
 from rest_framework import viewsets, status
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework.throttling import AnonRateThrottle
 from django.db.models import F, Count, Q
 from django.core.cache import cache
-from django.shortcuts import redirect
-from django.http import HttpResponseRedirect
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.filters import OrderingFilter
 from .models import Shop, Like, Comment
@@ -174,36 +169,3 @@ class ShopViewSet(viewsets.ReadOnlyModelViewSet):
 
         serializer = ShopListSerializer(similar_qs, many=True)
         return Response(serializer.data)
-
-    @action(detail=True, methods=['get'], url_path='external-redirect', permission_classes=[])
-    def external_redirect(self, request, slug=None):
-        """Редирект на внешний сайт магазина (для SEO)"""
-        shop = self.get_object()
-        if not shop.website:
-            return Response(
-                {'error': 'Сайт магазина не указан'},
-                status=status.HTTP_404_NOT_FOUND,
-            )
-
-        # Валидация URL — разрешаем только http/https
-        target_url = shop.website
-        parsed = urlparse(target_url)
-        if parsed.scheme not in ('http', 'https'):
-            return Response(
-                {'error': 'Недопустимый протокол'},
-                status=status.HTTP_400_BAD_REQUEST,
-            )
-
-        # Опционально: можно добавить ?next= для редиректа на произвольный URL
-        next_url = request.query_params.get('next')
-        if next_url:
-            next_parsed = urlparse(next_url)
-            # next_url должен быть относительным (на наш сайт)
-            if next_parsed.scheme or next_parsed.netloc:
-                return Response(
-                    {'error': 'Параметр next должен быть относительным URL'},
-                    status=status.HTTP_400_BAD_REQUEST,
-                )
-
-        # Логирование перехода (опционально — можно добавить счётчик кликов)
-        return HttpResponseRedirect(target_url)
