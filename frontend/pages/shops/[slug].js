@@ -370,7 +370,7 @@ export default function StorePage({ store, error }) {
                         className="flex items-center gap-2 font-semibold text-blue-600 hover:underline"
                       >
                         <Globe className="w-4 h-4" />
-                        Перейти на сайт
+                        Перейти на lemanapro.ru
                       </a>
                     </li>
                   )}
@@ -433,7 +433,7 @@ export default function StorePage({ store, error }) {
                     className="flex items-center justify-center gap-2 w-full mt-6 bg-primary-500 hover:bg-primary-600 text-white px-6 py-3 rounded-xl font-bold transition-colors"
                   >
                     <ExternalLink className="w-5 h-5" />
-                    Перейти на сайт
+                    Перейти на lemanapro.ru
                   </a>
                 )}
 
