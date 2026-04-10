@@ -1,7 +1,6 @@
-export const config = { runtime: 'nodejs' };
+import { shopsAPI, blogAPI } from '../lib/api';
 
 const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://lemanas.ru';
-const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
 
 const staticPages = [
   { path: '/', priority: 1.0, changefreq: 'daily' },
@@ -17,25 +16,19 @@ const formatDate = (date) => {
   return new Date(date).toISOString();
 };
 
-export default async function handler(req, res) {
+export async function getServerSideProps({ res }) {
   try {
-    // Загружаем данные с бэкенда
     const [shopsRes, blogRes] = await Promise.allSettled([
-      fetch(`${API_URL}/api/shops/?limit=200`, { next: { revalidate: 3600 } }),
-      fetch(`${API_URL}/api/blog/posts/?limit=100`, { next: { revalidate: 3600 } }),
+      shopsAPI.getList({ page_size: 200 }),
+      blogAPI.getPosts({ page_size: 100 }),
     ]);
 
-    const shopsData = shopsRes.status === 'fulfilled'
-      ? await shopsRes.value.json().catch(() => ({}))
-      : {};
-    const blogData = blogRes.status === 'fulfilled'
-      ? await blogRes.value.json().catch(() => ({}))
-      : {};
+    const shopsData = shopsRes.status === 'fulfilled' ? shopsRes.value.data : {};
+    const blogData = blogRes.status === 'fulfilled' ? blogRes.value.data : {};
 
     const shops = shopsData.results || shopsData || [];
     const posts = blogData.results || blogData || [];
 
-    // Формируем массив всех URL
     const urls = [
       ...staticPages.map((page) => ({
         loc: `${BASE_URL}${page.path}`,
@@ -43,9 +36,9 @@ export default async function handler(req, res) {
         changefreq: page.changefreq,
         priority: page.priority,
       })),
-      ...shops.map((park) => ({
-        loc: `${BASE_URL}/shops/${park.slug}`,
-        lastmod: formatDate(park.updated_at || park.created_at),
+      ...shops.map((shop) => ({
+        loc: `${BASE_URL}/shops/${shop.slug}`,
+        lastmod: formatDate(shop.updated_at || shop.created_at),
         changefreq: 'weekly',
         priority: 0.7,
       })),
@@ -57,7 +50,6 @@ export default async function handler(req, res) {
       })),
     ];
 
-    // Генерируем XML
     const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 ${urls
@@ -73,10 +65,16 @@ ${urls
 </urlset>`;
 
     res.setHeader('Content-Type', 'application/xml');
-    res.setHeader('Cache-Control', 'public, s-maxage=3600, stale-while-revalidate=59');
-    res.status(200).send(sitemap);
+    res.write(sitemap);
+    res.end();
+
+    return { props: {} };
   } catch (error) {
     console.error('Sitemap XML error:', error);
-    res.status(500).send('Error generating sitemap');
+    return { notFound: true };
   }
+}
+
+export default function Sitemap() {
+  return null;
 }
