@@ -80,7 +80,8 @@ class ShopDetailSerializer(serializers.ModelSerializer):
     comments_count = serializers.SerializerMethodField()
     schema_org = serializers.SerializerMethodField()
     user_liked = serializers.SerializerMethodField()
-    
+    external_link = serializers.SerializerMethodField()
+
     # 🔥 Ключевое: переопределяем description как метод-поле
     description = serializers.SerializerMethodField()
 
@@ -90,7 +91,7 @@ class ShopDetailSerializer(serializers.ModelSerializer):
             'id', 'name', 'slug', 'description', 'short_description',
             'logo', 'meta_title', 'meta_description', 'meta_keywords',
             'address', 'city', 'district', 'latitude', 'longitude',
-            'phone', 'email', 'website', 'working_hours',
+            'phone', 'email', 'external_link', 'working_hours',
             'views_count', 'likes_count', 'comments_count',
             'rating', 'min_price',
             'has_delivery', 'has_pickup', 'has_credit', 'has_returns',
@@ -100,6 +101,17 @@ class ShopDetailSerializer(serializers.ModelSerializer):
             'created_at', 'updated_at',
             'comments', 'schema_org', 'user_liked',
         ]
+
+    def get_external_link(self, obj):
+        """Возвращает редирект-ссылку на внешний сайт (для SEO)"""
+        if not obj.website:
+            return None
+        request = self.context.get('request')
+        if request:
+            return request.build_absolute_uri(
+                f'/api/shops/{obj.slug}/external-redirect/'
+            )
+        return f'/api/shops/{obj.slug}/external-redirect/'
 
     def get_description(self, obj):
         """Возвращает очищенное HTML-описание"""

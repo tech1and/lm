@@ -21,10 +21,15 @@ shop_similar = ShopViewSet.as_view({
     'get': 'similar',
 })
 
+shop_external_redirect = ShopViewSet.as_view({
+    'get': 'external_redirect',
+})
+
 urlpatterns = [
     path('', shop_list, name='shop-list'),
     path('<slug:slug>/', shop_detail, name='shop-detail'),
     path('<slug:slug>/like/', shop_like, name='shop-like'),
     path('<slug:slug>/comment/', shop_comment, name='shop-comment'),
     path('<slug:slug>/similar/', shop_similar, name='shop-similar'),
+    path('<slug:slug>/external-redirect/', shop_external_redirect, name='shop-external-redirect'),
 ]
