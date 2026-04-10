@@ -360,17 +360,17 @@ export default function StorePage({ store, error }) {
                     </li>
                   )}
 
-                  {store.website && (
+                  {store.external_link && (
                     <li>
                       <div className="text-xs text-gray-500 mb-1">Сайт</div>
                       <a
-                        href={store.website}
+                        href={store.external_link}
                         target="_blank"
                         rel="noopener noreferrer nofollow"
                         className="flex items-center gap-2 font-semibold text-blue-600 hover:underline"
                       >
                         <Globe className="w-4 h-4" />
-                        {store.website.replace(/https?:\/\//i, '').slice(0, 30)}
+                        Перейти на сайт
                       </a>
                     </li>
                   )}
@@ -425,9 +425,9 @@ export default function StorePage({ store, error }) {
                 )}
 
                 {/* CTA */}
-                {store.website && (
+                {store.external_link && (
                   <a
-                    href={store.website}
+                    href={store.external_link}
                     target="_blank"
                     rel="noopener noreferrer nofollow"
                     className="flex items-center justify-center gap-2 w-full mt-6 bg-primary-500 hover:bg-primary-600 text-white px-6 py-3 rounded-xl font-bold transition-colors"
