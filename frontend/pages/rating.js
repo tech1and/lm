@@ -1,8 +1,9 @@
 import Layout from '../components/Layout';
 import RatingList from '../components/RatingList';
 import { Trophy } from 'lucide-react';
+import { shopsAPI } from '../lib/api';
 
-export default function RatingPage() {
+export default function RatingPage({ stores }) {
   const ratingSchema = {
     "@context": "https://schema.org",
     "@type": "WebPage",
@@ -32,8 +33,28 @@ export default function RatingPage() {
           </p>
         </div>
 
-        <RatingList />
+        <RatingList initialData={stores} initialSortBy="rating" />
       </div>
     </Layout>
   );
+}
+
+export async function getServerSideProps() {
+  try {
+    const res = await shopsAPI.getList({ ordering: '-rating', page_size: 100 });
+    const data = res.data.results || res.data;
+    
+    return {
+      props: {
+        stores: data || [],
+      },
+    };
+  } catch (err) {
+    console.error('SSR Error:', err.message);
+    return {
+      props: {
+        stores: [],
+      },
+    };
+  }
 }

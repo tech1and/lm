@@ -98,7 +98,7 @@ export default function HomePage({ topshops, latestPosts, stats }) {
             </Link>
           </div>
 
-          <RatingList />
+          <RatingList initialData={topshops} initialSortBy="rating" />
         </div>
       </section>
 

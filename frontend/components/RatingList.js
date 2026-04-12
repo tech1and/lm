@@ -10,10 +10,10 @@ const SORT_OPTIONS = [
   { key: 'views_count', label: 'Просмотры', icon: Eye },
 ];
 
-export default function RatingList() {
-  const [stores, setStores] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [sortBy, setSortBy] = useState('rating');
+export default function RatingList({ initialData = null, initialSortBy = 'rating' }) {
+  const [stores, setStores] = useState(initialData || []);
+  const [loading, setLoading] = useState(!initialData);
+  const [sortBy, setSortBy] = useState(initialSortBy);
   const [transitioning, setTransitioning] = useState(false);
 
   const fetchStores = async (sort) => {
@@ -42,8 +42,19 @@ export default function RatingList() {
   };
 
   useEffect(() => {
-    fetchStores(sortBy);
+    // Не делаем fetch при первом рендере, если есть initialData
+    if (!initialData || sortBy !== initialSortBy) {
+      fetchStores(sortBy);
+    }
   }, [sortBy]);
+
+  useEffect(() => {
+    // Синхронизируем initialData при навигации
+    if (initialData) {
+      setStores(initialData);
+      setLoading(false);
+    }
+  }, [initialData]);
 
   const handleSort = (sort) => {
     if (sort === sortBy) return;
