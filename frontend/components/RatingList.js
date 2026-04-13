@@ -12,12 +12,13 @@ const SORT_OPTIONS = [
 
 export default function RatingList({ initialData = null, initialSortBy = 'rating' }) {
   const [stores, setStores] = useState(initialData || []);
-  const [loading, setLoading] = useState(!initialData);
+  const [loading, setLoading] = useState(false);
   const [sortBy, setSortBy] = useState(initialSortBy);
   const [transitioning, setTransitioning] = useState(false);
 
   const fetchStores = async (sort) => {
     setTransitioning(true);
+    setLoading(true);
     try {
       let params = { page_size: 20 };
       if (sort === 'comments') {
@@ -26,7 +27,9 @@ export default function RatingList({ initialData = null, initialSortBy = 'rating
         params.ordering = `-${sort}`;
       }
 
+      console.log('fetchStores params:', params);
       const res = await shopsAPI.getList(params);
+      console.log('fetchStores response:', res.data);
       const results = res.data.results || res.data;
 
       setTimeout(() => {
@@ -42,23 +45,19 @@ export default function RatingList({ initialData = null, initialSortBy = 'rating
   };
 
   useEffect(() => {
-    // Не делаем fetch при первом рендере, если есть initialData
-    if (!initialData || sortBy !== initialSortBy) {
-      fetchStores(sortBy);
-    }
+    fetchStores(sortBy);
   }, [sortBy]);
 
   useEffect(() => {
     // Синхронизируем initialData при навигации
     if (initialData) {
       setStores(initialData);
-      setLoading(false);
+      setSortBy(initialSortBy);
     }
   }, [initialData]);
 
   const handleSort = (sort) => {
     if (sort === sortBy) return;
-    setLoading(true);
     setSortBy(sort);
   };
 
