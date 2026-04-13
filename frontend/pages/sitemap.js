@@ -52,9 +52,8 @@ export default function SitemapPage({ stores, posts }) {
         <title>Карта сайта | Рейтинг магазинов Лемана Про</title>
         <meta name="description" content="Карта сайта рейтинга магазинов Лемана Про. Все разделы и страницы." />
       </Head>
-      <div className="pt-8 lg:pt-16">
-        <div className="container my-10 sm:my-12">
-          <main className="container py-5">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <main className="py-5">
             <h1 className="mb-4">🗺️ Карта сайта</h1>
 
             {/* Основные разделы */}
@@ -122,8 +121,7 @@ export default function SitemapPage({ stores, posts }) {
                 <li><a href="/robots.txt">🤖 robots.txt</a></li>
               </ul>
             </section>
-          </main>
-        </div>
+        </main>
       </div>
     </>
   );
