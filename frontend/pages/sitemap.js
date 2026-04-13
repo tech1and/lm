@@ -54,75 +54,79 @@ export default function SitemapPage({ stores, posts }) {
         <title>Карта сайта | Рейтинг магазинов Лемана Про</title>
         <meta name="description" content="Карта сайта рейтинга магазинов Лемана Про. Все разделы и страницы." />
       </Head>
-      <main className="container py-5">
-        <h1 className="mb-4">🗺️ Карта сайта</h1>
+      <div className="pt-8 lg:pt-16">
+        <div className="container my-10 sm:my-12">
+          <main className="container py-5">
+            <h1 className="mb-4">🗺️ Карта сайта</h1>
 
-        {/* Основные разделы */}
-        <section className="mb-5">
-          <h2 className="h4 mb-3">Основные разделы</h2>
-          <ul className="list-unstyled">
-            {staticPages.map((page) => (
-              <li key={page.path} className="mb-2">
-                <a href={page.path} className="text-decoration-none">{page.label}</a>
-              </li>
-            ))}
-          </ul>
-        </section>
+            {/* Основные разделы */}
+            <section className="mb-5">
+              <h2 className="h4 mb-3">Основные разделы</h2>
+              <ul className="list-unstyled">
+                {staticPages.map((page) => (
+                  <li key={page.path} className="mb-2">
+                    <a href={page.path} className="text-decoration-none">{page.label}</a>
+                  </li>
+                ))}
+              </ul>
+            </section>
 
-        {/* Магазины */}
-        <section className="mb-5">
-          <h2 className="h4 mb-3 flex items-center gap-2">
-            <Logo size={20} />
-            Магазины Лемана Про ({stores.length})
-          </h2>
-          {stores.length > 0 ? (
-            <ul className="list-unstyled">
-              {stores.slice(0, 30).map((store) => (
-                <li key={store.id} className="mb-1">
-                  <a href={`/shops/${store.slug}`} className="text-decoration-none">
-                    {store.name}
-                  </a>
-                </li>
-              ))}
-              {stores.length > 30 && (
-                <li><a href="/rating" className="text-muted">→ Все магазины</a></li>
+            {/* Магазины */}
+            <section className="mb-5">
+              <h2 className="h4 mb-3 flex items-center gap-2">
+                <Logo size={20} />
+                Магазины Лемана Про ({stores.length})
+              </h2>
+              {stores.length > 0 ? (
+                <ul className="list-unstyled">
+                  {stores.slice(0, 30).map((store) => (
+                    <li key={store.id} className="mb-1">
+                      <a href={`/shops/${store.slug}`} className="text-decoration-none">
+                        {store.name}
+                      </a>
+                    </li>
+                  ))}
+                  {stores.length > 30 && (
+                    <li><a href="/rating" className="text-muted">→ Все магазины</a></li>
+                  )}
+                </ul>
+              ) : (
+                <p className="text-muted">Не удалось загрузить список магазинов</p>
               )}
-            </ul>
-          ) : (
-            <p className="text-muted">Не удалось загрузить список магазинов</p>
-          )}
-        </section>
+            </section>
 
-        {/* Статьи блога */}
-        <section>
-          <h2 className="h4 mb-3">📰 Статьи ({posts.length})</h2>
-          {posts.length > 0 ? (
-            <ul className="list-unstyled">
-              {posts.slice(0, 20).map((post) => (
-                <li key={post.id} className="mb-2">
-                  <a href={`/blog/${post.slug}`} className="text-decoration-none">
-                    {post.title}
-                  </a>
-                </li>
-              ))}
-              {posts.length > 20 && (
-                <li><a href="/blog" className="text-muted">→ Все статьи</a></li>
+            {/* Статьи блога */}
+            <section>
+              <h2 className="h4 mb-3">📰 Статьи ({posts.length})</h2>
+              {posts.length > 0 ? (
+                <ul className="list-unstyled">
+                  {posts.slice(0, 20).map((post) => (
+                    <li key={post.id} className="mb-2">
+                      <a href={`/blog/${post.slug}`} className="text-decoration-none">
+                        {post.title}
+                      </a>
+                    </li>
+                  ))}
+                  {posts.length > 20 && (
+                    <li><a href="/blog" className="text-muted">→ Все статьи</a></li>
+                  )}
+                </ul>
+              ) : (
+                <p className="text-muted">Не удалось загрузить статьи</p>
               )}
-            </ul>
-          ) : (
-            <p className="text-muted">Не удалось загрузить статьи</p>
-          )}
-        </section>
+            </section>
 
-        {/* Файлы */}
-        <section className="mt-5 pt-4 border-top">
-          <h2 className="h4 mb-3">📄 Файлы</h2>
-          <ul className="list-unstyled">
-            <li><a href="/sitemap.xml">🗂️ sitemap.xml (для поисковиков)</a></li>
-            <li><a href="/robots.txt">🤖 robots.txt</a></li>
-          </ul>
-        </section>
-      </main>
+            {/* Файлы */}
+            <section className="mt-5 pt-4 border-top">
+              <h2 className="h4 mb-3">📄 Файлы</h2>
+              <ul className="list-unstyled">
+                <li><a href="/sitemap.xml">🗂️ sitemap.xml (для поисковиков)</a></li>
+                <li><a href="/robots.txt">🤖 robots.txt</a></li>
+              </ul>
+            </section>
+          </main>
+        </div>
+      </div>
     </>
   );
 }
