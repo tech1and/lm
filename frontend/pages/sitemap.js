@@ -1,8 +1,7 @@
 // pages/sitemap.js
 import Head from 'next/head';
 import Logo from '../components/Logo';
-const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://lemanas.ru';
-const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
+
 const staticPages = [
   { path: '/', label: '🏠 Главная' },
   { path: '/rating', label: '📊 Рейтинг магазинов' },
@@ -12,15 +11,16 @@ const staticPages = [
   { path: '/sitemap', label: '🗺️ Карта сайта' },
 ];
 
-export async function getStaticProps() {
+export async function getServerSideProps() {
+  const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
+
   try {
     const controller = new AbortController();
     const timeout = setTimeout(() => controller.abort(), 8000);
 
-    // Правильные URL: /api/shops/
     const [storesRes, blogRes] = await Promise.allSettled([
-      fetch(`${API_URL}/api/shops/?limit=50`, { signal: controller.signal }),
-      fetch(`${API_URL}/api/blog/posts/?limit=30`, { signal: controller.signal }),
+      fetch(`${API_URL}/api/shops/?page_size=50`, { signal: controller.signal }),
+      fetch(`${API_URL}/api/blog/posts/?page_size=30`, { signal: controller.signal }),
     ]);
 
     clearTimeout(timeout);
@@ -38,12 +38,10 @@ export async function getStaticProps() {
         stores,
         posts,
       },
-      revalidate: 3600,
     };
   } catch (error) {
     console.error('Sitemap page fetch error:', error);
-    // Возвращаем пустые данные, но страница отрендерится
-    return { props: { stores: [], posts: [] }, revalidate: 3600 };
+    return { props: { stores: [], posts: [] } };
   }
 }
 
