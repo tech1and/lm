@@ -7,8 +7,8 @@ from tinymce.models import HTMLField
 class Shop(models.Model):
     name = models.CharField('Название', max_length=200)
     slug = models.SlugField('URL', max_length=200, unique=True, blank=True)
-    description = HTMLField('Описание')
-    short_description = models.CharField('Краткое описание', max_length=500)
+    description = HTMLField('Описание', blank=True, default='')
+    short_description = models.CharField('Краткое описание', max_length=500, blank=True, default='')
     logo = models.ImageField('Логотип', upload_to='shops/logos/', blank=True, null=True)
     
     # SEO поля
