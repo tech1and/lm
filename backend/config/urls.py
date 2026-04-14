@@ -40,5 +40,6 @@ urlpatterns = [
     path('api/', api_health_check, name='api-health-check'),
     path('api/shops/', include('apps.shops.urls')),
     path('api/blog/', include('apps.blog.urls')),
+    path('api/catalog/', include('apps.catalog.urls')),
     path('go/', external_redirect, name='external-redirect'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
