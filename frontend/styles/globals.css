@@ -112,6 +112,66 @@
   .fade-in-up {
     @apply animate-fade-in-up;
   }
+
+  /* WYSIWYG / prose content */
+  .prose {
+    @apply text-gray-700 leading-relaxed;
+  }
+  .prose h1, .prose h2, .prose h3, .prose h4, .prose h5, .prose h6 {
+    @apply font-bold text-gray-900 mb-3 mt-5;
+  }
+  .prose h1 { @apply text-2xl; }
+  .prose h2 { @apply text-xl; }
+  .prose h3 { @apply text-lg; }
+  .prose h4 { @apply text-base; }
+  .prose p {
+    @apply mb-3;
+  }
+  .prose ul, .prose ol {
+    @apply pl-6 mb-3;
+  }
+  .prose ul {
+    @apply list-disc;
+  }
+  .prose ol {
+    @apply list-decimal;
+  }
+  .prose li {
+    @apply mb-1;
+  }
+  .prose a {
+    @apply text-blue-600 underline hover:text-blue-800;
+  }
+  .prose strong {
+    @apply font-bold text-gray-900;
+  }
+  .prose em {
+    @apply italic;
+  }
+  .prose blockquote {
+    @apply border-l-4 border-primary-400 pl-4 py-2 my-4 text-gray-600 italic bg-gray-50 rounded-r;
+  }
+  .prose img {
+    @apply rounded-lg max-w-full h-auto my-4;
+  }
+  .prose table {
+    @apply w-full border-collapse mb-4;
+  }
+  .prose table th, .prose table td {
+    @apply border border-gray-200 px-3 py-2 text-left;
+  }
+  .prose table th {
+    @apply bg-gray-100 font-semibold;
+  }
+  .prose code {
+    @apply bg-gray-100 px-1.5 py-0.5 rounded text-sm font-mono;
+  }
+  .prose pre {
+    @apply bg-gray-900 text-gray-100 p-4 rounded-lg overflow-x-auto mb-4;
+  }
+  .prose pre code {
+    @apply bg-transparent p-0 text-inherit;
+  }
 }
 
 @layer utilities {

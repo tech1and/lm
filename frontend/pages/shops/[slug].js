@@ -211,8 +211,8 @@ export default function StorePage({ store, error }) {
                 О магазине
               </h2>
               <div
-                className="text-gray-600 leading-relaxed"
-                dangerouslySetInnerHTML={{ __html: store.description.replace(/\n/g, '<br>') }}
+                className="prose"
+                dangerouslySetInnerHTML={{ __html: store.description }}
               />
             </div>
 
