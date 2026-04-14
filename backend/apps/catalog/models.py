@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.postgres.fields import ArrayField
-from django.contrib.postgres.search import SearchVectorField, GinIndex
+from django.contrib.postgres.search import SearchVectorField
+from django.contrib.postgres.indexes import GinIndex
 from django.utils.text import slugify
 import uuid
 
