@@ -41,7 +41,7 @@ class CategoryViewSet(viewsets.ReadOnlyModelViewSet):
         if sort_by == 'reviews':
             qs = qs.order_by('-reviews_count')
         else:
-            ordering = request.query_params.get('ordering', '-created_at')
+            ordering = request.query_params.get('ordering', '-avg_rating')
             qs = qs.order_by(ordering)
         
         # Пагинация
@@ -66,7 +66,7 @@ class ProductViewSet(viewsets.ReadOnlyModelViewSet):
     filterset_fields = ['brand', 'in_stock', 'categories__slug']
     search_fields = ['name', 'brand', 'description', 'barcode']
     ordering_fields = ['price', 'created_at', 'views_count', 'avg_rating', 'likes_count', 'reviews_count']
-    ordering = ['-created_at']
+    ordering = ['-avg_rating']
 
     def get_serializer_class(self):
         if self.action == 'retrieve':

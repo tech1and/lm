@@ -10,7 +10,7 @@ const SORT_OPTIONS = [
   { key: 'views_count', label: 'Просмотры', icon: Eye },
 ];
 
-export default function CatalogProductList({ categorySlug, initialData }) {
+export default function CatalogProductList({ categorySlug, initialData, isRootCatalog = false }) {
   const { products: initialProducts, children, category } = initialData || {};
 
   const [products, setProducts] = useState(initialProducts || []);
@@ -32,8 +32,13 @@ export default function CatalogProductList({ categorySlug, initialData }) {
         params.ordering = `-${sort}`;
       }
 
-      const res = await catalogAPI.getCategoryProducts(categorySlug, params);
-      const results = res.data.results || res.data.products || [];
+      let res;
+      if (isRootCatalog || !categorySlug) {
+        res = await catalogAPI.getProducts(params);
+      } else {
+        res = await catalogAPI.getCategoryProducts(categorySlug, params);
+      }
+      const results = res.data.results || [];
 
       setProducts(results);
       setCurrentPage(page);
