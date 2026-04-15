@@ -28,7 +28,7 @@ INSTALLED_APPS = [
     'django_filters',
     'apps.blog',
     'apps.shops',
-    'apps.catalog',
+    'apps.catalog.apps.CatalogConfig',
 ]
 
 MIDDLEWARE = [
