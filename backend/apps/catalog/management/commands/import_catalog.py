@@ -12,6 +12,7 @@ class Command(BaseCommand):
 
     def add_arguments(self, parser):
         parser.add_argument('xml_file', type=str, help='Путь к YML файлу')
+        parser.add_argument('--categories-only', action='store_true', help='Импорт только категорий')
         parser.add_argument('--limit', type=int, default=0, help='Лимит товаров (0 = все)')
         parser.add_argument('--dry-run', action='store_true', help='Тест без записи в БД')
 
@@ -74,6 +75,11 @@ class Command(BaseCommand):
             category_map[cat_id] = cat
 
         self.stdout.write(self.style.SUCCESS(f'✅ Категорий обработано: {len(category_map)}'))
+
+        if options['categories_only']:
+            self.stdout.write(self.style.SUCCESS('✅ Импорт категорий завершён'))
+            return
+
         return category_map
 
     def build_path(self, category):
