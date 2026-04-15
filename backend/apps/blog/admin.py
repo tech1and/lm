@@ -7,6 +7,9 @@ class CategoryAdmin(admin.ModelAdmin):
     list_display = ['name', 'slug']
     prepopulated_fields = {'slug': ('name',)}
 
+    def view_on_site(self, obj):
+        return f'/blog/category/{obj.slug}/'
+
 
 @admin.register(Post)
 class PostAdmin(admin.ModelAdmin):

@@ -24,6 +24,9 @@ class CategoryAdmin(ImportExportModelAdmin, admin.ModelAdmin):
         }),
     )
 
+    def view_on_site(self, obj):
+        return f'/catalog/categories/{obj.slug}/'
+
 
 @admin.register(Product)
 class ProductAdmin(ImportExportModelAdmin, admin.ModelAdmin):
