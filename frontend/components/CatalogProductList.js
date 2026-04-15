@@ -4,9 +4,9 @@ import { catalogAPI } from '../lib/api';
 import { Star, Heart, MessageCircle, Eye, Inbox, ChevronLeft, ChevronRight, FolderOpen } from 'lucide-react';
 
 const SORT_OPTIONS = [
-  { key: 'rating', label: 'Рейтинг', icon: Star },
+  { key: 'avg_rating', label: 'Рейтинг', icon: Star },
   { key: 'likes_count', label: 'Лайки', icon: Heart },
-  { key: 'reviews', label: 'Отзывы', icon: MessageCircle },
+  { key: 'reviews_count', label: 'Отзывы', icon: MessageCircle },
   { key: 'views_count', label: 'Просмотры', icon: Eye },
 ];
 
@@ -15,7 +15,7 @@ export default function CatalogProductList({ categorySlug, initialData, isRootCa
 
   const [products, setProducts] = useState(initialProducts || []);
   const [loading, setLoading] = useState(false);
-  const [sortBy, setSortBy] = useState('rating');
+  const [sortBy, setSortBy] = useState('avg_rating');
   const [transitioning, setTransitioning] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
@@ -26,8 +26,8 @@ export default function CatalogProductList({ categorySlug, initialData, isRootCa
     setLoading(true);
     try {
       let params = { page, page_size: 20 };
-      if (sort === 'reviews') {
-        params.sort_by = 'reviews';
+      if (sort === 'reviews_count') {
+        params.ordering = '-reviews_count';
       } else {
         params.ordering = `-${sort}`;
       }
