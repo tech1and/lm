@@ -77,4 +77,17 @@ export const blogAPI = {
     api.get('/api/blog/categories/'),
 };
 
+export const catalogAPI = {
+  getCategories: (params = {}) =>
+    api.get('/api/catalog/categories/', { params }),
+  getCategory: (slug) =>
+    api.get(`/api/catalog/categories/${slug}/`),
+  getCategoryProducts: (slug, params = {}) =>
+    api.get(`/api/catalog/categories/${slug}/products/`, { params }),
+  getProducts: (params = {}) =>
+    api.get('/api/catalog/products/', { params }),
+  getProduct: (slug) =>
+    api.get(`/api/catalog/products/${slug}/`),
+};
+
 export default api;
