@@ -16,3 +16,6 @@ class PostAdmin(admin.ModelAdmin):
     prepopulated_fields = {'slug': ('title',)}
     readonly_fields = ['views_count', 'created_at', 'updated_at']
     save_on_top = True
+
+    def view_on_site(self, obj):
+        return f'/blog/{obj.slug}/'

@@ -67,3 +67,6 @@ class ProductAdmin(ImportExportModelAdmin, admin.ModelAdmin):
             'classes': ('collapse',),
         }),
     )
+
+    def view_on_site(self, obj):
+        return f'/catalog/products/{obj.slug}/'
