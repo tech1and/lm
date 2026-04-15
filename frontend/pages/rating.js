@@ -41,9 +41,9 @@ export default function RatingPage({ stores }) {
 
 export async function getServerSideProps() {
   try {
-    const res = await shopsAPI.getList({ ordering: '-rating', page_size: 100 });
+    const res = await shopsAPI.getList({ ordering: '-rating', page_size: 20 });
     const data = res.data.results || res.data;
-    
+
     return {
       props: {
         stores: data || [],
