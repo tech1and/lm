@@ -1,8 +1,8 @@
-import Layout from '../../components/Layout';
-import CatalogProductList from '../../components/CatalogProductList';
+import Layout from '../../../components/Layout';
+import CatalogProductList from '../../../components/CatalogProductList';
 import Link from 'next/link';
 import { FolderOpen, ChevronRight, Home } from 'lucide-react';
-import { catalogAPI } from '../../lib/api';
+import { catalogAPI } from '../../../lib/api';
 
 export default function CategoryPage({ category, children, products, error }) {
   if (error || !category) {
