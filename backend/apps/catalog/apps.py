@@ -6,5 +6,3 @@ class CatalogConfig(AppConfig):
     name = 'apps.catalog'
     verbose_name = 'Каталог товаров'
 
-    def ready(self):
-        import apps.catalog.admin  # noqa: F401
