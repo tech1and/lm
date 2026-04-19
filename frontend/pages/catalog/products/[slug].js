@@ -89,10 +89,11 @@ export default function ProductPage({ product, error }) {
 
   return (
     <Layout
-      title={product.meta_title || `${product.name} — Купить за ${product.price} ₽`}
+      title={product.meta_title ? product.meta_title : `${product.name} — Купить за ${product.price} ₽`}
       description={product.meta_description || product.short_description || `Купить ${product.name} по цене ${product.price} ₽. Характеристики, отзывы, рейтинг.`}
       canonical={canonical}
       schema={combinedSchema}
+      keywords={product.meta_keywords}
     >
       {/* Breadcrumb */}
       <div className="bg-white border-b">

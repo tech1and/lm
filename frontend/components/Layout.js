@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { Home, Trophy, BookOpen, Info, Menu, X, Mail, MapPin } from 'lucide-react';
 import Logo from './Logo';
 
-export default function Layout({ children, title, description, canonical, schema }) {
+export default function Layout({ children, title, description, canonical, schema, keywords }) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const siteTitle = title
@@ -27,6 +27,7 @@ export default function Layout({ children, title, description, canonical, schema
         <title>{siteTitle}</title>
         <meta name="description" content={siteDescription} />
         {canonical && <link rel="canonical" href={canonical} />}
+        {keywords && <meta name="keywords" content={keywords} />}
         <meta property="og:title" content={siteTitle} />
         <meta property="og:description" content={siteDescription} />
         {schema && (
