@@ -82,11 +82,14 @@ backend/apps/*/migrations/*.py
 !backend/apps/*/migrations/__init__.py
 
 # === Node.js ===
-node_modules/
+frontend/node_modules/
 *.node
-.next/
+frontend/.next
 dist/
+
 
 # === Большие данные ===
 backend/apps/catalog/management/feed.xml
 *.xml
+
+.qwen
