@@ -1,56 +1,55 @@
-# Dependencies
+```
+# Python
 __pycache__/
 *.pyc
 *.pyo
 *.pyd
-*.py.class
-*.py.obj
-
-# Environment
+.Python
+env/
+venv/
+.venv/
+.ENV
+.ENV.local
 .env
 .env.local
 .env.*
-venv/
-.venv/
-env/
-ENV/
+.env.local.*
+.env.prod.*
+.env.test.*
+.env.testing.*
 
-# Build and distribution artifacts
-build/
-dist/
-*.egg-info/
-.installed.cfg
-.tox/
-.coverage
-.coverage.*
-
-# Logs
+# Django
 *.log
+local_settings.py
+db.sqlite3
+db.sqlite3-journal
+media/
+staticfiles/
+.coverage
+htmlcov/
+.DS_Store
+Thumbs.db
 
-# IDE specific
+# Migration files (if not already tracked)
+*/migrations/*.py
+!*/migrations/__init__.py
+!*/migrations/0001_initial.py
+
+# IDE
 .vscode/
 .idea/
 *.swp
 *.swo
-*~
-.DS_Store
-Thumbs.db
+*.tmp
 
-# Testing
+# Build and distribution artifacts
+dist/
+build/
+*.egg-info/
+.coverage
+htmlcov/
 .pytest_cache/
 .mypy_cache/
-htmlcov/
-coverage/
-
-# OS generated
-.DS_Store
-.DS_Store?
-._*
-.Spotlight-V100
-.Trashes
-ehthumbs.db
-Thumbs.db
-Icon?
-*/Icon?
-.dSYM/
-*.dSYM/
+.tox/
+nox/
+```
