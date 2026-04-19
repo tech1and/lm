@@ -1,39 +1,32 @@
-```
 # Python
 __pycache__/
-*.pyc
-*.pyo
-*.pyd
+*.py[cod]
+*$py.class
+*.so
 .Python
-env/
-venv/
-.venv/
-.ENV
-.ENV.local
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Environment
 .env
 .env.local
 .env.*
-.env.local.*
-.env.prod.*
-.env.test.*
-.env.testing.*
-
-# Django
-*.log
-local_settings.py
-db.sqlite3
-db.sqlite3-journal
-media/
-staticfiles/
-.coverage
-htmlcov/
-.DS_Store
-Thumbs.db
-
-# Migration files (if not already tracked)
-*/migrations/*.py
-!*/migrations/__init__.py
-!*/migrations/0001_initial.py
+.venv/
+venv/
+ENV/
 
 # IDE
 .vscode/
@@ -42,14 +35,48 @@ Thumbs.db
 *.swo
 *.tmp
 
-# Build and distribution artifacts
-dist/
-build/
-*.egg-info/
+# Logs
+*.log
+
+# Coverage
 .coverage
+coverage/
 htmlcov/
+
+# Testing
 .pytest_cache/
 .mypy_cache/
-.tox/
-nox/
-```
+
+# Distribution / packaging
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+pip-wheel-metadata/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# Django
+*.log
+local_settings.py
+db.sqlite3
+db.sqlite3-journal
+media/
+staticfiles/
+
+# Migration files (except when specifically added)
+!backend/apps/catalog/migrations/0002_add_product_seo_fields.py
+backend/apps/*/migrations/*.py
+!backend/apps/*/migrations/__init__.py
