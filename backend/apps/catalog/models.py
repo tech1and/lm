@@ -86,6 +86,8 @@ class Product(models.Model):
     meta_description = models.TextField('Meta Description', blank=True)
     meta_keywords = models.TextField('Meta Keywords', blank=True)
 
+    video_source = models.TextField('Источник видео', blank=True)
+
     # Системные
     is_active = models.BooleanField('Активен', default=True)
     created_at = models.DateTimeField('Создан', auto_now_add=True)
