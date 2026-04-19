@@ -80,3 +80,13 @@ staticfiles/
 !backend/apps/catalog/migrations/0002_add_product_seo_fields.py
 backend/apps/*/migrations/*.py
 !backend/apps/*/migrations/__init__.py
+
+# === Node.js ===
+node_modules/
+*.node
+.next/
+dist/
+
+# === Большие данные ===
+backend/apps/catalog/management/feed.xml
+*.xml
