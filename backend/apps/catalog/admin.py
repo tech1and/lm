@@ -65,6 +65,10 @@ class ProductAdmin(ImportExportModelAdmin, admin.ModelAdmin):
             'fields': ('params',),
             'classes': ('collapse',),
         }),
+        ('SEO', {
+            'fields': ('meta_title', 'meta_description', 'meta_keywords'),
+            'classes': ('collapse',),
+        }),
         ('Статистика', {
             'fields': ('likes_count', 'views_count', 'reviews_count', 'avg_rating', 'created_at', 'updated_at'),
             'classes': ('collapse',),
