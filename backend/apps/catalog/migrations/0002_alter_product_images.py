@@ -13,6 +13,6 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='product',
             name='images',
-            field=models.JSONField(blank=True, default=list, verbose_name='Изображения'),
+            field=models.TextField(blank=True, default='[]', verbose_name='Изображения'),
         ),
     ]

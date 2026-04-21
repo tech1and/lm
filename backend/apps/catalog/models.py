@@ -6,6 +6,36 @@ from django.utils.text import slugify
 import uuid
 
 
+class ImageListField(models.TextField):
+    """Кастомное поле для хранения списка URL изображений в виде JSON."""
+    
+    def from_db_value(self, value, expression, connection):
+        if value is None:
+            return []
+        import json
+        try:
+            return json.loads(value)
+        except (json.JSONDecodeError, TypeError):
+            return []
+    
+    def to_python(self, value):
+        if isinstance(value, list):
+            return value
+        if value is None:
+            return []
+        import json
+        try:
+            return json.loads(value)
+        except (json.JSONDecodeError, TypeError):
+            return []
+    
+    def get_prep_value(self, value):
+        import json
+        if isinstance(value, list):
+            return json.dumps(value, ensure_ascii=False)
+        return super().get_prep_value(value)
+
+
 class Category(models.Model):
     """Дерево категорий"""
     xml_id = models.CharField('XML ID', max_length=50, unique=True, db_index=True)
@@ -59,7 +89,7 @@ class Product(models.Model):
     delivery_available = models.BooleanField('Доставка', default=True)
 
     # Медиа
-    images = models.JSONField('Изображения', default=list, blank=True)
+    images = ImageListField('Изображения', default='[]', blank=True)
 
     # Параметры из <param> (JSONB для гибкости)
     params = models.JSONField('Параметры', default=dict, blank=True)
