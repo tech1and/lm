@@ -2,6 +2,11 @@ from rest_framework import serializers
 from .models import Category, Product
 
 
+class ImageListField(serializers.ListField):
+    """Кастомное поле для списка изображений, чтобы избежать разбиения по запятым"""
+    child = serializers.CharField(max_length=500)
+
+
 class CategorySerializer(serializers.ModelSerializer):
     class Meta:
         model = Category
@@ -10,6 +15,7 @@ class CategorySerializer(serializers.ModelSerializer):
 
 class ProductListSerializer(serializers.ModelSerializer):
     category_names = serializers.SerializerMethodField()
+    images = ImageListField(read_only=True)
 
     class Meta:
         model = Product
@@ -25,6 +31,7 @@ class ProductListSerializer(serializers.ModelSerializer):
 
 class ProductDetailSerializer(serializers.ModelSerializer):
     categories = CategorySerializer(many=True, read_only=True)
+    images = ImageListField(read_only=True)
 
     class Meta:
         model = Product
