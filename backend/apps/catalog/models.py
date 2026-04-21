@@ -82,9 +82,9 @@ class Product(models.Model):
 
     # SEO
     search_vector = SearchVectorField('Поиск', null=True)
-    #meta_title = models.CharField('Meta Title', max_length=300, blank=True)
-    #meta_description = models.TextField('Meta Description', blank=True)
-    #meta_keywords = models.TextField('Meta Keywords', blank=True)
+    meta_title = models.CharField('Meta Title', max_length=300, blank=True)
+    meta_description = models.TextField('Meta Description', blank=True)
+    meta_keywords = models.TextField('Meta Keywords', blank=True)
 
     video_source = models.TextField('Источник видео', blank=True)
 
