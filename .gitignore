@@ -93,3 +93,4 @@ backend/apps/catalog/management/feed.xml
 *.xml
 
 .qwen
+*.code-workspace
