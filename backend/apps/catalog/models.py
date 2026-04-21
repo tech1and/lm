@@ -59,7 +59,7 @@ class Product(models.Model):
     delivery_available = models.BooleanField('Доставка', default=True)
 
     # Медиа
-    images = ArrayField(models.URLField(max_length=500), default=list, verbose_name='Изображения')
+    images = models.JSONField('Изображения', default=list, blank=True)
 
     # Параметры из <param> (JSONB для гибкости)
     params = models.JSONField('Параметры', default=dict, blank=True)
