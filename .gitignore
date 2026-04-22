@@ -77,9 +77,15 @@ media/
 staticfiles/
 
 # Migration files (except when specifically added)
-!backend/apps/catalog/migrations/0002_add_product_seo_fields.py
 backend/apps/*/migrations/*.py
 !backend/apps/*/migrations/__init__.py
+
+# Игнорировать все миграции, кроме начальных
+apps/catalog/migrations/00[2-9]*.py
+apps/catalog/migrations/0[1-9][0-9]*.py
+apps/shops/migrations/00[2-9]*.py
+apps/shops/migrations/0[1-9][0-9]*.py
+!apps/*/migrations/0001_initial.py
 
 # === Node.js ===
 frontend/node_modules/
