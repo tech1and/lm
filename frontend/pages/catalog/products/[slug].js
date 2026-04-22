@@ -126,26 +126,32 @@ export default function ProductPage({ product, error }) {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Left Column - Images & Details */}
           <div className="lg:col-span-2 space-y-6">
-            {/* Product Images */}
-            <div className="lm-card p-6">
-              {product.images && product.images.length > 0 ? (
-                <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
-                  {product.images.map((img, idx) => (
-                    <div key={idx} className="aspect-square bg-gray-100 rounded-xl overflow-hidden">
-                      <img
-                        src={img}
-                        alt={`${product.name} ${idx + 1}`}
-                        className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
-                      />
-                    </div>
-                  ))}
-                </div>
-              ) : (
-                <div className="aspect-video bg-gradient-to-br from-gray-100 to-gray-200 rounded-xl flex items-center justify-center">
-                  <Inbox className="w-24 h-24 text-gray-400" />
-                </div>
-              )}
-            </div>
+             {/* Product Images - Bootstrap Carousel */}
+             <div className="lm-card p-6">
+               {product.images && product.images.length > 0 ? (
+                 <div id={`carousel-${product.slug}`} className="carousel slide" data-bs-ride="carousel">
+                   <div className="carousel-inner">
+                     {product.images.map((img, idx) => (
+                       <div key={idx} className={`carousel-item ${idx === 0 ? 'active' : ''}`}>
+                         <img src={img} className="d-block w-100" alt={`${product.name} ${idx + 1}`} />
+                       </div>
+                     ))}
+                   </div>
+                   <button className="carousel-control-prev" type="button" data-bs-target={`#carousel-${product.slug}`} data-bs-slide="prev">
+                     <span className="carousel-control-prev-icon" aria-hidden="true"></span>
+                     <span className="visually-hidden">Previous</span>
+                   </button>
+                   <button className="carousel-control-next" type="button" data-bs-target={`#carousel-${product.slug}`} data-bs-slide="next">
+                     <span className="carousel-control-next-icon" aria-hidden="true"></span>
+                     <span className="visually-hidden">Next</span>
+                   </button>
+                 </div>
+               ) : (
+                 <div className="aspect-video bg-gradient-to-br from-gray-100 to-gray-200 rounded-xl flex items-center justify-center">
+                   <Inbox className="w-24 h-24 text-gray-400" />
+                 </div>
+               )}
+             </div>
 
             {/* Description */}
             {product.description && (
