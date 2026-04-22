@@ -132,19 +132,15 @@ export default function ProductPage({ product, error }) {
                  <div className="relative w-full overflow-hidden rounded-2xl">
                    <div className="group/cardGallerySlider group relative">
                      <div className="w-full overflow-hidden rounded-xl">
-                       <a className="relative flex items-center justify-center aspect-w-3 aspect-h-3" href="#">
-                         <div className="absolute inset-0" style={{ opacity: 1, transform: 'none' }}>
-                           <img
-                             alt="listing card gallery"
-                             loading="lazy"
-                             decoding="async"
-                             className="rounded-xl object-cover"
-                             sizes="(max-width: 1025px) 100vw, 25vw"
-                             src={product.images[0]}
-                             style={{ position: 'absolute', height: '100%', width: '100%', inset: 0, color: 'transparent' }}
-                           />
-                         </div>
-                       </a>
+                       <div className="relative w-full aspect-square">
+                         <img
+                           alt={product.name}
+                           loading="lazy"
+                           decoding="async"
+                           className="rounded-xl object-cover w-full h-full"
+                           src={product.images[0]}
+                         />
+                       </div>
                      </div>
                      <div className="opacity-0 transition-opacity group-hover/cardGallerySlider:opacity-100">
                        <div className="absolute end-3 top-[calc(50%-1rem)]">
