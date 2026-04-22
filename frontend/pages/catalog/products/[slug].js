@@ -133,12 +133,12 @@ export default function ProductPage({ product, error }) {
                  <div className="relative w-full overflow-hidden rounded-2xl">
                    <div className="group/cardGallerySlider group relative">
                      <div className="w-full overflow-hidden rounded-xl">
-                       <div className="relative w-full aspect-square">
+                       <div className="relative w-full max-h-[70vh] lg:max-h-[80vh] flex items-center justify-center bg-gray-50">
                          <img
                            alt={product.name}
                            loading="lazy"
                            decoding="async"
-                           className="rounded-xl object-cover w-full h-full transition-transform duration-300"
+                           className="max-w-full max-h-full object-contain rounded-xl"
                            src={product.images[currentImageIndex]}
                          />
                        </div>
