@@ -93,10 +93,15 @@ frontend/node_modules/
 frontend/.next
 dist/
 
+.qwen/
+*.qwen-session
+*.tmp
+node_modules/
+.env
+
 
 # === Большие данные ===
 backend/apps/catalog/management/feed.xml
 *.xml
 
-.qwen
 *.code-workspace
