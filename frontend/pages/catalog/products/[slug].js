@@ -126,25 +126,51 @@ export default function ProductPage({ product, error }) {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Left Column - Images & Details */}
           <div className="lg:col-span-2 space-y-6">
-             {/* Product Images - Bootstrap Carousel */}
+             {/* Product Images Gallery */}
              <div className="lm-card p-6">
                {product.images && product.images.length > 0 ? (
-                 <div id={`carousel-${product.slug}`} className="carousel slide" data-bs-ride="carousel">
-                   <div className="carousel-inner">
-                     {product.images.map((img, idx) => (
-                       <div key={idx} className={`carousel-item ${idx === 0 ? 'active' : ''}`}>
-                         <img src={img} className="d-block w-100" alt={`${product.name} ${idx + 1}`} />
+                 <div className="relative w-full overflow-hidden rounded-2xl">
+                   <div className="group/cardGallerySlider group relative">
+                     <div className="w-full overflow-hidden rounded-xl">
+                       <a className="relative flex items-center justify-center aspect-w-3 aspect-h-3" href="#">
+                         <div className="absolute inset-0" style={{ opacity: 1, transform: 'none' }}>
+                           <img
+                             alt="listing card gallery"
+                             loading="lazy"
+                             decoding="async"
+                             className="rounded-xl object-cover"
+                             sizes="(max-width: 1025px) 100vw, 25vw"
+                             src={product.images[0]}
+                             style={{ position: 'absolute', height: '100%', width: '100%', inset: 0, color: 'transparent' }}
+                           />
+                         </div>
+                       </a>
+                     </div>
+                     <div className="opacity-0 transition-opacity group-hover/cardGallerySlider:opacity-100">
+                       <div className="absolute end-3 top-[calc(50%-1rem)]">
+                         <button
+                           className="size-8! relative isolate inline-flex shrink-0 items-center justify-center rounded-full border font-medium size-10 text-sm/none focus:not-data-focus:outline-hidden data-focus:outline-2 data-focus:outline-offset-2 data-focus:outline-blue-500 data-disabled:opacity-50 *:data-[slot=icon]:-mx-0.5 *:data-[slot=icon]:my-0.5 *:data-[slot=icon]:size-5 *:data-[slot=icon]:shrink-0 *:data-[slot=icon]:self-center sm:*:data-[slot=icon]:my-1 sm:*:data-[slot=icon]:size-5 forced-colors:[--btn-icon:ButtonText] forced-colors:data-hover:[--btn-icon:ButtonText] border-transparent bg-(--btn-border) dark:bg-(--btn-bg) before:absolute before:inset-0 before:-z-10 before:rounded-full before:bg-(--btn-bg) dark:before:hidden dark:border-white/5 after:absolute after:inset-0 after:-z-10 after:rounded-full data-active:after:bg-(--btn-hover-overlay) data-hover:after:bg-(--btn-hover-overlay) dark:after:-inset-px dark:after:rounded-full data-disabled:before:shadow-none data-disabled:after:shadow-none text-neutral-950 [--btn-bg:white] [--btn-border:var(--color-neutral-950)]/10 [--btn-hover-overlay:var(--color-neutral-950)]/[2.5%] data-active:[--btn-border:var(--color-neutral-950)]/15 data-hover:[--btn-border:var(--color-neutral-950)]/15 dark:[--btn-hover-overlay:var(--color-neutral-950)]/5 [--btn-icon:var(--color-neutral-400)] data-active:[--btn-icon:var(--color-neutral-500)] data-hover:[--btn-icon:var(--color-neutral-500)] cursor-default"
+                           type="button"
+                         >
+                           <span className="absolute top-1/2 left-1/2 size-[max(100%,2.75rem)] -translate-x-1/2 -translate-y-1/2 [@media(pointer:fine)]:hidden" aria-hidden="true"></span>
+                           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" aria-hidden="true" data-slot="icon" className="size-4! rtl:rotate-180">
+                             <path strokeLinecap="round" strokeLinejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5"></path>
+                           </svg>
+                         </button>
                        </div>
-                     ))}
+                     </div>
+                     <div className="absolute inset-x-0 bottom-0 h-10 rounded-b-xl bg-linear-to-t from-neutral-900 opacity-50"></div>
+                     <div className="absolute bottom-2 left-1/2 flex -translate-x-1/2 items-center justify-center gap-x-1.5">
+                       {product.images.map((_, idx) => (
+                         <button key={idx} className={`h-1.5 w-1.5 rounded-full ${idx === 0 ? 'bg-white' : 'bg-white/60'}`}></button>
+                       ))}
+                     </div>
                    </div>
-                   <button className="carousel-control-prev" type="button" data-bs-target={`#carousel-${product.slug}`} data-bs-slide="prev">
-                     <span className="carousel-control-prev-icon" aria-hidden="true"></span>
-                     <span className="visually-hidden">Previous</span>
-                   </button>
-                   <button className="carousel-control-next" type="button" data-bs-target={`#carousel-${product.slug}`} data-bs-slide="next">
-                     <span className="carousel-control-next-icon" aria-hidden="true"></span>
-                     <span className="visually-hidden">Next</span>
-                   </button>
+                   <div className="flex cursor-pointer items-center justify-center rounded-full pt-px transition-colors absolute top-3 right-3 text-white bg-black/30 hover:bg-black/50 size-8">
+                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20" color="#FF385C" fill="#FF385C" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                       <path d="M10.4107 19.9677C7.58942 17.858 2 13.0348 2 8.69444C2 5.82563 4.10526 3.5 7 3.5C8.5 3.5 10 4 12 6C14 4 15.5 3.5 17 3.5C19.8947 3.5 22 5.82563 22 8.69444C22 13.0348 16.4106 17.858 13.5893 19.9677C12.6399 20.6776 11.3601 20.6776 10.4107 19.9677Z"></path>
+                     </svg>
+                   </div>
                  </div>
                ) : (
                  <div className="aspect-video bg-gradient-to-br from-gray-100 to-gray-200 rounded-xl flex items-center justify-center">
