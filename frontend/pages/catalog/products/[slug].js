@@ -3,7 +3,7 @@ import Layout from '../../../components/Layout';
 import LikeButton from '../../../components/LikeButton';
 import CommentForm from '../../../components/CommentForm';
 import Link from 'next/link';
-import { useState } from 'react';
+import { useState, Fragment } from 'react';
 import { catalogAPI } from '../../../lib/api';
 import {
   Star, Heart, MessageCircle, Eye, Inbox, ChevronRight, Home,
@@ -229,20 +229,44 @@ export default function ProductPage({ product, error }) {
             )}
 
             {/* Specifications */}
-            {product.specifications && Object.keys(product.specifications).length > 0 && (
+            {(product.params || product.weight || product.dimensions) && (
               <div className="lm-card p-6">
                 <h2 className="text-xl font-bold mb-4 flex items-center gap-2">
                   <Package className="w-6 h-6 text-purple-600" />
                   Характеристики
                 </h2>
-                <div className="space-y-3">
-                  {Object.entries(product.specifications).map(([key, value]) => (
-                    <div key={key} className="flex justify-between py-2 border-b border-gray-100 last:border-0">
-                      <span className="text-gray-500 text-sm">{key}</span>
-                      <span className="font-medium text-gray-900 text-sm">{value}</span>
-                    </div>
+                <dl className="grid grid-cols-1 text-base/6 sm:grid-cols-[min(50%,--spacing(80))_auto]">
+                  {product.params && Object.entries(product.params).map(([key, value]) => (
+                    <Fragment key={key}>
+                      <dt className="col-start-1 border-t border-neutral-950/5 pt-3 text-neutral-500 first:border-none sm:border-t sm:border-neutral-950/5 sm:py-3 dark:border-white/5 dark:text-neutral-400 sm:dark:border-white/5">
+                        {key}
+                      </dt>
+                      <dd className="sm:text-right pt-1 pb-3 text-neutral-950 sm:border-t sm:border-neutral-950/5 sm:py-3 sm:nth-2:border-none dark:text-white dark:sm:border-white/5">
+                        {value}
+                      </dd>
+                    </Fragment>
                   ))}
-                </div>
+                  {product.weight && (
+                    <Fragment>
+                      <dt className="col-start-1 border-t border-neutral-950/5 pt-3 text-neutral-500 first:border-none sm:border-t sm:border-neutral-950/5 sm:py-3 dark:border-white/5 dark:text-neutral-400 sm:dark:border-white/5">
+                        Вес
+                      </dt>
+                      <dd className="sm:text-right pt-1 pb-3 text-neutral-950 sm:border-t sm:border-neutral-950/5 sm:py-3 sm:nth-2:border-none dark:text-white dark:sm:border-white/5">
+                        {product.weight}
+                      </dd>
+                    </Fragment>
+                  )}
+                  {product.dimensions && (
+                    <Fragment>
+                      <dt className="col-start-1 border-t border-neutral-950/5 pt-3 text-neutral-500 first:border-none sm:border-t sm:border-neutral-950/5 sm:py-3 dark:border-white/5 dark:text-neutral-400 sm:dark:border-white/5">
+                        Габариты
+                      </dt>
+                      <dd className="sm:text-right pt-1 pb-3 text-neutral-950 sm:border-t sm:border-neutral-950/5 sm:py-3 sm:nth-2:border-none dark:text-white dark:sm:border-white/5">
+                        {product.dimensions}
+                      </dd>
+                    </Fragment>
+                  )}
+                </dl>
               </div>
             )}
 
