@@ -88,6 +88,8 @@ export const catalogAPI = {
     api.get('/api/catalog/products/', { params }),
   getProduct: (slug) =>
     api.get(`/api/catalog/products/${slug}/`),
+  getSimilarProducts: (slug, params = {}) =>
+    api.get(`/api/catalog/products/${slug}/similar/`, { params }),
 };
 
 export default api;

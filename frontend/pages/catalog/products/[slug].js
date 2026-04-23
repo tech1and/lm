@@ -3,7 +3,7 @@ import Layout from '../../../components/Layout';
 import LikeButton from '../../../components/LikeButton';
 import CommentForm from '../../../components/CommentForm';
 import Link from 'next/link';
-import { useState, Fragment } from 'react';
+import { useState } from 'react';
 import { catalogAPI } from '../../../lib/api';
 import {
   Star, Heart, MessageCircle, Eye, Inbox, ChevronRight, Home,
@@ -11,7 +11,7 @@ import {
   AlertCircle, Tag, Package
 } from 'lucide-react';
 
-export default function ProductPage({ product, error }) {
+export default function ProductPage({ product, similarProducts, error }) {
   const router = useRouter();
   const [comments, setComments] = useState(product?.comments || []);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
@@ -235,36 +235,36 @@ export default function ProductPage({ product, error }) {
                   <Package className="w-6 h-6 text-purple-600" />
                   Характеристики
                 </h2>
-                <dl className="grid grid-cols-1 text-base/6 sm:grid-cols-[min(50%,--spacing(80))_auto]">
+                <dl className="space-y-3">
                   {product.params && Object.entries(product.params).map(([key, value]) => (
-                    <Fragment key={key}>
-                      <dt className="col-start-1 border-t border-neutral-950/5 pt-3 text-neutral-500 first:border-none sm:border-t sm:border-neutral-950/5 sm:py-3 dark:border-white/5 dark:text-neutral-400 sm:dark:border-white/5">
+                    <div key={key} className="flex items-baseline gap-4 border-t border-gray-100 pt-3 first:border-none first:pt-0 dark:border-white/5">
+                      <dt className="text-neutral-500 min-w-[150px] dark:text-neutral-400">
                         {key}
                       </dt>
-                      <dd className="sm:text-right pt-1 pb-3 text-neutral-950 sm:border-t sm:border-neutral-950/5 sm:py-3 sm:nth-2:border-none dark:text-white dark:sm:border-white/5">
+                      <dd className="text-neutral-950 dark:text-white">
                         {value}
                       </dd>
-                    </Fragment>
+                    </div>
                   ))}
                   {product.weight && (
-                    <Fragment>
-                      <dt className="col-start-1 border-t border-neutral-950/5 pt-3 text-neutral-500 first:border-none sm:border-t sm:border-neutral-950/5 sm:py-3 dark:border-white/5 dark:text-neutral-400 sm:dark:border-white/5">
+                    <div className="flex items-baseline gap-4 border-t border-gray-100 pt-3 first:border-none first:pt-0 dark:border-white/5">
+                      <dt className="text-neutral-500 min-w-[150px] dark:text-neutral-400">
                         Вес
                       </dt>
-                      <dd className="sm:text-right pt-1 pb-3 text-neutral-950 sm:border-t sm:border-neutral-950/5 sm:py-3 sm:nth-2:border-none dark:text-white dark:sm:border-white/5">
+                      <dd className="text-neutral-950 dark:text-white">
                         {product.weight}
                       </dd>
-                    </Fragment>
+                    </div>
                   )}
                   {product.dimensions && (
-                    <Fragment>
-                      <dt className="col-start-1 border-t border-neutral-950/5 pt-3 text-neutral-500 first:border-none sm:border-t sm:border-neutral-950/5 sm:py-3 dark:border-white/5 dark:text-neutral-400 sm:dark:border-white/5">
+                    <div className="flex items-baseline gap-4 border-t border-gray-100 pt-3 first:border-none first:pt-0 dark:border-white/5">
+                      <dt className="text-neutral-500 min-w-[150px] dark:text-neutral-400">
                         Габариты
                       </dt>
-                      <dd className="sm:text-right pt-1 pb-3 text-neutral-950 sm:border-t sm:border-neutral-950/5 sm:py-3 sm:nth-2:border-none dark:text-white dark:sm:border-white/5">
+                      <dd className="text-neutral-950 dark:text-white">
                         {product.dimensions}
                       </dd>
-                    </Fragment>
+                    </div>
                   )}
                 </dl>
               </div>
@@ -365,6 +365,56 @@ export default function ProductPage({ product, error }) {
                 onCommentAdded={handleCommentAdded}
               />
             </div>
+
+            {/* Similar Products */}
+            {similarProducts && similarProducts.length > 0 && (
+              <div className="lm-card p-6">
+                <h2 className="text-xl font-bold mb-4 flex items-center gap-2">
+                  <Package className="w-6 h-6 text-blue-600" />
+                  Похожие товары
+                </h2>
+                <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-2 gap-4">
+                  {similarProducts.map(similarProduct => (
+                    <Link
+                      key={similarProduct.id}
+                      href={`/catalog/products/${similarProduct.slug}`}
+                      className="group block border border-gray-200 rounded-xl overflow-hidden hover:shadow-lg transition-shadow dark:border-white/10"
+                    >
+                      <div className="aspect-square bg-gray-50 overflow-hidden">
+                        {similarProduct.images && similarProduct.images[0] ? (
+                          <img
+                            src={similarProduct.images[0]}
+                            alt={similarProduct.name}
+                            loading="lazy"
+                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                          />
+                        ) : (
+                          <div className="w-full h-full flex items-center justify-center">
+                            <Inbox className="w-12 h-12 text-gray-400" />
+                          </div>
+                        )}
+                      </div>
+                      <div className="p-3">
+                        <h3 className="text-sm font-medium text-gray-900 line-clamp-2 mb-2 dark:text-white">
+                          {similarProduct.name}
+                        </h3>
+                        <div className="flex items-center justify-between">
+                          <span className="text-base font-bold text-primary-600">
+                            {similarProduct.price.toLocaleString('ru-RU')} ₽
+                          </span>
+                          {similarProduct.avg_rating > 0 && (
+                            <div className="flex items-center gap-1 text-xs text-gray-500">
+                              <Star className="w-3 h-3 fill-current text-yellow-500" />
+                              {Number(similarProduct.avg_rating).toFixed(1)}
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                    </Link>
+                  ))}
+                </div>
+              </div>
+            )}
           </div>
 
           {/* Right Sidebar - Buy Block */}
@@ -517,12 +567,27 @@ export async function getServerSideProps({ params }) {
       console.error('Ошибка загрузки комментариев:', e);
     }
 
+    // Получаем похожие товары из той же категории (6 шт)
+    let similarProducts = [];
+    try {
+      if (data.category && data.category.slug) {
+        const similarRes = await catalogAPI.getCategoryProducts(data.category.slug, { limit: 6 });
+        // Фильтруем текущий товар из списка похожих
+        similarProducts = (similarRes.data.results || similarRes.data || [])
+          .filter(p => p.id !== data.id)
+          .slice(0, 6);
+      }
+    } catch (e) {
+      console.error('Ошибка загрузки похожих товаров:', e);
+    }
+
     return {
       props: {
         product: {
           ...data,
           comments,
         } || null,
+        similarProducts,
       },
     };
   } catch (err) {
@@ -530,6 +595,7 @@ export async function getServerSideProps({ params }) {
       return {
         props: {
           product: null,
+          similarProducts: [],
           error: 'not_found',
         },
       };
@@ -539,6 +605,7 @@ export async function getServerSideProps({ params }) {
     return {
       props: {
         product: null,
+        similarProducts: [],
         error: err.message,
       },
     };
