@@ -1,1 +1,97 @@
-Nothing should be ignored based on the provided file changes, as only a JavaScript source file was modified and no build artifacts, dependencies, or temporary files were detected.
+# ==========================================
+# PYTHON / DJANGO
+# ==========================================
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+*.egg-info/
+dist/
+build/
+*.egg
+
+# Virtual environments
+venv/
+ENV/
+env/
+.venv/
+
+# Django specific
+*.log
+local_settings.py
+db.sqlite3
+*.sqlite3
+staticfiles/
+media/
+.pytest_cache/
+.coverage
+htmlcov/
+
+# ==========================================
+# NODE.JS / NEXT.JS
+# ==========================================
+node_modules/
+.next/
+out/
+*.tsbuildinfo
+
+# Package manager caches
+.npm/
+.yarn/
+.pnp/
+.pnp.js
+
+# Debug logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# ==========================================
+# ENVIRONMENT & SECRETS
+# ==========================================
+.env
+.env.local
+.env.*.local
+.env.production
+.env.development
+*.key
+*.pem
+secrets.json
+config.local.py
+
+# ==========================================
+# IDE & EDITORS
+# ==========================================
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+
+# ==========================================
+# PROJECT STRATEGY & CUSTOM
+# ==========================================
+# 📦 Django Migrations: в Git храним ТОЛЬКО начальную миграцию
+**/migrations/*.py
+!**/migrations/__init__.py
+!**/migrations/0001_initial.py
+
+# 🚫 Большие/бинарные файлы (вызывали ошибки пуша)
+*.node
+feed.xml
+*.xml
+
+# 🗂️ OS / System
+.AppleDouble
+.LSOverride
+Icon
+._*
+
+*.code-workspace
+
+.qwen
+*.filepart
