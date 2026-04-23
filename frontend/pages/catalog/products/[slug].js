@@ -567,16 +567,11 @@ export async function getServerSideProps({ params }) {
       console.error('Ошибка загрузки комментариев:', e);
     }
 
-    // Получаем похожие товары из той же категории (6 шт)
+    // Получаем похожие товары через специальный API-метод (6 шт)
     let similarProducts = [];
     try {
-      if (data.category && data.category.slug) {
-        const similarRes = await catalogAPI.getCategoryProducts(data.category.slug, { limit: 6 });
-        // Фильтруем текущий товар из списка похожих
-        similarProducts = (similarRes.data.results || similarRes.data || [])
-          .filter(p => p.id !== data.id)
-          .slice(0, 6);
-      }
+      const similarRes = await catalogAPI.getSimilarProducts(params.slug, { limit: 6 });
+      similarProducts = (similarRes.data.results || similarRes.data || []).slice(0, 6);
     } catch (e) {
       console.error('Ошибка загрузки похожих товаров:', e);
     }
