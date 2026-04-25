@@ -72,3 +72,26 @@ class ProductViewSet(viewsets.ReadOnlyModelViewSet):
         if self.action == 'retrieve':
             return ProductDetailSerializer
         return ProductListSerializer
+
+    @action(detail=True, methods=['get'])
+    def similar(self, request, slug=None):
+        """Похожие товары из той же категории"""
+        product = get_object_or_404(Product, slug=slug)
+        
+        # Получаем категории товара
+        categories = product.categories.all()
+        if not categories.exists():
+            return Response([])
+        
+        # Собираем похожие товары из тех же категорий (исключая текущий товар)
+        similar_qs = Product.objects.filter(
+            is_active=True,
+            categories__in=categories
+        ).exclude(pk=product.pk).distinct()
+        
+        # Ограничиваем количество
+        limit = int(request.query_params.get('limit', 6))
+        similar_qs = similar_qs[:limit]
+        
+        serializer = ProductListSerializer(similar_qs, many=True)
+        return Response(serializer.data)
