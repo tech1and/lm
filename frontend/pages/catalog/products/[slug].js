@@ -21,6 +21,9 @@ export default function ProductPage({ product, similarProducts, error }) {
   const [comments, setComments] = useState(product?.comments || []);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [viewsCount, setViewsCount] = useState(product?.views_count || 0);
+  const [likesCount, setLikesCount] = useState(product?.likes_count || 0);
+  const [liked, setLiked] = useState(product?.user_liked || false);
+  const [likeLoading, setLikeLoading] = useState(false);
 
   // Increment view count on page load
   useEffect(() => {
@@ -30,6 +33,8 @@ export default function ProductPage({ product, similarProducts, error }) {
         const res = await catalogAPI.getProduct(product.slug);
         if (res.data) {
           setViewsCount(res.data.views_count);
+          setLikesCount(res.data.likes_count);
+          setLiked(res.data.user_liked);
         }
       } catch (err) {
         console.error('Error incrementing view:', err);
@@ -40,6 +45,20 @@ export default function ProductPage({ product, similarProducts, error }) {
       incrementView();
     }
   }, [product]);
+
+  const handleLike = async () => {
+    if (likeLoading) return;
+    setLikeLoading(true);
+    try {
+      const res = await catalogAPI.like(product.slug);
+      setLikesCount(res.data.likes_count);
+      setLiked(res.data.liked);
+    } catch (err) {
+      console.error('Ошибка лайка:', err);
+    } finally {
+      setLikeLoading(false);
+    }
+  };
 
   if (router.isFallback) {
     return (
@@ -252,11 +271,15 @@ export default function ProductPage({ product, similarProducts, error }) {
                    </div>
                    
                    {/* Like Button */}
-                   <div className="flex cursor-pointer items-center justify-center rounded-full pt-px transition-colors absolute top-3 right-3 text-white bg-black/30 hover:bg-black/50 size-8">
-                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20" color="#FF385C" fill="#FF385C" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                   <button 
+                     onClick={handleLike}
+                     className="flex cursor-pointer items-center justify-center rounded-full pt-px transition-colors absolute top-3 right-3 text-white bg-black/30 hover:bg-black/50 size-8"
+                     aria-label={liked ? 'Убрать лайк' : 'Поставить лайк'}
+                   >
+                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20" color="#FF385C" fill={liked ? "#FF385C" : "none"} stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
                        <path d="M10.4107 19.9677C7.58942 17.858 2 13.0348 2 8.69444C2 5.82563 4.10526 3.5 7 3.5C8.5 3.5 10 4 12 6C14 4 15.5 3.5 17 3.5C19.8947 3.5 22 5.82563 22 8.69444C22 13.0348 16.4106 17.858 13.5893 19.9677C12.6399 20.6776 11.3601 20.6776 10.4107 19.9677Z"></path>
                      </svg>
-                   </div>
+                   </button>
                  </div>
                ) : (
                  <div className="aspect-video bg-gradient-to-br from-gray-100 to-gray-200 rounded-xl flex items-center justify-center">
@@ -281,7 +304,7 @@ export default function ProductPage({ product, similarProducts, error }) {
                   <div className="flex items-center justify-center gap-2 mb-1">
                     <ThumbsUp className="w-5 h-5 text-red-500" />
                     <span className="stat-value text-red-500 text-xl">
-                      {product.likes_count?.toLocaleString('ru') || 0}
+                      {likesCount?.toLocaleString('ru') || 0}
                     </span>
                   </div>
                   <div className="stat-label">Лайков</div>
@@ -307,9 +330,20 @@ export default function ProductPage({ product, similarProducts, error }) {
               </div>
             </div>
 
+            {/* Navigation Menu */}
+            <div className="lm-card p-0 overflow-hidden">
+              <nav className="flex overflow-x-auto scrollbar-hide">
+                <a href="#description" className="flex-shrink-0 px-4 py-3 text-sm font-medium text-gray-700 hover:bg-gray-50 hover:text-primary-600 transition-colors border-b-2 border-transparent hover:border-primary-600 whitespace-nowrap">Описание</a>
+                <a href="#specifications" className="flex-shrink-0 px-4 py-3 text-sm font-medium text-gray-700 hover:bg-gray-50 hover:text-primary-600 transition-colors border-b-2 border-transparent hover:border-primary-600 whitespace-nowrap">Характеристики</a>
+                <a href="#similar" className="flex-shrink-0 px-4 py-3 text-sm font-medium text-gray-700 hover:bg-gray-50 hover:text-primary-600 transition-colors border-b-2 border-transparent hover:border-primary-600 whitespace-nowrap">Похожие</a>
+                <a href="#comments" className="flex-shrink-0 px-4 py-3 text-sm font-medium text-gray-700 hover:bg-gray-50 hover:text-primary-600 transition-colors border-b-2 border-transparent hover:border-primary-600 whitespace-nowrap">Отзывы</a>
+                <a href="#faq" className="flex-shrink-0 px-4 py-3 text-sm font-medium text-gray-700 hover:bg-gray-50 hover:text-primary-600 transition-colors border-b-2 border-transparent hover:border-primary-600 whitespace-nowrap">Вопрос-ответ</a>
+              </nav>
+            </div>
+
             {/* Description */}
             {product.description && (
-              <div className="lm-card p-6">
+              <div id="description" className="lm-card p-6">
                 <h2 className="text-xl font-bold mb-4 flex items-center gap-2">
                   <span className="w-8 h-8 bg-blue-100 text-blue-600 rounded-lg flex items-center justify-center">
                     <span className="text-sm">ℹ️</span>
@@ -325,7 +359,7 @@ export default function ProductPage({ product, similarProducts, error }) {
 
             {/* Specifications */}
             {(product.params || product.weight || product.dimensions) && (
-              <div className="lm-card p-6">
+              <div id="specifications" className="lm-card p-6">
                 <h2 className="text-xl font-bold mb-4 flex items-center gap-2">
                   <Package className="w-6 h-6 text-purple-600" />
                   Характеристики
@@ -367,7 +401,7 @@ export default function ProductPage({ product, similarProducts, error }) {
 
             {/* FAQ */}
             {product.faq && product.faq.trim() !== '' && (
-              <div className="lm-card p-6">
+              <div id="faq" className="lm-card p-6">
                 <h2 className="text-xl font-bold mb-4 flex items-center gap-2">
                   <MessageSquare className="w-6 h-6 text-blue-600" />
                   Вопрос-ответ
@@ -380,7 +414,7 @@ export default function ProductPage({ product, similarProducts, error }) {
             )}
 
             {/* Comments */}
-            <div className="lm-card p-6">
+            <div id="comments" className="lm-card p-6">
               <h2 className="text-xl font-bold mb-6 flex items-center gap-2">
                 <span className="w-8 h-8 bg-primary-100 text-primary-600 rounded-lg flex items-center justify-center">
                   <span className="text-sm">💬</span>
@@ -435,7 +469,7 @@ export default function ProductPage({ product, similarProducts, error }) {
 
             {/* Similar Products */}
             {similarProducts && similarProducts.length > 0 && (
-              <div className="lm-card p-6">
+              <div id="similar" className="lm-card p-6">
                 <h2 className="text-xl font-bold mb-4 flex items-center gap-2">
                   <Package className="w-6 h-6 text-blue-600" />
                   Похожие товары
@@ -545,23 +579,25 @@ export default function ProductPage({ product, similarProducts, error }) {
 
                 {/* Action Buttons */}
                 <div className="space-y-3 mb-4">
-                  <button 
+                  <a
+                    href={`https://lemanas.ru/go/?url=${encodeURIComponent(product.url)}`}
+                    target="_blank"
+                    rel="noopener noreferrer nofollow"
                     className={`w-full py-3 px-4 rounded-xl font-bold text-white transition-all duration-200 flex items-center justify-center gap-2 ${
                       product.in_stock
                         ? 'bg-gradient-to-r from-primary-500 to-primary-600 hover:from-primary-600 hover:to-primary-700 shadow-md hover:shadow-lg'
                         : 'bg-gray-300 cursor-not-allowed'
                     }`}
-                    disabled={!product.in_stock}
                   >
                     <ShoppingCart className="w-5 h-5" />
                     Проверить наличие и цену
-                  </button>
+                  </a>
 
                   <LikeButton
                     slug={product.slug}
                     type="product"
-                    initialLikes={product.likes_count}
-                    initialLiked={product.user_liked}
+                    initialLikes={likesCount}
+                    initialLiked={liked}
                   />
                 </div>
 
