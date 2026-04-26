@@ -60,6 +60,10 @@ class Product(models.Model):
 
     # Медиа
     images = models.JSONField('Изображения', default=list, blank=True)
+    video_source = models.TextField('Источник видео', blank=True, default='')
+
+    # FAQ
+    faq = models.TextField('FAQ', blank=True, default='')
 
     # Параметры из <param> (JSONB для гибкости)
     params = models.JSONField('Параметры', default=dict, blank=True)
@@ -85,8 +89,6 @@ class Product(models.Model):
     meta_title = models.CharField('Meta Title', max_length=300, blank=True)
     meta_description = models.TextField('Meta Description', blank=True)
     meta_keywords = models.TextField('Meta Keywords', blank=True)
-
-    video_source = models.TextField('Источник видео', blank=True)
 
     # Системные
     is_active = models.BooleanField('Активен', default=True)
