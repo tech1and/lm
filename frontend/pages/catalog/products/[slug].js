@@ -8,8 +8,13 @@ import { catalogAPI } from '../../../lib/api';
 import {
   Star, Heart, MessageCircle, Eye, Inbox, ChevronRight, Home,
   ThumbsUp, MessageSquare, ShoppingCart, Truck, Shield, CheckCircle,
-  AlertCircle, Tag, Package
+  AlertCircle, Tag, Package, Play
 } from 'lucide-react';
+
+// Helper function to format price without decimals
+const formatPrice = (price) => {
+  return Math.floor(Number(price)).toLocaleString('ru-RU');
+};
 
 export default function ProductPage({ product, similarProducts, error }) {
   const router = useRouter();
@@ -90,8 +95,8 @@ export default function ProductPage({ product, similarProducts, error }) {
 
   return (
     <Layout
-      title={product.meta_title ? product.meta_title : `${product.name} — Купить за ${product.price} ₽`}
-      description={product.meta_description || product.short_description || `Купить ${product.name} по цене ${product.price} ₽. Характеристики, отзывы, рейтинг.`}
+      title={product.meta_title ? product.meta_title : `${product.name} — Купить за ${formatPrice(product.price)} ₽`}
+      description={product.meta_description || product.short_description || `Купить ${product.name} по цене ${formatPrice(product.price)} ₽. Характеристики, отзывы, рейтинг.`}
       canonical={canonical}
       schema={combinedSchema}
       keywords={product.meta_keywords}
@@ -134,23 +139,38 @@ export default function ProductPage({ product, similarProducts, error }) {
                    <div className="group/cardGallerySlider group relative">
                      <div className="w-full overflow-hidden rounded-xl">
                        <div className="relative w-full max-h-[70vh] lg:max-h-[80vh] flex items-center justify-center bg-gray-50">
-                         <img
-                           alt={product.name}
-                           loading="lazy"
-                           decoding="async"
-                           className="max-w-full max-h-full object-contain rounded-xl"
-                           src={product.images[currentImageIndex]}
-                         />
+                         {product.video_source && currentImageIndex === product.images.length ? (
+                           <video 
+                             title={`Видео ${product.name}`} 
+                             poster={product.images[0]}
+                             controls
+                             className="max-w-full max-h-full object-contain rounded-xl"
+                           >
+                             <source src={product.video_source} type="video/mp4" />
+                             Ваш браузер не поддерживает видео.
+                           </video>
+                         ) : (
+                           <img
+                             alt={product.name}
+                             loading="lazy"
+                             decoding="async"
+                             className="max-w-full max-h-full object-contain rounded-xl"
+                             src={product.images[currentImageIndex]}
+                           />
+                         )}
                        </div>
                      </div>
                      
                      {/* Navigation Button - Next */}
-                     {product.images.length > 1 && (
+                     {(product.images.length > 1 || product.video_source) && (
                        <>
                          <div className="opacity-0 transition-opacity group-hover/cardGallerySlider:opacity-100">
                            <div className="absolute end-3 top-[calc(50%-1rem)]">
                              <button
-                               onClick={() => setCurrentImageIndex((prev) => (prev + 1) % product.images.length)}
+                               onClick={() => setCurrentImageIndex((prev) => {
+                                 const maxIdx = product.video_source ? product.images.length : product.images.length - 1;
+                                 return (prev + 1) > maxIdx ? 0 : prev + 1;
+                               })}
                                className="size-8! relative isolate inline-flex shrink-0 items-center justify-center rounded-full border font-medium size-10 text-sm/none focus:not-data-focus:outline-hidden data-focus:outline-2 data-focus:outline-offset-2 data-focus:outline-blue-500 data-disabled:opacity-50 *:data-[slot=icon]:-mx-0.5 *:data-[slot=icon]:my-0.5 *:data-[slot=icon]:size-5 *:data-[slot=icon]:shrink-0 *:data-[slot=icon]:self-center sm:*:data-[slot=icon]:my-1 sm:*:data-[slot=icon]:size-5 forced-colors:[--btn-icon:ButtonText] forced-colors:data-hover:[--btn-icon:ButtonText] border-transparent bg-(--btn-border) dark:bg-(--btn-bg) before:absolute before:inset-0 before:-z-10 before:rounded-full before:bg-(--btn-bg) dark:before:hidden dark:border-white/5 after:absolute after:inset-0 after:-z-10 after:rounded-full data-active:after:bg-(--btn-hover-overlay) data-hover:after:bg-(--btn-hover-overlay) dark:after:-inset-px dark:after:rounded-full data-disabled:before:shadow-none data-disabled:after:shadow-none text-neutral-950 [--btn-bg:white] [--btn-border:var(--color-neutral-950)]/10 [--btn-hover-overlay:var(--color-neutral-950)]/[2.5%] data-active:[--btn-border:var(--color-neutral-950)]/15 data-hover:[--btn-border:var(--color-neutral-950)]/15 dark:[--btn-hover-overlay:var(--color-neutral-950)]/5 [--btn-icon:var(--color-neutral-400)] data-active:[--btn-icon:var(--color-neutral-500)] data-hover:[--btn-icon:var(--color-neutral-500)] cursor-pointer hover:bg-white/90"
                                type="button"
                                aria-label="Следующее изображение"
@@ -167,7 +187,10 @@ export default function ProductPage({ product, similarProducts, error }) {
                          <div className="opacity-0 transition-opacity group-hover/cardGallerySlider:opacity-100">
                            <div className="absolute start-3 top-[calc(50%-1rem)]">
                              <button
-                               onClick={() => setCurrentImageIndex((prev) => (prev - 1 + product.images.length) % product.images.length)}
+                               onClick={() => setCurrentImageIndex((prev) => {
+                                 const maxIdx = product.video_source ? product.images.length : product.images.length - 1;
+                                 return (prev - 1) < 0 ? maxIdx : prev - 1;
+                               })}
                                className="size-8! relative isolate inline-flex shrink-0 items-center justify-center rounded-full border font-medium size-10 text-sm/none focus:not-data-focus:outline-hidden data-focus:outline-2 data-focus:outline-offset-2 data-focus:outline-blue-500 data-disabled:opacity-50 *:data-[slot=icon]:-mx-0.5 *:data-[slot=icon]:my-0.5 *:data-[slot=icon]:size-5 *:data-[slot=icon]:shrink-0 *:data-[slot=icon]:self-center sm:*:data-[slot=icon]:my-1 sm:*:data-[slot=icon]:size-5 forced-colors:[--btn-icon:ButtonText] forced-colors:data-hover:[--btn-icon:ButtonText] border-transparent bg-(--btn-border) dark:bg-(--btn-bg) before:absolute before:inset-0 before:-z-10 before:rounded-full before:bg-(--btn-bg) dark:before:hidden dark:border-white/5 after:absolute after:inset-0 after:-z-10 after:rounded-full data-active:after:bg-(--btn-hover-overlay) data-hover:after:bg-(--btn-hover-overlay) dark:after:-inset-px dark:after:rounded-full data-disabled:before:shadow-none data-disabled:after:shadow-none text-neutral-950 [--btn-bg:white] [--btn-border:var(--color-neutral-950)]/10 [--btn-hover-overlay:var(--color-neutral-950)]/[2.5%] data-active:[--btn-border:var(--color-neutral-950)]/15 data-hover:[--btn-border:var(--color-neutral-950)]/15 dark:[--btn-hover-overlay:var(--color-neutral-950)]/5 [--btn-icon:var(--color-neutral-400)] data-active:[--btn-icon:var(--color-neutral-500)] data-hover:[--btn-icon:var(--color-neutral-500)] cursor-pointer hover:bg-white/90"
                                type="button"
                                aria-label="Предыдущее изображение"
@@ -195,6 +218,16 @@ export default function ProductPage({ product, similarProducts, error }) {
                            aria-label={`Изображение ${idx + 1}`}
                          ></button>
                        ))}
+                       {product.video_source && (
+                         <button
+                           key="video"
+                           onClick={() => setCurrentImageIndex(product.images.length)}
+                           className={`h-1.5 w-1.5 rounded-full transition-all ${currentImageIndex === product.images.length ? 'bg-white w-3' : 'bg-white/60 hover:bg-white/80'}`}
+                           aria-label="Видео"
+                         >
+                           <Play className="w-3 h-3" />
+                         </button>
+                       )}
                      </div>
                    </div>
                    
@@ -211,6 +244,48 @@ export default function ProductPage({ product, similarProducts, error }) {
                  </div>
                )}
              </div>
+
+            {/* Stats Cards */}
+            <div className="lm-card p-6">
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 text-center">
+                <div className="stat-item">
+                  <div className="flex items-center justify-center gap-2 mb-1">
+                    <Star className="w-5 h-5 text-yellow-500 fill-current" />
+                    <span className="stat-value text-yellow-500 text-xl">
+                      {product.avg_rating > 0 ? Number(product.avg_rating).toFixed(1) : '—'}
+                    </span>
+                  </div>
+                  <div className="stat-label">Рейтинг</div>
+                </div>
+                <div className="stat-item border-l border-gray-200">
+                  <div className="flex items-center justify-center gap-2 mb-1">
+                    <ThumbsUp className="w-5 h-5 text-red-500" />
+                    <span className="stat-value text-red-500 text-xl">
+                      {product.likes_count?.toLocaleString('ru') || 0}
+                    </span>
+                  </div>
+                  <div className="stat-label">Лайков</div>
+                </div>
+                <div className="stat-item border-l border-gray-200">
+                  <div className="flex items-center justify-center gap-2 mb-1">
+                    <MessageSquare className="w-5 h-5 text-blue-600" />
+                    <span className="stat-value text-blue-600 text-xl">
+                      {product.reviews_count?.toLocaleString('ru') || 0}
+                    </span>
+                  </div>
+                  <div className="stat-label">Отзывов</div>
+                </div>
+                <div className="stat-item border-l border-gray-200">
+                  <div className="flex items-center justify-center gap-2 mb-1">
+                    <Eye className="w-5 h-5 text-green-600" />
+                    <span className="stat-value text-green-600 text-xl">
+                      {product.views_count?.toLocaleString('ru') || 0}
+                    </span>
+                  </div>
+                  <div className="stat-label">Просмотров</div>
+                </div>
+              </div>
+            </div>
 
             {/* Description */}
             {product.description && (
@@ -270,47 +345,19 @@ export default function ProductPage({ product, similarProducts, error }) {
               </div>
             )}
 
-            {/* Stats Cards */}
-            <div className="lm-card p-6">
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 text-center">
-                <div className="stat-item">
-                  <div className="flex items-center justify-center gap-2 mb-1">
-                    <Star className="w-5 h-5 text-yellow-500 fill-current" />
-                    <span className="stat-value text-yellow-500 text-xl">
-                      {product.avg_rating > 0 ? Number(product.avg_rating).toFixed(1) : '—'}
-                    </span>
-                  </div>
-                  <div className="stat-label">Рейтинг</div>
-                </div>
-                <div className="stat-item border-l border-gray-200">
-                  <div className="flex items-center justify-center gap-2 mb-1">
-                    <ThumbsUp className="w-5 h-5 text-red-500" />
-                    <span className="stat-value text-red-500 text-xl">
-                      {product.likes_count?.toLocaleString('ru') || 0}
-                    </span>
-                  </div>
-                  <div className="stat-label">Лайков</div>
-                </div>
-                <div className="stat-item border-l border-gray-200">
-                  <div className="flex items-center justify-center gap-2 mb-1">
-                    <MessageSquare className="w-5 h-5 text-blue-600" />
-                    <span className="stat-value text-blue-600 text-xl">
-                      {product.reviews_count?.toLocaleString('ru') || 0}
-                    </span>
-                  </div>
-                  <div className="stat-label">Отзывов</div>
-                </div>
-                <div className="stat-item border-l border-gray-200">
-                  <div className="flex items-center justify-center gap-2 mb-1">
-                    <Eye className="w-5 h-5 text-green-600" />
-                    <span className="stat-value text-green-600 text-xl">
-                      {product.views_count?.toLocaleString('ru') || 0}
-                    </span>
-                  </div>
-                  <div className="stat-label">Просмотров</div>
-                </div>
+            {/* FAQ */}
+            {product.faq && product.faq.trim() !== '' && (
+              <div className="lm-card p-6">
+                <h2 className="text-xl font-bold mb-4 flex items-center gap-2">
+                  <MessageSquare className="w-6 h-6 text-blue-600" />
+                  Вопрос-ответ
+                </h2>
+                <div
+                  className="prose max-w-none"
+                  dangerouslySetInnerHTML={{ __html: product.faq }}
+                />
               </div>
-            </div>
+            )}
 
             {/* Comments */}
             <div className="lm-card p-6">
@@ -400,7 +447,7 @@ export default function ProductPage({ product, similarProducts, error }) {
                         </h3>
                         <div className="flex items-center justify-between">
                           <span className="text-base font-bold text-primary-600">
-                            {similarProduct.price.toLocaleString('ru-RU')} ₽
+                            {formatPrice(similarProduct.price)} ₽
                           </span>
                           {similarProduct.avg_rating > 0 && (
                             <div className="flex items-center gap-1 text-xs text-gray-500">
@@ -448,11 +495,11 @@ export default function ProductPage({ product, similarProducts, error }) {
                 {/* Price */}
                 <div className="bg-gradient-to-r from-green-50 to-emerald-50 rounded-xl p-4 mb-4">
                   <div className="text-3xl font-black text-gray-900 mb-1">
-                    {product.price.toLocaleString('ru-RU')} ₽
+                    Цена от {formatPrice(product.price)} ₽
                   </div>
                   {product.old_price && product.old_price > product.price && (
                     <div className="text-sm text-gray-400 line-through">
-                      {product.old_price.toLocaleString('ru-RU')} ₽
+                      {formatPrice(product.old_price)} ₽
                     </div>
                   )}
                 </div>
@@ -487,7 +534,7 @@ export default function ProductPage({ product, similarProducts, error }) {
                     disabled={!product.in_stock}
                   >
                     <ShoppingCart className="w-5 h-5" />
-                    {product.in_stock ? 'Добавить в корзину' : 'Нет в наличии'}
+                    Проверить наличие и цену
                   </button>
 
                   <LikeButton

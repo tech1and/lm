@@ -3,6 +3,11 @@ import Link from 'next/link';
 import { catalogAPI } from '../lib/api';
 import { Star, Heart, MessageCircle, Eye, Inbox, ChevronLeft, ChevronRight, FolderOpen } from 'lucide-react';
 
+// Helper function to format price without decimals
+const formatPrice = (price) => {
+  return Math.floor(Number(price)).toLocaleString('ru-RU');
+};
+
 const SORT_OPTIONS = [
   { key: 'avg_rating', label: 'Рейтинг', icon: Star },
   { key: 'likes_count', label: 'Лайки', icon: Heart },
@@ -194,7 +199,7 @@ export default function CatalogProductList({ categorySlug, initialData, isRootCa
                 {/* Price */}
                 <div className="flex-shrink-0 text-right">
                   <div className="text-lg font-bold text-gray-900">
-                    {product.price.toLocaleString('ru-RU')} ₽
+                    {formatPrice(product.price)} ₽
                   </div>
                   {product.in_stock ? (
                     <span className="text-xs text-green-600 font-medium">В наличии</span>
