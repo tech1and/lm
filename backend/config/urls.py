@@ -15,18 +15,27 @@ def api_health_check(request):
 
 
 def external_redirect(request):
-    """Редирект на внешний сайт магазина через /go/?shop=<slug>"""
+    """Редирект на внешний сайт магазина через /go/?shop=<slug> или товара через /go/?url=<url>"""
     from apps.shops.models import Shop
+    from apps.catalog.models import Product
 
-    slug = request.GET.get('shop')
-    if not slug:
-        return JsonResponse({'error': 'Параметр shop обязателен'}, status=400)
+    shop_slug = request.GET.get('shop')
+    product_url = request.GET.get('url')
 
-    shop = get_object_or_404(Shop, slug=slug, is_active=True)
-    if not shop.website:
-        return JsonResponse({'error': 'Сайт магазина не указан'}, status=404)
+    # Редирект для магазина
+    if shop_slug:
+        shop = get_object_or_404(Shop, slug=shop_slug, is_active=True)
+        if not shop.website:
+            return JsonResponse({'error': 'Сайт магазина не указан'}, status=404)
+        target_url = shop.website
 
-    target_url = shop.website
+    # Редирект для товара
+    elif product_url:
+        target_url = product_url
+
+    else:
+        return JsonResponse({'error': 'Параметр shop или url обязателен'}, status=400)
+
     parsed = urlparse(target_url)
     if parsed.scheme not in ('http', 'https'):
         return JsonResponse({'error': 'Недопустимый протокол'}, status=400)

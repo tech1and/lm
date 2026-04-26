@@ -60,6 +60,12 @@ export default function ProductPage({ product, similarProducts, error }) {
     }
   };
 
+  const handleLikeOnImage = async (e, imageIndex) => {
+    e.stopPropagation();
+    e.preventDefault();
+    await handleLike();
+  };
+
   if (router.isFallback) {
     return (
       <Layout title="Загрузка..." description="">
@@ -247,15 +253,26 @@ export default function ProductPage({ product, similarProducts, error }) {
                      {/* Gradient Overlay */}
                      <div className="absolute inset-x-0 bottom-0 h-10 rounded-b-xl bg-linear-to-t from-neutral-900 opacity-50"></div>
                      
-                     {/* Image Indicators */}
-                     <div className="absolute bottom-2 left-1/2 flex -translate-x-1/2 items-center justify-center gap-x-1.5">
-                       {product.images.map((_, idx) => (
-                         <button
-                           key={idx}
-                           onClick={() => setCurrentImageIndex(idx)}
-                           className={`h-1.5 w-1.5 rounded-full transition-all ${idx === currentImageIndex ? 'bg-white w-3' : 'bg-white/60 hover:bg-white/80'}`}
-                           aria-label={`Изображение ${idx + 1}`}
-                         ></button>
+                     {/* Image Indicators with Like Buttons */}
+                     <div className="absolute bottom-2 left-1/2 flex -translate-x-1/2 items-center gap-x-1.5">
+                       {product.images.map((img, idx) => (
+                         <div key={idx} className="relative group">
+                           <button
+                             onClick={() => setCurrentImageIndex(idx)}
+                             className={`h-1.5 w-1.5 rounded-full transition-all ${idx === currentImageIndex ? 'bg-white w-3' : 'bg-white/60 hover:bg-white/80'}`}
+                             aria-label={`Изображение ${idx + 1}`}
+                           ></button>
+                           {/* Like button on each thumbnail */}
+                           <button 
+                             onClick={(e) => handleLikeOnImage(e, idx)}
+                             className="absolute -top-6 left-1/2 -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity flex cursor-pointer items-center justify-center rounded-full pt-px transition-colors text-white bg-black/50 hover:bg-black/70 size-6"
+                             aria-label={liked ? 'Убрать лайк' : 'Поставить лайк'}
+                           >
+                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="14" height="14" color="#FF385C" fill={liked ? "#FF385C" : "none"} stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                               <path d="M10.4107 19.9677C7.58942 17.858 2 13.0348 2 8.69444C2 5.82563 4.10526 3.5 7 3.5C8.5 3.5 10 4 12 6C14 4 15.5 3.5 17 3.5C19.8947 3.5 22 5.82563 22 8.69444C22 13.0348 16.4106 17.858 13.5893 19.9677C12.6399 20.6776 11.3601 20.6776 10.4107 19.9677Z"></path>
+                             </svg>
+                           </button>
+                         </div>
                        ))}
                        {product.video_source && (
                          <button
@@ -651,6 +668,23 @@ export default function ProductPage({ product, similarProducts, error }) {
             </div>
           </div>
         </div>
+      </div>
+
+      {/* Mobile Sticky Bottom Bar */}
+      <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 p-4 lg:hidden z-50">
+        <a
+          href={`https://lemanas.ru/go/?url=${encodeURIComponent(product.url)}`}
+          target="_blank"
+          rel="noopener noreferrer nofollow"
+          className={`w-full py-3 px-4 rounded-xl font-bold text-white transition-all duration-200 flex items-center justify-center gap-2 ${
+            product.in_stock
+              ? 'bg-gradient-to-r from-primary-500 to-primary-600 hover:from-primary-600 hover:to-primary-700 shadow-md hover:shadow-lg'
+              : 'bg-gray-300 cursor-not-allowed'
+          }`}
+        >
+          <ShoppingCart className="w-5 h-5" />
+          Проверить наличие и цену
+        </a>
       </div>
     </Layout>
   );
