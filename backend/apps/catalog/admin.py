@@ -54,7 +54,11 @@ class ProductAdmin(ImportExportModelAdmin, admin.ModelAdmin):
             'classes': ('collapse',),
         }),
         ('Медиа', {
-            'fields': ('images',),
+            'fields': ('images', 'video_source'),
+            'classes': ('collapse',),
+        }),
+        ('FAQ', {
+            'fields': ('faq',),
             'classes': ('collapse',),
         }),
         ('Габариты', {
