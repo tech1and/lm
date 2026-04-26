@@ -90,6 +90,8 @@ export const catalogAPI = {
     api.get(`/api/catalog/products/${slug}/`),
   getSimilarProducts: (slug, params = {}) =>
     api.get(`/api/catalog/products/${slug}/similar/`, { params }),
+  like: (slug) =>
+    api.post(`/api/catalog/products/${slug}/like/`),
 };
 
 export default api;
