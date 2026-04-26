@@ -1,8 +1,8 @@
 import { useState } from 'react';
-import { shopsAPI } from '../lib/api';
+import { catalogAPI, shopsAPI } from '../lib/api';
 import { Heart } from 'lucide-react';
 
-export default function LikeButton({ slug, initialLikes, initialLiked }) {
+export default function LikeButton({ slug, initialLikes, initialLiked, type = 'shop' }) {
   const [likesCount, setLikesCount] = useState(initialLikes || 0);
   const [liked, setLiked] = useState(initialLiked || false);
   const [loading, setLoading] = useState(false);
@@ -14,7 +14,8 @@ export default function LikeButton({ slug, initialLikes, initialLiked }) {
     setAnimating(true);
 
     try {
-      const res = await shopsAPI.like(slug);
+      const apiFunc = type === 'product' ? catalogAPI.like : shopsAPI.like;
+      const res = await apiFunc(slug);
       setLikesCount(res.data.likes_count);
       setLiked(res.data.liked);
     } catch (err) {

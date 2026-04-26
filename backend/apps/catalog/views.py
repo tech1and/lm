@@ -1,15 +1,28 @@
-from rest_framework import viewsets
+from rest_framework import viewsets, status
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework.filters import SearchFilter, OrderingFilter
 from django_filters.rest_framework import DjangoFilterBackend
 from django.shortcuts import get_object_or_404
-from .models import Product, Category
+from django.db.models import F, Count, Q
+from django.core.cache import cache
+from .models import Product, Category, Like
 from .serializers import (
     CategorySerializer,
     ProductListSerializer,
     ProductDetailSerializer,
 )
+import logging
+
+logger = logging.getLogger(__name__)
+
+
+def get_client_ip(request):
+    """Получение реального IP-адреса клиента"""
+    x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
+    if x_forwarded_for:
+        return x_forwarded_for.split(',')[0].strip()
+    return request.META.get('REMOTE_ADDR')
 
 
 class CategoryViewSet(viewsets.ReadOnlyModelViewSet):
@@ -72,6 +85,55 @@ class ProductViewSet(viewsets.ReadOnlyModelViewSet):
         if self.action == 'retrieve':
             return ProductDetailSerializer
         return ProductListSerializer
+
+    def retrieve(self, request, *args, **kwargs):
+        """Переопределяем retrieve для подсчёта просмотров"""
+        instance = self.get_object()
+        ip = get_client_ip(request)
+        cache_key = f'view_product_{instance.pk}_{ip}'
+        
+        if not cache.get(cache_key):
+            Product.objects.filter(pk=instance.pk).update(
+                views_count=F('views_count') + 1
+            )
+            cache.set(cache_key, True, 60 * 60)  # Кэш на 1 час
+            instance.refresh_from_db()
+
+        serializer = self.get_serializer(instance)
+        return Response(serializer.data)
+
+    @action(detail=True, methods=['post'], url_path='like', permission_classes=[])
+    def like(self, request, slug=None):
+        """Обработка лайка/дизлайка товара"""
+        product = self.get_object()
+        ip = get_client_ip(request)
+
+        like, created = Like.objects.get_or_create(
+            product=product,
+            ip_address=ip,
+        )
+
+        if not created:
+            # Если лайк уже был — удаляем (дизлайк)
+            like.delete()
+            Product.objects.filter(pk=product.pk).update(
+                likes_count=F('likes_count') - 1
+            )
+            product.refresh_from_db()
+            return Response({
+                'liked': False,
+                'likes_count': product.likes_count,
+            })
+
+        # Новый лайк — увеличиваем счётчик
+        Product.objects.filter(pk=product.pk).update(
+            likes_count=F('likes_count') + 1
+        )
+        product.refresh_from_db()
+        return Response({
+            'liked': True,
+            'likes_count': product.likes_count,
+        })
 
     @action(detail=True, methods=['get'])
     def similar(self, request, slug=None):

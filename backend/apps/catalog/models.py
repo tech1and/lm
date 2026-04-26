@@ -126,3 +126,16 @@ class Product(models.Model):
             self.slug = slug
         super().save(*args, **kwargs)
 
+
+class Like(models.Model):
+    """Лайки товаров"""
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='likes')
+    ip_address = models.GenericIPAddressField('IP адрес')
+    session_key = models.CharField('Ключ сессии', max_length=100, blank=True)
+    created_at = models.DateTimeField('Создан', auto_now_add=True)
+
+    class Meta:
+        unique_together = ['product', 'ip_address']
+        verbose_name = 'Лайк'
+        verbose_name_plural = 'Лайки'
+

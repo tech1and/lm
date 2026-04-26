@@ -3,7 +3,7 @@ import Layout from '../../../components/Layout';
 import LikeButton from '../../../components/LikeButton';
 import CommentForm from '../../../components/CommentForm';
 import Link from 'next/link';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { catalogAPI } from '../../../lib/api';
 import {
   Star, Heart, MessageCircle, Eye, Inbox, ChevronRight, Home,
@@ -20,6 +20,26 @@ export default function ProductPage({ product, similarProducts, error }) {
   const router = useRouter();
   const [comments, setComments] = useState(product?.comments || []);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const [viewsCount, setViewsCount] = useState(product?.views_count || 0);
+
+  // Increment view count on page load
+  useEffect(() => {
+    const incrementView = async () => {
+      try {
+        // Fetch the product again to get updated views count
+        const res = await catalogAPI.getProduct(product.slug);
+        if (res.data) {
+          setViewsCount(res.data.views_count);
+        }
+      } catch (err) {
+        console.error('Error incrementing view:', err);
+      }
+    };
+    
+    if (product && product.slug) {
+      incrementView();
+    }
+  }, [product]);
 
   if (router.isFallback) {
     return (
@@ -279,7 +299,7 @@ export default function ProductPage({ product, similarProducts, error }) {
                   <div className="flex items-center justify-center gap-2 mb-1">
                     <Eye className="w-5 h-5 text-green-600" />
                     <span className="stat-value text-green-600 text-xl">
-                      {product.views_count?.toLocaleString('ru') || 0}
+                      {viewsCount?.toLocaleString('ru') || 0}
                     </span>
                   </div>
                   <div className="stat-label">Просмотров</div>
@@ -588,7 +608,7 @@ export default function ProductPage({ product, similarProducts, error }) {
                   )}
                   <li className="flex justify-between">
                     <span className="text-gray-500">Просмотры:</span>
-                    <span className="font-medium">{product.views_count?.toLocaleString('ru') || 0}</span>
+                    <span className="font-medium">{viewsCount?.toLocaleString('ru') || 0}</span>
                   </li>
                 </ul>
               </div>
