@@ -175,7 +175,7 @@ export default function ProductPage({ product, similarProducts, error }) {
       {/* Main Content */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          {/* Right Sidebar - Buy Block (order-last for visual, but first in DOM for SEO) */}
+          {/* Right Sidebar - Buy Block (first in DOM for SEO, visually on right) */}
           <div className="lg:col-span-1 order-first lg:order-none">
             <div className="sticky top-20 space-y-6">
               {/* Buy Card */}
@@ -215,22 +215,38 @@ export default function ProductPage({ product, similarProducts, error }) {
                   )}
                 </div>
 
-                {/* Stock Status */}
-                <div className={`flex items-center gap-2 mb-4 px-3 py-2 rounded-lg ${
+                {/* Stock Status with Article */}
+                <div className={`flex items-center justify-between gap-2 mb-4 px-3 py-2 rounded-lg ${
                   product.in_stock 
                     ? 'bg-green-50 text-green-700' 
                     : 'bg-red-50 text-red-700'
                 }`}>
-                  {product.in_stock ? (
-                    <>
-                      <CheckCircle className="w-5 h-5" />
-                      <span className="font-semibold text-sm">В наличии</span>
-                    </>
-                  ) : (
-                    <>
-                      <AlertCircle className="w-5 h-5" />
-                      <span className="font-semibold text-sm">Нет в наличии</span>
-                    </>
+                  <div className="flex items-center gap-2">
+                    {product.in_stock ? (
+                      <>
+                        <CheckCircle className="w-5 h-5" />
+                        <span className="font-semibold text-sm">В наличии</span>
+                      </>
+                    ) : (
+                      <>
+                        <AlertCircle className="w-5 h-5" />
+                        <span className="font-semibold text-sm">Нет в наличии</span>
+                      </>
+                    )}
+                  </div>
+                  {product.xml_id && (
+                    <button
+                      onClick={() => {
+                        navigator.clipboard.writeText(product.xml_id);
+                      }}
+                      className="flex items-center gap-1 text-xs text-gray-500 hover:text-primary-600 cursor-pointer transition-colors"
+                      title="Нажмите, чтобы скопировать артикул"
+                    >
+                      <svg fill="none" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" data-qa="copy-button" data-icons-pack="svg" className="w-4 h-4">
+                        <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M15.75 15.75h4.5v-12h-12v4.5m-4.5 0h12v12h-12v-12z"></path>
+                      </svg>
+                      <span className="font-mono">{product.xml_id}</span>
+                    </button>
                   )}
                 </div>
 
@@ -296,20 +312,6 @@ export default function ProductPage({ product, similarProducts, error }) {
                 </h3>
 
                 <ul className="space-y-3 text-sm">
-                  {product.xml_id && (
-                    <li>
-                      <span className="text-gray-500 block mb-1">Артикул:</span>
-                      <button
-                        onClick={() => {
-                          navigator.clipboard.writeText(product.xml_id);
-                        }}
-                        className="text-primary-600 hover:text-primary-700 font-medium cursor-pointer hover:underline"
-                        title="Нажмите, чтобы скопировать артикул"
-                      >
-                        {product.xml_id}
-                      </button>
-                    </li>
-                  )}
                   {product.category && (
                     <li>
                       <span className="text-gray-500 block mb-1">Категория:</span>
@@ -326,8 +328,8 @@ export default function ProductPage({ product, similarProducts, error }) {
             </div>
           </div>
 
-          {/* Left Column - Images & Details (order-first for visual, but last in DOM) */}
-          <div className="lg:col-span-2 order-last lg:order-none space-y-6">
+          {/* Left Column - Images & Details (visually on left) */}
+          <div className="lg:col-span-2 space-y-6">
              {/* Product Images Gallery */}
              <div className="lm-card p-6">
                {product.images && product.images.length > 0 ? (
