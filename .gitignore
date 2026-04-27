@@ -9,30 +9,21 @@ build/
 target/
 
 # Dependencies
-.venv/
-venv/
 node_modules/
-.julia/
-zig*/
-.jest/
-.nyc_output/
+venv/
+.venv/
+.env
+.env.local
+*.env.*
 
 # Logs and temp files
 *.log
 *.tmp
 *.swp
-*.swo
-
-# Environment
-.env
-.env.local
-.env.*
 
 # Editors
 .vscode/
 .idea/
-*.sublime-project
-*.sublime-workspace
 
 # OS generated files
 .DS_Store
@@ -46,12 +37,8 @@ htmlcov/
 # Python specific
 *.pyc
 __pycache__/
-*.pyo
-*.pyd
-.Python
-*.so
-.mypy_cache/
 .pytest_cache/
+.mypy_cache/
 
 # Node.js specific
 npm-debug.log*
@@ -62,29 +49,4 @@ yarn-error.log*
 *.min.js
 *.min.css
 bundle.js
-*.bundle.js
-
-# Compression files
-*.zip
-*.gz
-*.tar
-*.tgz
-*.bz2
-*.xz
-*.7z
-*.rar
-*.zst
-*.lz4
-*.lzh
-*.cab
-*.arj
-*.rpm
-*.deb
-*.Z
-*.lz
-*.lzo
-*.tar.gz
-*.tar.bz2
-*.tar.xz
-*.tar.zst
 ```
