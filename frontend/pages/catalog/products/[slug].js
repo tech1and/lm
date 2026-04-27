@@ -175,8 +175,159 @@ export default function ProductPage({ product, similarProducts, error }) {
       {/* Main Content */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          {/* Left Column - Images & Details */}
-          <div className="lg:col-span-2 space-y-6">
+          {/* Right Sidebar - Buy Block (order-last for visual, but first in DOM for SEO) */}
+          <div className="lg:col-span-1 order-first lg:order-none">
+            <div className="sticky top-20 space-y-6">
+              {/* Buy Card */}
+              <div className="lm-card p-6">
+                <div className="mb-4">
+                  <h1 className="text-2xl font-black text-gray-900 mb-2">{product.name}</h1>
+                  {product.brand && (
+                    <div className="flex items-center gap-2 text-sm text-gray-500 mb-3">
+                      <Tag className="w-4 h-4" />
+                      <span className="font-medium text-primary-600">{product.brand}</span>
+                    </div>
+                  )}
+                </div>
+
+                {/* Rating */}
+                {product.avg_rating > 0 && (
+                  <div className="flex items-center gap-2 mb-4">
+                    <div className="rating-badge">
+                      <Star className="w-4 h-4 fill-current" />
+                      {Number(product.avg_rating).toFixed(1)}
+                    </div>
+                    <span className="text-sm text-gray-500">
+                      ({product.reviews_count || 0} отзывов)
+                    </span>
+                  </div>
+                )}
+
+                {/* Price */}
+                <div className="bg-gradient-to-r from-green-50 to-emerald-50 rounded-xl p-4 mb-4">
+                  <div className="text-3xl font-black text-gray-900 mb-1">
+                    Цена от {formatPrice(product.price)} ₽
+                  </div>
+                  {product.old_price && product.old_price > product.price && (
+                    <div className="text-sm text-gray-400 line-through">
+                      {formatPrice(product.old_price)} ₽
+                    </div>
+                  )}
+                </div>
+
+                {/* Stock Status */}
+                <div className={`flex items-center gap-2 mb-4 px-3 py-2 rounded-lg ${
+                  product.in_stock 
+                    ? 'bg-green-50 text-green-700' 
+                    : 'bg-red-50 text-red-700'
+                }`}>
+                  {product.in_stock ? (
+                    <>
+                      <CheckCircle className="w-5 h-5" />
+                      <span className="font-semibold text-sm">В наличии</span>
+                    </>
+                  ) : (
+                    <>
+                      <AlertCircle className="w-5 h-5" />
+                      <span className="font-semibold text-sm">Нет в наличии</span>
+                    </>
+                  )}
+                </div>
+
+                {/* Action Buttons */}
+                <div className="space-y-3 mb-4">
+                  <a
+                    href={`https://lemanas.ru/go/?url=${encodeURIComponent(product.url)}`}
+                    target="_blank"
+                    rel="noopener noreferrer nofollow"
+                    className={`w-full py-3 px-4 rounded-xl font-bold text-white transition-all duration-200 flex items-center justify-center gap-2 ${
+                      product.in_stock
+                        ? 'bg-gradient-to-r from-primary-500 to-primary-600 hover:from-primary-600 hover:to-primary-700 shadow-md hover:shadow-lg'
+                        : 'bg-gray-300 cursor-not-allowed'
+                    }`}
+                  >
+                    <ShoppingCart className="w-5 h-5" />
+                    Проверить наличие и цену
+                  </a>
+
+                  <LikeButton
+                    slug={product.slug}
+                    type="product"
+                    initialLikes={likesCount}
+                    initialLiked={liked}
+                  />
+                </div>
+
+                {/* Delivery Info */}
+                <div className="border-t border-gray-200 pt-4">
+                  <dl className="space-y-3">
+                    <div className="flex items-baseline gap-4 border-t border-gray-100 pt-3 first:border-none first:pt-0 dark:border-white/5">
+                      <dt className="text-neutral-500 min-w-[150px] dark:text-neutral-400">
+                        Самовывоз сегодня
+                      </dt>
+                      <dd className="text-neutral-950 dark:text-white">
+                        бесплатно
+                      </dd>
+                    </div>
+                    <div className="flex items-baseline gap-4 border-t border-gray-100 pt-3 first:border-none first:pt-0 dark:border-white/5">
+                      <dt className="text-neutral-500 min-w-[150px] dark:text-neutral-400">
+                        В пункте выдачи до {new Date(new Date().getFullYear(), new Date().getMonth() + 1, 0).getDate()} {new Date().toLocaleString('ru-RU', { month: 'long' })}
+                      </dt>
+                      <dd className="text-neutral-950 dark:text-white">
+                        от 1 ₽
+                      </dd>
+                    </div>
+                    <div className="flex items-baseline gap-4 border-t border-gray-100 pt-3 first:border-none first:pt-0 dark:border-white/5">
+                      <dt className="text-neutral-500 min-w-[150px] dark:text-neutral-400">
+                        Доставим завтра
+                      </dt>
+                      <dd className="text-neutral-950 dark:text-white">
+                        от 490 ₽
+                      </dd>
+                    </div>
+                  </dl>
+                </div>
+              </div>
+
+              {/* Additional Info */}
+              <div className="lm-card p-6">
+                <h3 className="text-sm font-bold text-gray-500 uppercase tracking-wider mb-4">
+                  Информация
+                </h3>
+
+                <ul className="space-y-3 text-sm">
+                  {product.xml_id && (
+                    <li>
+                      <span className="text-gray-500 block mb-1">Артикул:</span>
+                      <button
+                        onClick={() => {
+                          navigator.clipboard.writeText(product.xml_id);
+                        }}
+                        className="text-primary-600 hover:text-primary-700 font-medium cursor-pointer hover:underline"
+                        title="Нажмите, чтобы скопировать артикул"
+                      >
+                        {product.xml_id}
+                      </button>
+                    </li>
+                  )}
+                  {product.category && (
+                    <li>
+                      <span className="text-gray-500 block mb-1">Категория:</span>
+                      <Link 
+                        href={`/catalog/categories/${product.category.slug}`}
+                        className="text-primary-600 hover:text-primary-700 font-medium"
+                      >
+                        {product.category.name}
+                      </Link>
+                    </li>
+                  )}
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          {/* Left Column - Images & Details (order-first for visual, but last in DOM) */}
+          <div className="lg:col-span-2 order-last lg:order-none space-y-6">
              {/* Product Images Gallery */}
              <div className="lm-card p-6">
                {product.images && product.images.length > 0 ? (
@@ -533,139 +684,6 @@ export default function ProductPage({ product, similarProducts, error }) {
                 </div>
               </div>
             )}
-          </div>
-
-          {/* Right Sidebar - Buy Block */}
-          <div className="lg:col-span-1">
-            <div className="sticky top-20 space-y-6">
-              {/* Buy Card */}
-              <div className="lm-card p-6">
-                <div className="mb-4">
-                  <h1 className="text-2xl font-black text-gray-900 mb-2">{product.name}</h1>
-                  {product.brand && (
-                    <div className="flex items-center gap-2 text-sm text-gray-500 mb-3">
-                      <Tag className="w-4 h-4" />
-                      <span className="font-medium text-primary-600">{product.brand}</span>
-                    </div>
-                  )}
-                </div>
-
-                {/* Rating */}
-                {product.avg_rating > 0 && (
-                  <div className="flex items-center gap-2 mb-4">
-                    <div className="rating-badge">
-                      <Star className="w-4 h-4 fill-current" />
-                      {Number(product.avg_rating).toFixed(1)}
-                    </div>
-                    <span className="text-sm text-gray-500">
-                      ({product.reviews_count || 0} отзывов)
-                    </span>
-                  </div>
-                )}
-
-                {/* Price */}
-                <div className="bg-gradient-to-r from-green-50 to-emerald-50 rounded-xl p-4 mb-4">
-                  <div className="text-3xl font-black text-gray-900 mb-1">
-                    Цена от {formatPrice(product.price)} ₽
-                  </div>
-                  {product.old_price && product.old_price > product.price && (
-                    <div className="text-sm text-gray-400 line-through">
-                      {formatPrice(product.old_price)} ₽
-                    </div>
-                  )}
-                </div>
-
-                {/* Stock Status */}
-                <div className={`flex items-center gap-2 mb-4 px-3 py-2 rounded-lg ${
-                  product.in_stock 
-                    ? 'bg-green-50 text-green-700' 
-                    : 'bg-red-50 text-red-700'
-                }`}>
-                  {product.in_stock ? (
-                    <>
-                      <CheckCircle className="w-5 h-5" />
-                      <span className="font-semibold text-sm">В наличии</span>
-                    </>
-                  ) : (
-                    <>
-                      <AlertCircle className="w-5 h-5" />
-                      <span className="font-semibold text-sm">Нет в наличии</span>
-                    </>
-                  )}
-                </div>
-
-                {/* Action Buttons */}
-                <div className="space-y-3 mb-4">
-                  <a
-                    href={`https://lemanas.ru/go/?url=${encodeURIComponent(product.url)}`}
-                    target="_blank"
-                    rel="noopener noreferrer nofollow"
-                    className={`w-full py-3 px-4 rounded-xl font-bold text-white transition-all duration-200 flex items-center justify-center gap-2 ${
-                      product.in_stock
-                        ? 'bg-gradient-to-r from-primary-500 to-primary-600 hover:from-primary-600 hover:to-primary-700 shadow-md hover:shadow-lg'
-                        : 'bg-gray-300 cursor-not-allowed'
-                    }`}
-                  >
-                    <ShoppingCart className="w-5 h-5" />
-                    Проверить наличие и цену
-                  </a>
-
-                  <LikeButton
-                    slug={product.slug}
-                    type="product"
-                    initialLikes={likesCount}
-                    initialLiked={liked}
-                  />
-                </div>
-
-                {/* Delivery Info */}
-                <div className="border-t border-gray-200 pt-4 space-y-3">
-                  <div className="flex items-center gap-2 text-sm text-gray-600">
-                    <Truck className="w-4 h-4 text-blue-600" />
-                    <span>Доставка по России</span>
-                  </div>
-                  <div className="flex items-center gap-2 text-sm text-gray-600">
-                    <Shield className="w-4 h-4 text-green-600" />
-                    <span>Гарантия качества</span>
-                  </div>
-                  <div className="flex items-center gap-2 text-sm text-gray-600">
-                    <Package className="w-4 h-4 text-purple-600" />
-                    <span>Быстрая отправка</span>
-                  </div>
-                </div>
-              </div>
-
-              {/* Additional Info */}
-              <div className="lm-card p-6">
-                <h3 className="text-sm font-bold text-gray-500 uppercase tracking-wider mb-4">
-                  Информация
-                </h3>
-
-                <ul className="space-y-3 text-sm">
-                  {product.article && (
-                    <li className="flex justify-between">
-                      <span className="text-gray-500">Артикул:</span>
-                      <span className="font-medium">{product.article}</span>
-                    </li>
-                  )}
-                  {product.category && (
-                    <li>
-                      <span className="text-gray-500 block mb-1">Категория:</span>
-                      <Link 
-                        href={`/catalog/categories/${product.category.slug}`}
-                        className="text-primary-600 hover:text-primary-700 font-medium"
-                      >
-                        {product.category.name}
-                      </Link>
-                    </li>
-                  )}
-                  <li className="flex justify-between">
-                    <span className="text-gray-500">Просмотры:</span>
-                    <span className="font-medium">{viewsCount?.toLocaleString('ru') || 0}</span>
-                  </li>
-                </ul>
-              </div>
-            </div>
           </div>
         </div>
       </div>
