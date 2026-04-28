@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useRef, useCallback } from 'react';
 import { catalogAPI, shopsAPI } from '../lib/api';
 import { Heart } from 'lucide-react';
 
@@ -8,8 +8,14 @@ export default function LikeButton({ slug, initialLikes, initialLiked, type = 's
   const [loading, setLoading] = useState(false);
   const [animating, setAnimating] = useState(false);
 
-  const handleLike = async () => {
-    if (loading) return;
+  // Используем ref для предотвращения повторных запросов
+  const requestInProgressRef = useRef(false);
+
+  const handleLike = useCallback(async () => {
+    // Предотвращаем повторные вызовы во время загрузки
+    if (loading || requestInProgressRef.current) return;
+
+    requestInProgressRef.current = true;
     setLoading(true);
     setAnimating(true);
 
@@ -22,9 +28,10 @@ export default function LikeButton({ slug, initialLikes, initialLiked, type = 's
       console.error('Ошибка лайка:', err);
     } finally {
       setLoading(false);
+      requestInProgressRef.current = false;
       setTimeout(() => setAnimating(false), 300);
     }
-  };
+  }, [slug, type, loading]);
 
   return (
     <button
