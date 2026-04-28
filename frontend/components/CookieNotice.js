@@ -1,7 +1,8 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 
 export default function CookieNotice() {
   const [accepted, setAccepted] = useState(false);
+  const isInitialMount = useRef(true);
 
   useEffect(() => {
     const consent = localStorage.getItem('cookie-consent');
@@ -9,9 +10,15 @@ export default function CookieNotice() {
   }, []);
 
   const handleAccept = () => {
+    // Предотвращаем множественные вызовы
+    if (accepted) return;
+
     localStorage.setItem('cookie-consent', 'true');
     setAccepted(true);
   };
+
+  // Не рендерим ничего при первой загрузке на SSR
+  if (typeof window === 'undefined') return null;
 
   if (accepted) return null;
 
