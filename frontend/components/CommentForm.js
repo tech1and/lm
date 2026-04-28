@@ -50,6 +50,9 @@ export default function CommentForm({ slug, onCommentAdded }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    // Предотвращаем повторную отправку
+    if (loading) return;
+
     const validationErrors = validate();
     if (Object.keys(validationErrors).length > 0) {
       setErrors(validationErrors);
