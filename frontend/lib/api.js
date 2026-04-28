@@ -14,22 +14,22 @@ const api = axios.create({
 // 🔥 Интерцептор: автоматически добавляет CSRF-токен к POST/PUT/DELETE запросам
 api.interceptors.request.use((config) => {
   const csrfToken = getCookie('csrftoken');
-  
+
   // Добавляем токен только к "изменяющим" запросам и только если он есть
   if (csrfToken && config.method && ['post', 'put', 'patch', 'delete'].includes(config.method.toLowerCase())) {
     config.headers['X-CSRFToken'] = csrfToken;
   }
-  
+
   return config;
 });
 
 // 🍪 Вспомогательная функция для получения куки по имени
 function getCookie(name) {
   if (typeof document === 'undefined') return null; // SSR-защита для Next.js
-  
+
   const cookieString = document.cookie;
   if (!cookieString) return null;
-  
+
   const cookies = cookieString.split(';');
   for (let cookie of cookies) {
     const [cookieName, cookieValue] = cookie.trim().split('=');
@@ -47,6 +47,13 @@ api.interceptors.response.use(
     if (error.response?.status === 403) {
       console.warn('CSRF ошибка: проверьте, что токен получен и отправлен');
     }
+
+    // Логирование ошибок сети для отладки
+    if (error.code === 'ECONNRESET' || error.code === 'ERR_CONNECTION_RESET' ||
+        (error.message && error.message.includes('Network Error'))) {
+      console.error('Ошибка сети:', error.code, error.message);
+    }
+
     return Promise.reject(error);
   }
 );
