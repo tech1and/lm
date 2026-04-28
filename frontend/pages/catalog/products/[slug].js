@@ -176,7 +176,7 @@ export default function ProductPage({ product, similarProducts, error }) {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Right Sidebar - Buy Block (visually on right) */}
-          <div className="lg:col-span-1 order-last lg:order-none">
+          <div className="lg:col-span-1 order-2 lg:order-1">
             <div className="sticky top-20 space-y-6">
               {/* Buy Card */}
               <div className="lm-card p-6">
@@ -329,7 +329,7 @@ export default function ProductPage({ product, similarProducts, error }) {
           </div>
 
           {/* Left Column - Images & Details (visually on left, first in DOM for SEO) */}
-          <div className="lg:col-span-2 order-first lg:order-none space-y-6">
+          <div className="lg:col-span-2 order-1 lg:order-2 space-y-6">
              {/* Product Images Gallery */}
              <div className="lm-card p-6">
                {product.images && product.images.length > 0 ? (
