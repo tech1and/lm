@@ -3,7 +3,7 @@ import Layout from '../../../components/Layout';
 import LikeButton from '../../../components/LikeButton';
 import CommentForm from '../../../components/CommentForm';
 import Link from 'next/link';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Fragment } from 'react';
 import { catalogAPI } from '../../../lib/api';
 import {
   Star, Heart, MessageCircle, Eye, Inbox, ChevronRight, Home,
@@ -98,19 +98,57 @@ export default function ProductPage({ product, similarProducts, error }) {
   };
 
   const siteUrl = 'https://lemanas.ru';
-  const canonical = `${siteUrl}/catalog/products/${product.slug}`;
+  const canonical = `${siteUrl}/p/${product.slug}`;
+
+  // Build full breadcrumb path from categories
+  const buildBreadcrumbItems = () => {
+    const items = [
+      { "@type": "ListItem", "position": 1, "name": "Главная", "item": siteUrl },
+      { "@type": "ListItem", "position": 2, "name": "Каталог", "item": `${siteUrl}/catalog` },
+    ];
+    
+    if (product.categories && product.categories.length > 0) {
+      // Use the first category for breadcrumb (primary category)
+      const primaryCategory = product.categories[0];
+      if (primaryCategory.path && primaryCategory.path.length > 0) {
+        // Build path for each level in the category hierarchy
+        let categoryPath = '';
+        primaryCategory.path.forEach((catName, index) => {
+          // We need to find the slug for each category level
+          // For simplicity, we'll use the primary category slug for all levels
+          // In a real scenario, you'd want to have slugs for each level
+          categoryPath += `/${catName.toLowerCase().replace(/\s+/g, '-')}`;
+          items.push({
+            "@type": "ListItem",
+            "position": items.length + 1,
+            "name": catName,
+            "item": `${siteUrl}/catalog/categories${categoryPath}`,
+          });
+        });
+      } else if (primaryCategory.slug) {
+        items.push({
+          "@type": "ListItem",
+          "position": items.length + 1,
+          "name": primaryCategory.name,
+          "item": `${siteUrl}/catalog/categories/${primaryCategory.slug}`,
+        });
+      }
+    }
+    
+    items.push({
+      "@type": "ListItem",
+      "position": items.length + 1,
+      "name": product.name,
+      "item": canonical,
+    });
+    
+    return items;
+  };
 
   const breadcrumbSchema = {
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",
-    "itemListElement": [
-      { "@type": "ListItem", "position": 1, "name": "Главная", "item": siteUrl },
-      { "@type": "ListItem", "position": 2, "name": "Каталог", "item": `${siteUrl}/catalog` },
-      ...(product.category ? [
-        { "@type": "ListItem", "position": 3, "name": product.category.name, "item": `${siteUrl}/catalog/categories/${product.category.slug}` },
-      ] : []),
-      { "@type": "ListItem", "position": product.category ? 4 : 3, "name": product.name, "item": canonical },
-    ],
+    "itemListElement": buildBreadcrumbItems(),
   };
 
   const productSchema = {
@@ -158,12 +196,40 @@ export default function ProductPage({ product, similarProducts, error }) {
             <Link href="/catalog" className="hover:text-gray-700">
               Каталог
             </Link>
-            {product.category && (
+            {product.categories && product.categories.length > 0 && (
               <>
-                <ChevronRight className="w-4 h-4 flex-shrink-0" />
-                <Link href={`/catalog/categories/${product.category.slug}`} className="hover:text-gray-700">
-                  {product.category.name}
-                </Link>
+                {product.categories[0].path && product.categories[0].path.length > 0 ? (
+                  // Render full category path from the path array
+                  product.categories[0].path.map((catName, index) => {
+                    const isLast = index === product.categories[0].path.length - 1;
+                    return (
+                      <Fragment key={index}>
+                        <ChevronRight className="w-4 h-4 flex-shrink-0" />
+                        {isLast ? (
+                          <Link 
+                            href={`/catalog/categories/${product.categories[0].slug}`} 
+                            className="hover:text-gray-700"
+                          >
+                            {catName}
+                          </Link>
+                        ) : (
+                          <span className="text-gray-700">{catName}</span>
+                        )}
+                      </Fragment>
+                    );
+                  })
+                ) : (
+                  // Fallback to single category link
+                  <>
+                    <ChevronRight className="w-4 h-4 flex-shrink-0" />
+                    <Link 
+                      href={`/catalog/categories/${product.categories[0].slug}`} 
+                      className="hover:text-gray-700"
+                    >
+                      {product.categories[0].name}
+                    </Link>
+                  </>
+                )}
               </>
             )}
             <ChevronRight className="w-4 h-4 flex-shrink-0" />
