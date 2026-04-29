@@ -1,6 +1,7 @@
 import Layout from '../../../components/Layout';
 import CatalogProductList from '../../../components/CatalogProductList';
 import Link from 'next/link';
+import { Fragment } from 'react';
 import { FolderOpen, ChevronRight, Home } from 'lucide-react';
 import { catalogAPI } from '../../../lib/api';
 
@@ -21,14 +22,43 @@ export default function CategoryPage({ category, children, products, error }) {
     );
   }
 
+  const siteUrl = 'https://lemanas.ru';
+  
+  // Build full breadcrumb path from category path array
+  const buildBreadcrumbItems = () => {
+    const items = [
+      { "@type": "ListItem", "position": 1, "name": "Главная", "item": siteUrl },
+      { "@type": "ListItem", "position": 2, "name": "Каталог", "item": `${siteUrl}/catalog` },
+    ];
+    
+    if (category.path && category.path.length > 0) {
+      // Build path for each level in the category hierarchy
+      let categoryPath = '';
+      category.path.forEach((catName, index) => {
+        categoryPath += `/${catName.toLowerCase().replace(/\s+/g, '-')}`;
+        items.push({
+          "@type": "ListItem",
+          "position": items.length + 1,
+          "name": catName,
+          "item": `${siteUrl}/catalog/categories${categoryPath}`,
+        });
+      });
+    } else if (category.slug) {
+      items.push({
+        "@type": "ListItem",
+        "position": items.length + 1,
+        "name": category.name,
+        "item": `${siteUrl}/catalog/categories/${category.slug}`,
+      });
+    }
+    
+    return items;
+  };
+
   const breadcrumbSchema = {
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",
-    "itemListElement": [
-      { "@type": "ListItem", "position": 1, "name": "Главная", "item": process.env.NEXT_PUBLIC_SITE_URL },
-      { "@type": "ListItem", "position": 2, "name": "Каталог", "item": `${process.env.NEXT_PUBLIC_SITE_URL}/catalog` },
-      { "@type": "ListItem", "position": 3, "name": category.name, "item": `${process.env.NEXT_PUBLIC_SITE_URL}/catalog/categories/${category.slug}` },
-    ],
+    "itemListElement": buildBreadcrumbItems(),
   };
 
   const initialData = {
@@ -41,7 +71,7 @@ export default function CategoryPage({ category, children, products, error }) {
     <Layout
       title={`${category.name} — Каталог товаров`}
       description={category.meta_description || `Товары категории ${category.name}. Сравнение цен, характеристики, отзывы.`}
-      canonical={`${process.env.NEXT_PUBLIC_SITE_URL}/catalog/categories/${category.slug}`}
+      canonical={`${siteUrl}/catalog/categories/${category.slug}`}
       schema={breadcrumbSchema}
     >
       {/* Breadcrumb */}
@@ -56,12 +86,27 @@ export default function CategoryPage({ category, children, products, error }) {
             <Link href="/catalog" className="hover:text-gray-700">
               Каталог
             </Link>
-            {category.path && category.path.length > 1 && (
-              <>
-                <ChevronRight className="w-4 h-4" />
-                <span className="text-gray-900 font-medium">{category.name}</span>
-              </>
-            )}
+            {category.path && category.path.length > 0 ? (
+              // Render full category path from the path array
+              category.path.map((catName, index) => {
+                const isLast = index === category.path.length - 1;
+                return (
+                  <Fragment key={index}>
+                    <ChevronRight className="w-4 h-4" />
+                    {isLast ? (
+                      <span className="text-gray-900 font-medium">{catName}</span>
+                    ) : (
+                      <Link 
+                        href={`/catalog/categories/${category.slug}`} 
+                        className="hover:text-gray-700"
+                      >
+                        {catName}
+                      </Link>
+                    )}
+                  </Fragment>
+                );
+              })
+            ) : null}
           </nav>
         </div>
       </div>
