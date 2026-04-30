@@ -1,6 +1,6 @@
 import Layout from '../components/Layout';
 import Link from 'next/link';
-import { Star, RefreshCw, Search, ShieldCheck, Trophy, Heart, Eye, BarChart3, ArrowRight, MessageSquare } from 'lucide-react';
+import { Star, RefreshCw, Search, ShieldCheck, Trophy, Heart, Eye, BarChart3, ArrowRight, MessageSquare, Home, ChevronRight } from 'lucide-react';
 
 export default function AboutPage() {
   const aboutSchema = {
@@ -18,6 +18,20 @@ export default function AboutPage() {
       canonical={`${process.env.NEXT_PUBLIC_SITE_URL}/about`}
       schema={aboutSchema}
     >
+      {/* Breadcrumb */}
+      <div className="bg-white border-b">
+        <div className="max-w-7xl mx-auto px-4 py-3">
+          <nav className="flex items-center gap-2 text-sm text-gray-500" aria-label="breadcrumb">
+            <Link href="/" className="hover:text-gray-700 flex items-center gap-1">
+              <Home className="w-4 h-4" />
+              Главная
+            </Link>
+            <ChevronRight className="w-4 h-4" />
+            <span className="text-gray-900 font-medium">О проекте</span>
+          </nav>
+        </div>
+      </div>
+
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Header */}
         <div className="mb-12">

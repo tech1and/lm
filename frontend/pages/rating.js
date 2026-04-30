@@ -1,6 +1,7 @@
 import Layout from '../components/Layout';
 import RatingList from '../components/RatingList';
-import { Trophy } from 'lucide-react';
+import { Trophy, Home, ChevronRight } from 'lucide-react';
+import Link from 'next/link';
 import { shopsAPI } from '../lib/api';
 
 export default function RatingPage({ stores }) {
@@ -19,6 +20,20 @@ export default function RatingPage({ stores }) {
       canonical={`${process.env.NEXT_PUBLIC_SITE_URL}/rating`}
       schema={ratingSchema}
     >
+      {/* Breadcrumb */}
+      <div className="bg-white border-b">
+        <div className="max-w-7xl mx-auto px-4 py-3">
+          <nav className="flex items-center gap-2 text-sm text-gray-500" aria-label="breadcrumb">
+            <Link href="/" className="hover:text-gray-700 flex items-center gap-1">
+              <Home className="w-4 h-4" />
+              Главная
+            </Link>
+            <ChevronRight className="w-4 h-4" />
+            <span className="text-gray-900 font-medium">Рейтинг магазинов</span>
+          </nav>
+        </div>
+      </div>
+
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="mb-8">
           <span className="inline-block bg-primary-500 text-dark-800 px-4 py-1.5 rounded-full font-bold text-sm mb-4">
