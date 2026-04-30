@@ -148,7 +148,7 @@ export default function CatalogProductList({ categorySlug, initialData, isRootCa
             products.map((product, i) => (
               <Link
                 key={product.id}
-                href={`/catalog/products/${product.slug}`}
+                href={`/p/${product.slug}`}
                 className="lm-card p-4 flex gap-4 hover:shadow-md transition-shadow"
               >
                 {/* Image */}
