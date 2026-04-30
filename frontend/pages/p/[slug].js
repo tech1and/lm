@@ -98,7 +98,7 @@ export default function ProductPage({ product, similarProducts, error }) {
   };
 
   const siteUrl = 'https://lemanas.ru';
-  const canonical = `${siteUrl}/catalog/products/${product.slug}`;
+  const canonical = `${siteUrl}/p/${product.slug}`;
 
   const breadcrumbSchema = {
     "@context": "https://schema.org",
@@ -648,7 +648,7 @@ export default function ProductPage({ product, similarProducts, error }) {
                   {similarProducts.map(similarProduct => (
                     <Link
                       key={similarProduct.id}
-                      href={`/catalog/products/${similarProduct.slug}`}
+                      href={`/p/${similarProduct.slug}`}
                       className="group block border border-gray-200 rounded-xl overflow-hidden hover:shadow-lg transition-shadow dark:border-white/10"
                     >
                       <div className="aspect-square bg-gray-50 overflow-hidden">
