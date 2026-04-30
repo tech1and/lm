@@ -80,4 +80,4 @@ class ProductAdmin(ImportExportModelAdmin, admin.ModelAdmin):
     )
 
     def view_on_site(self, obj):
-        return f'/catalog/products/{obj.slug}/'
+        return f'/p/{obj.slug}/'
