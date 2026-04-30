@@ -89,6 +89,8 @@ export const catalogAPI = {
     api.get('/api/catalog/categories/', { params }),
   getCategory: (slug) =>
     api.get(`/api/catalog/categories/${slug}/`),
+  getCategoryWithParents: (slug) =>
+    api.get(`/api/catalog/categories/${slug}/`, { params: { with_parents: true } }),
   getCategoryProducts: (slug, params = {}) =>
     api.get(`/api/catalog/categories/${slug}/products/`, { params }),
   getProducts: (params = {}) =>

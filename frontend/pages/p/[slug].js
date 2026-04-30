@@ -106,10 +106,13 @@ export default function ProductPage({ product, similarProducts, error }) {
     "itemListElement": [
       { "@type": "ListItem", "position": 1, "name": "Главная", "item": siteUrl },
       { "@type": "ListItem", "position": 2, "name": "Каталог", "item": `${siteUrl}/catalog` },
-      ...(product.category ? [
-        { "@type": "ListItem", "position": 3, "name": product.category.name, "item": `${siteUrl}/catalog/categories/${product.category.slug}` },
-      ] : []),
-      { "@type": "ListItem", "position": product.category ? 4 : 3, "name": product.name, "item": canonical },
+      ...(product.categoryParents ? product.categoryParents.map((cat, index) => ({
+        "@type": "ListItem",
+        "position": 3 + index,
+        "name": cat.name,
+        "item": `${siteUrl}/catalog/categories/${cat.slug}`,
+      })) : []),
+      { "@type": "ListItem", "position": product.categoryParents ? 3 + product.categoryParents.length : 3, "name": product.name, "item": canonical },
     ],
   };
 
@@ -158,14 +161,14 @@ export default function ProductPage({ product, similarProducts, error }) {
             <Link href="/catalog" className="hover:text-gray-700">
               Каталог
             </Link>
-            {product.category && (
+            {product.categoryParents && product.categoryParents.map((cat, index) => (
               <>
-                <ChevronRight className="w-4 h-4 flex-shrink-0" />
-                <Link href={`/catalog/categories/${product.category.slug}`} className="hover:text-gray-700">
-                  {product.category.name}
+                <ChevronRight key={cat.slug} className="w-4 h-4 flex-shrink-0" />
+                <Link href={`/catalog/categories/${cat.slug}`} className="hover:text-gray-700">
+                  {cat.name}
                 </Link>
               </>
-            )}
+            ))}
             <ChevronRight className="w-4 h-4 flex-shrink-0" />
             <span className="text-gray-900 font-medium truncate">{product.name}</span>
           </nav>
@@ -312,14 +315,14 @@ export default function ProductPage({ product, similarProducts, error }) {
                 </h3>
 
                 <ul className="space-y-3 text-sm">
-                  {product.category && (
+                  {product.categoryParents && product.categoryParents.length > 0 && (
                     <li>
                       <span className="text-gray-500 block mb-1">Категория:</span>
                       <Link 
-                        href={`/catalog/categories/${product.category.slug}`}
+                        href={`/catalog/categories/${product.categoryParents[product.categoryParents.length - 1].slug}`}
                         className="text-primary-600 hover:text-primary-700 font-medium"
                       >
-                        {product.category.name}
+                        {product.categoryParents[product.categoryParents.length - 1].name}
                       </Link>
                     </li>
                   )}
@@ -716,6 +719,23 @@ export async function getServerSideProps({ params }) {
     const res = await catalogAPI.getProduct(params.slug);
     const data = res.data;
 
+    // Загружаем полную информацию о категории с родительскими категориями
+    let categoryWithParents = null;
+    if (data.category && data.category.path) {
+      try {
+        // Получаем информацию о всех родительских категориях через path
+        const pathSlugs = data.category.path;
+        const parents = [];
+        for (const slug of pathSlugs) {
+          const catRes = await catalogAPI.getCategory(slug);
+          parents.push(catRes.data);
+        }
+        categoryWithParents = parents;
+      } catch (e) {
+        console.error('Ошибка загрузки родительских категорий:', e);
+      }
+    }
+
     // Получаем комментарии для товара
     let comments = [];
     try {
@@ -739,6 +759,7 @@ export async function getServerSideProps({ params }) {
         product: {
           ...data,
           comments,
+          categoryParents: categoryWithParents,
         } || null,
         similarProducts,
       },

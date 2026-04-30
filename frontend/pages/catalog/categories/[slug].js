@@ -27,7 +27,12 @@ export default function CategoryPage({ category, children, products, error }) {
     "itemListElement": [
       { "@type": "ListItem", "position": 1, "name": "Главная", "item": process.env.NEXT_PUBLIC_SITE_URL },
       { "@type": "ListItem", "position": 2, "name": "Каталог", "item": `${process.env.NEXT_PUBLIC_SITE_URL}/catalog` },
-      { "@type": "ListItem", "position": 3, "name": category.name, "item": `${process.env.NEXT_PUBLIC_SITE_URL}/catalog/categories/${category.slug}` },
+      ...(category.parents ? category.parents.map((cat, index) => ({
+        "@type": "ListItem",
+        "position": 3 + index,
+        "name": cat.name,
+        "item": `${process.env.NEXT_PUBLIC_SITE_URL}/catalog/categories/${cat.slug}`,
+      })) : []),
     ],
   };
 
@@ -56,12 +61,14 @@ export default function CategoryPage({ category, children, products, error }) {
             <Link href="/catalog" className="hover:text-gray-700">
               Каталог
             </Link>
-            {category.path && category.path.length > 1 && (
+            {category.parents && category.parents.map((cat, index) => (
               <>
-                <ChevronRight className="w-4 h-4" />
-                <span className="text-gray-900 font-medium">{category.name}</span>
+                <ChevronRight key={cat.slug} className="w-4 h-4" />
+                <Link href={`/catalog/categories/${cat.slug}`} className="hover:text-gray-700">
+                  {cat.name}
+                </Link>
               </>
-            )}
+            ))}
           </nav>
         </div>
       </div>
@@ -96,17 +103,39 @@ export default function CategoryPage({ category, children, products, error }) {
 
 export async function getServerSideProps({ params }) {
   try {
-    const res = await catalogAPI.getCategoryProducts(params.slug, {
+    const res = await catalogAPI.getCategory(params.slug);
+    const categoryData = res.data;
+
+    // Загружаем информацию о родительских категориях через path
+    let categoryWithParents = null;
+    if (categoryData.path) {
+      try {
+        const pathSlugs = categoryData.path;
+        const parents = [];
+        for (const slug of pathSlugs) {
+          const catRes = await catalogAPI.getCategory(slug);
+          parents.push(catRes.data);
+        }
+        categoryWithParents = parents;
+      } catch (e) {
+        console.error('Ошибка загрузки родительских категорий:', e);
+      }
+    }
+
+    const productsRes = await catalogAPI.getCategoryProducts(params.slug, {
       page: 1,
       page_size: 20,
       ordering: '-avg_rating',
     });
 
-    const data = res.data;
+    const data = productsRes.data;
 
     return {
       props: {
-        category: data.category || null,
+        category: {
+          ...categoryData,
+          parents: categoryWithParents,
+        } || null,
         children: data.children || [],
         products: data.results || [],
       },
