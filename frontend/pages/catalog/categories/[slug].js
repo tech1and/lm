@@ -69,6 +69,8 @@ export default function CategoryPage({ category, children, products, error }) {
                 </Link>
               </>
             ))}
+            <ChevronRight className="w-4 h-4" />
+            <span className="text-gray-900 font-medium">{category.name}</span>
           </nav>
         </div>
       </div>
