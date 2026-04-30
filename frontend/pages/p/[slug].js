@@ -719,12 +719,13 @@ export async function getServerSideProps({ params }) {
     const res = await catalogAPI.getProduct(params.slug);
     const data = res.data;
 
-    // Загружаем полную информацию о категории с родительскими категориями
+    // Загружаем полную информацию о категориях с родительскими категориями
     let categoryWithParents = null;
-    if (data.category && data.category.path) {
+    if (data.categories && data.categories.length > 0) {
       try {
-        // Получаем информацию о всех родительских категориях через path
-        const pathSlugs = data.category.path;
+        // Используем первую категорию и её path для получения родительских категорий
+        const mainCategory = data.categories[0];
+        const pathSlugs = mainCategory.path || [];
         const parents = [];
         for (const slug of pathSlugs) {
           const catRes = await catalogAPI.getCategory(slug);
