@@ -107,6 +107,9 @@ class Product(models.Model):
             models.Index(fields=['brand']),
             models.Index(fields=['-likes_count']),
             models.Index(fields=['-views_count']),
+            models.Index(fields=['avg_rating']),
+            models.Index(fields=['reviews_count']),
+            models.Index(fields=['created_at']),
         ]
 
     def __str__(self):

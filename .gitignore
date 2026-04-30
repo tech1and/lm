@@ -1,53 +1,97 @@
-```
-# Dependencies
-node_modules/
-
-# Build artifacts
+# ==========================================
+# PYTHON / DJANGO
+# ==========================================
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+*.egg-info/
 dist/
 build/
-.next/
-.nuxt/
+*.egg
 
-# Logs and temp files
+# Virtual environments
+venv/
+ENV/
+env/
+.venv/
+
+# Django specific
 *.log
-*.tmp
+local_settings.py
+db.sqlite3
+*.sqlite3
+staticfiles/
+media/
+.pytest_cache/
+.coverage
+htmlcov/
 
-# Environment
+# ==========================================
+# NODE.JS / NEXT.JS
+# ==========================================
+node_modules/
+.next/
+out/
+*.tsbuildinfo
+
+# Package manager caches
+.npm/
+.yarn/
+.pnp/
+.pnp.js
+
+# Debug logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# ==========================================
+# ENVIRONMENT & SECRETS
+# ==========================================
 .env
 .env.local
-.env.*
+.env.*.local
+.env.production
+.env.development
+*.key
+*.pem
+secrets.json
+config.local.py
 
-# Editors
+# ==========================================
+# IDE & EDITORS
+# ==========================================
 .vscode/
 .idea/
 *.swp
 *.swo
+*~
+.DS_Store
+Thumbs.db
 
-# Python
-__pycache__/
-*.pyc
-*.pyo
-*.pyd
-.Python
-venv/
-.venv/
-.env
-.env.local
-.env.*
-.mypy_cache/
-.pytest_cache/
-.coverage
-coverage/
-htmlcov/
+# ==========================================
+# PROJECT STRATEGY & CUSTOM
+# ==========================================
+# 📦 Django Migrations: в Git храним ТОЛЬКО начальную миграцию
+**/migrations/*.py
+!**/migrations/__init__.py
+!**/migrations/0001_initial.py
 
-# Node.js
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-node_modules/
-dist/
-build/
-.next/
-.nuxt/
-public/dist/
-```
+# 🚫 Большие/бинарные файлы (вызывали ошибки пуша)
+*.node
+feed.xml
+*.xml
+
+# 🗂️ OS / System
+.AppleDouble
+.LSOverride
+Icon
+._*
+
+*.code-workspace
+
+.qwen
+*.filepart
