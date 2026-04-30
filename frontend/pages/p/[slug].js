@@ -1,10 +1,10 @@
 import { useRouter } from 'next/router';
-import Layout from '../../../components/Layout';
-import LikeButton from '../../../components/LikeButton';
-import CommentForm from '../../../components/CommentForm';
+import Layout from '../../components/Layout';
+import LikeButton from '../../components/LikeButton';
+import CommentForm from '../../components/CommentForm';
 import Link from 'next/link';
 import { useState, useEffect } from 'react';
-import { catalogAPI } from '../../../lib/api';
+import { catalogAPI } from '../../lib/api';
 import {
   Star, Heart, MessageCircle, Eye, Inbox, ChevronRight, Home,
   ThumbsUp, MessageSquare, ShoppingCart, Truck, Shield, CheckCircle,
