@@ -24,10 +24,10 @@ export default function ShopCategoryProducts({ category, products }) {
       </div>
 
       {/* Products Grid */}
-      <div className="relative mt-8 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-2 md:gap-x-8 md:gap-y-12 lg:mt-10 lg:grid-cols-3 xl:grid-cols-4">
+      <div className="relative mt-8 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-2 md:gap-x-8 md:gap-y-12 lg:mt-10 lg:grid-cols-3 xl:grid-cols-3">
         {products.map((product) => (
           <div key={product.id} className="group relative">
-            <Link href={`/catalog/products/${product.slug}`} className="block">
+            <Link href={`/p/${product.slug}`} className="block">
               <div className="relative w-full overflow-hidden rounded-2xl">
                 {/* Image */}
                 <div className="aspect-square w-full overflow-hidden rounded-xl bg-gray-100">
