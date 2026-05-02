@@ -81,6 +81,7 @@ class ShopDetailSerializer(serializers.ModelSerializer):
     schema_org = serializers.SerializerMethodField()
     user_liked = serializers.SerializerMethodField()
     external_link = serializers.SerializerMethodField()
+    product_categories = serializers.SerializerMethodField()
 
     # 🔥 Ключевое: переопределяем description как метод-поле
     description = serializers.SerializerMethodField()
@@ -99,7 +100,19 @@ class ShopDetailSerializer(serializers.ModelSerializer):
             'has_parking', 'has_toilet', 'has_available_environment',
             'has_cafe', 'has_wifi', 'has_cash_machine', 'has_cargo',
             'created_at', 'updated_at',
-            'comments', 'schema_org', 'user_liked',
+            'comments', 'schema_org', 'user_liked', 'product_categories',
+        ]
+
+    def get_product_categories(self, obj):
+        """Возвращает список категорий товаров для магазина"""
+        categories = obj.product_categories.all()
+        return [
+            {
+                'id': cat.id,
+                'name': cat.name,
+                'slug': cat.slug,
+            }
+            for cat in categories
         ]
 
     def get_external_link(self, obj):

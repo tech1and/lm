@@ -12,6 +12,7 @@ class ShopAdmin(ImportExportModelAdmin, admin.ModelAdmin):
     save_on_top = True
     prepopulated_fields = {'slug': ('name',)}
     readonly_fields = ['views_count', 'likes_count', 'created_at', 'updated_at']
+    filter_horizontal = ('product_categories',)
     fieldsets = (
         ('Основное', {
             'fields': ('name', 'slug', 'short_description', 'description', 'logo', 'is_active')
@@ -40,6 +41,10 @@ class ShopAdmin(ImportExportModelAdmin, admin.ModelAdmin):
                 'has_delivery', 'has_pickup', 'has_credit', 'has_returns',
                 'has_tool_checking', 'has_service_center',
             ),
+        }),
+        ('Категории товаров для показа', {
+            'fields': ('product_categories',),
+            'description': 'Выберите категории товаров, которые будут отображаться на странице магазина',
         }),
         ('Статистика', {
             'fields': ('rating', 'views_count', 'likes_count', 'created_at', 'updated_at'),
