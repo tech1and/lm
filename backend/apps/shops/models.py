@@ -2,6 +2,7 @@ from django.db import models
 from django.utils.text import slugify
 import uuid
 from tinymce.models import HTMLField
+from apps.catalog.models import Category
 
 
 class Shop(models.Model):
@@ -10,47 +11,47 @@ class Shop(models.Model):
     description = HTMLField('Описание', blank=True, default='')
     short_description = models.CharField('Краткое описание', max_length=500, blank=True, default='')
     logo = models.ImageField('Логотип', upload_to='shops/logos/', blank=True, null=True)
-    
+
     # SEO поля
     meta_title = models.CharField('Meta Title', max_length=200, blank=True)
     meta_description = models.CharField('Meta Description', max_length=500, blank=True)
     meta_keywords = models.CharField('Meta Keywords', max_length=300, blank=True)
-    
+
     # GEO поля
     address = models.CharField('Адрес', max_length=500, blank=True)
     city = models.CharField('Город', max_length=100, default='Москва')
     district = models.CharField('Район Москвы', max_length=100, blank=True)
     latitude = models.DecimalField('Широта', max_digits=10, decimal_places=7, null=True, blank=True)
     longitude = models.DecimalField('Долгота', max_digits=10, decimal_places=7, null=True, blank=True)
-    
+
     # Контакты
     phone = models.CharField('Телефон', max_length=50, blank=True)
     email = models.EmailField('Email', blank=True)
     website = models.URLField('Сайт', blank=True)
-    
+
     # Рабочие часы
     working_hours = models.CharField('Часы работы', max_length=100, default='Круглосуточно')
-    
+
     # Статистика
     views_count = models.PositiveIntegerField('Просмотры', default=0)
     likes_count = models.PositiveIntegerField('Лайки', default=0)
-    
+
     # Рейтинг
     rating = models.FloatField('Рейтинг', default=0.0)
-    
+
     # Тарифы
     price_per_km = models.DecimalField('Цена за км', max_digits=8, decimal_places=2, null=True, blank=True)
     min_price = models.DecimalField('Минимальная стоимость', max_digits=8, decimal_places=2, null=True, blank=True)
-    
+
     # Особенности
     has_parking = models.BooleanField('Парковка', default=True)
     has_toilet = models.BooleanField('Туалет', default=True)
     has_available_environment = models.BooleanField('Доступная среда', default=True)
     has_cafe = models.BooleanField('Кафе', default=True)
     has_wifi = models.BooleanField('Wi-Fi', default=True)
-    has_cash_machine = models.BooleanField('Банкоматы', default=True)    
+    has_cash_machine = models.BooleanField('Банкоматы', default=True)
     has_cargo = models.BooleanField('Грузовое такси', default=True)
-    
+
     #Сервисы
     has_delivery = models.BooleanField('Доставка из магазина', default=True)
     has_pickup = models.BooleanField('Самовывоз', default=True)
@@ -58,7 +59,10 @@ class Shop(models.Model):
     has_returns = models.BooleanField('Возврат товаров', default=True)
     has_tool_checking = models.BooleanField('Проверка техники', default=True)
     has_service_center = models.BooleanField('Сервисный центр', default=True)
-    
+
+    # Категории товаров для отображения на странице магазина
+    product_categories = models.ManyToManyField(Category, blank=True, related_name='shops', verbose_name='Категории товаров для показа')
+
     is_active = models.BooleanField('Активен', default=True)
     created_at = models.DateTimeField('Создан', auto_now_add=True)
     updated_at = models.DateTimeField('Обновлен', auto_now=True)
@@ -135,11 +139,11 @@ class Comment(models.Model):
     author_email = models.EmailField('Email')
     text = models.TextField('Текст комментария')
     rating = models.PositiveSmallIntegerField('Оценка', choices=[(i, i) for i in range(1, 6)], default=5)
-    
+
     # Антиспам
     honeypot = models.CharField('Honeypot', max_length=100, blank=True)
     ip_address = models.GenericIPAddressField('IP адрес', null=True, blank=True)
-    
+
     is_approved = models.BooleanField('Одобрен', default=True)
     created_at = models.DateTimeField('Создан', auto_now_add=True)
 

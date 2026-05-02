@@ -4,15 +4,16 @@ import LikeButton from '../../components/LikeButton';
 import CommentForm from '../../components/CommentForm';
 import SimilarStores from '../../components/SimilarStores';
 import Logo from '../../components/Logo';
+import ShopCategoryProducts from '../../components/ShopCategoryProducts';
 import Link from 'next/link';
 import { useState } from 'react';
-import { shopsAPI } from '../../lib/api';
+import { shopsAPI, catalogAPI } from '../../lib/api';
 import {
   Star, MapPin, Phone, Globe, Clock, Truck, Wrench, Shield, CreditCard,
   MapPin as MapPinIcon, ChevronRight, Home, Trophy, ThumbsUp, MessageSquare, Eye, ExternalLink
 } from 'lucide-react';
 
-export default function StorePage({ store, error }) {
+export default function StorePage({ store, error, categoryProducts }) {
   const router = useRouter();
   const [comments, setComments] = useState(store?.comments || []);
 
@@ -215,6 +216,25 @@ export default function StorePage({ store, error }) {
                 dangerouslySetInnerHTML={{ __html: store.description }}
               />
             </div>
+
+            {/* Product Categories Listings */}
+            {categoryProducts && categoryProducts.length > 0 && (
+              <div className="space-y-8">
+                <h2 className="text-2xl font-bold flex items-center gap-2">
+                  <span className="w-8 h-8 bg-blue-100 text-blue-600 rounded-lg flex items-center justify-center">
+                    📦
+                  </span>
+                  Каталог товаров
+                </h2>
+                {categoryProducts.map(({ category, products }) => (
+                  <ShopCategoryProducts
+                    key={category.id}
+                    category={category}
+                    products={products}
+                  />
+                ))}
+              </div>
+            )}
 
             {/* Features */}
             {features.length > 0 && (
@@ -458,9 +478,36 @@ export default function StorePage({ store, error }) {
 export async function getServerSideProps({ params }) {
   try {
     const res = await shopsAPI.getDetail(params.slug);
+    const store = res.data;
+
+    // Получаем товары для каждой категории, выбранной в админке
+    let categoryProducts = [];
+    if (store.product_categories && store.product_categories.length > 0) {
+      const productsPromises = store.product_categories.map(async (category) => {
+        try {
+          const catRes = await catalogAPI.getCategoryProducts(category.slug, {
+            page: 1,
+            page_size: 6,
+            ordering: '?', // Случайный порядок
+          });
+          return {
+            category: category,
+            products: catRes.data.results || [],
+          };
+        } catch (err) {
+          console.error(`Ошибка загрузки товаров для категории ${category.slug}:`, err);
+          return null;
+        }
+      });
+
+      const results = await Promise.all(productsPromises);
+      categoryProducts = results.filter(Boolean);
+    }
+
     return {
       props: {
-        store: res.data,
+        store: store,
+        categoryProducts: categoryProducts,
       },
     };
   } catch (err) {
@@ -471,6 +518,7 @@ export async function getServerSideProps({ params }) {
       props: {
         store: null,
         error: 'Ошибка загрузки данных',
+        categoryProducts: [],
       },
     };
   }

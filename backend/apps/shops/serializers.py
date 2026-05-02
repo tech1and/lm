@@ -9,23 +9,23 @@ def clean_html_whitespace(html: str) -> str:
     """
     if not html:
         return html
-    
+
     # 1. Нормализуем все переносы строк: \r\n, \r, \n → пробел
     html = re.sub(r'\r\n?|\n', ' ', html)
-    
+
     # 2. Удаляем пробелы между тегами: >   <  →  ><
     html = re.sub(r'>\s+<', '><', html)
-    
+
     # 3. Удаляем <br> в начале/конце блочных элементов
     html = re.sub(r'(<(div|p|header|section|article|main)[^>]*>)\s*(<br\s*/?>\s*)+', r'\1', html, flags=re.IGNORECASE)
     html = re.sub(r'(\s*<br\s*/?>\s*)+(</(div|p|header|section|article|main)>)', r'\2', html, flags=re.IGNORECASE)
-    
+
     # 4. Заменяем множественные <br> подряд на максимум один
     html = re.sub(r'(<br\s*/?>\s*){2,}', '<br>', html)
-    
+
     # 5. Финальная очистка: множественные пробелы → один
     html = re.sub(r'\s{2,}', ' ', html)
-    
+
     return html.strip()
 
 
@@ -81,6 +81,7 @@ class ShopDetailSerializer(serializers.ModelSerializer):
     schema_org = serializers.SerializerMethodField()
     user_liked = serializers.SerializerMethodField()
     external_link = serializers.SerializerMethodField()
+    product_categories = serializers.SerializerMethodField()
 
     # 🔥 Ключевое: переопределяем description как метод-поле
     description = serializers.SerializerMethodField()
@@ -99,7 +100,19 @@ class ShopDetailSerializer(serializers.ModelSerializer):
             'has_parking', 'has_toilet', 'has_available_environment',
             'has_cafe', 'has_wifi', 'has_cash_machine', 'has_cargo',
             'created_at', 'updated_at',
-            'comments', 'schema_org', 'user_liked',
+            'comments', 'schema_org', 'user_liked', 'product_categories',
+        ]
+
+    def get_product_categories(self, obj):
+        """Возвращает список категорий товаров для магазина"""
+        categories = obj.product_categories.all()
+        return [
+            {
+                'id': cat.id,
+                'name': cat.name,
+                'slug': cat.slug,
+            }
+            for cat in categories
         ]
 
     def get_external_link(self, obj):
