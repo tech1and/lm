@@ -2,6 +2,7 @@ from django.db import models
 from django.utils.text import slugify
 import uuid
 from tinymce.models import HTMLField
+from apps.catalog.models import Category
 
 
 class Shop(models.Model):
@@ -58,6 +59,9 @@ class Shop(models.Model):
     has_returns = models.BooleanField('Возврат товаров', default=True)
     has_tool_checking = models.BooleanField('Проверка техники', default=True)
     has_service_center = models.BooleanField('Сервисный центр', default=True)
+    
+    # Категории товаров для отображения на странице магазина
+    product_categories = models.ManyToManyField(Category, blank=True, related_name='shops', verbose_name='Категории товаров для показа')
     
     is_active = models.BooleanField('Активен', default=True)
     created_at = models.DateTimeField('Создан', auto_now_add=True)
