@@ -55,9 +55,21 @@ class CategoryViewSet(viewsets.ReadOnlyModelViewSet):
             qs = qs.order_by('-reviews_count')
         else:
             ordering = request.query_params.get('ordering', '-avg_rating')
-            qs = qs.order_by(ordering)
+            # Handle random ordering
+            if ordering == '?':
+                qs = qs.order_by('?')
+            else:
+                qs = qs.order_by(ordering)
         
-        # Пагинация
+        # Пагинация - override page size if specified
+        page_size = request.query_params.get('page_size')
+        if page_size:
+            try:
+                page_size = int(page_size)
+                self.paginator.page_size = page_size
+            except (ValueError, TypeError):
+                pass  # Use default page size if invalid
+        
         page = self.paginate_queryset(qs)
         if page is not None:
             serializer = ProductListSerializer(page, many=True)

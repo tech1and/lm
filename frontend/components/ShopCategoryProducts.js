@@ -80,7 +80,7 @@ export default function ShopCategoryProducts({ category, products }) {
                     </div>
                   )}
                   <div className="mt-1.5 flex items-center gap-x-2">
-                    <h3 className="text-base font-medium capitalize line-clamp-1 text-neutral-900 dark:text-white">
+                    <h3 className="text-base font-medium capitalize line-clamp-3 text-neutral-900 dark:text-white">
                       {product.name}
                     </h3>
                   </div>
@@ -122,14 +122,7 @@ export default function ShopCategoryProducts({ category, products }) {
                   </div>
                 </div>
 
-                {/* Stock status */}
-                <div className="text-xs">
-                  {product.in_stock ? (
-                    <span className="text-green-600 font-medium">В наличии</span>
-                  ) : (
-                    <span className="text-red-500 font-medium">Нет в наличии</span>
-                  )}
-                </div>
+                
               </div>
             </Link>
           </div>
