@@ -203,20 +203,6 @@ export default function StorePage({ store, error, categoryProducts }) {
               />
             </div>
 
-            {/* Description */}
-            <div className="lm-card p-6">
-              <h2 className="text-xl font-bold mb-4 flex items-center gap-2">
-                <span className="w-8 h-8 bg-blue-100 text-blue-600 rounded-lg flex items-center justify-center">
-                  <span className="text-sm">ℹ️</span>
-                </span>
-                О магазине
-              </h2>
-              <div
-                className="prose"
-                dangerouslySetInnerHTML={{ __html: store.description }}
-              />
-            </div>
-
             {/* Product Categories Listings */}
             {categoryProducts && categoryProducts.length > 0 && (
               <div className="space-y-8">
@@ -235,6 +221,20 @@ export default function StorePage({ store, error, categoryProducts }) {
                 ))}
               </div>
             )}
+
+            {/* Description */}
+            <div className="lm-card p-6">
+              <h2 className="text-xl font-bold mb-4 flex items-center gap-2">
+                <span className="w-8 h-8 bg-blue-100 text-blue-600 rounded-lg flex items-center justify-center">
+                  <span className="text-sm">ℹ️</span>
+                </span>
+                О магазине
+              </h2>
+              <div
+                className="prose"
+                dangerouslySetInnerHTML={{ __html: store.description }}
+              />
+            </div>
 
             {/* Features */}
             {features.length > 0 && (

@@ -1,21 +1,22 @@
 import Head from 'next/head';
 import Link from 'next/link';
 import { useState } from 'react';
-import { Home, Trophy, BookOpen, Info, Menu, X, Mail, MapPin } from 'lucide-react';
+import { Home, Trophy, BookOpen, Info, Menu, X, Mail, MapPin, Layers } from 'lucide-react';
 import Logo from './Logo';
 
 export default function Layout({ children, title, description, canonical, schema, keywords }) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const siteTitle = title
-    ? `${title} | Рейтинг магазинов Лемана Про`
-    : 'Рейтинг магазинов Лемана Про 2026 — лучшие магазины';
+    ? `${title} | lemanas.ru`
+    : 'Рейтинг lemanas.ru';
 
   const siteDescription = description ||
     'Рейтинг лучших магазинов Лемана Про 2026. Читайте отзывы, сравнивайте цены и выбирайте лучший магазин.';
 
   const navLinks = [
     { href: '/', label: 'Главная', icon: Home },
+    { href: '/catalog', label: 'Каталог', icon: Layers },
     { href: '/rating', label: 'Рейтинг', icon: Trophy },
     { href: '/blog', label: 'Блог', icon: BookOpen },
     { href: '/about', label: 'О нас', icon: Info },
@@ -122,6 +123,7 @@ export default function Layout({ children, title, description, canonical, schema
               <h6 className="text-white font-semibold mb-3">Навигация</h6>
               <ul className="space-y-2 text-sm">
                 <li><Link href="/" className="hover:text-primary-400">Главная</Link></li>
+                <li><Link href="/catalog" className="hover:text-primary-400">Каталог</Link></li>
                 <li><Link href="/rating" className="hover:text-primary-400">Рейтинг</Link></li>
                 <li><Link href="/blog" className="hover:text-primary-400">Блог</Link></li>
                 <li><Link href="/about" className="hover:text-primary-400">О нас</Link></li>
