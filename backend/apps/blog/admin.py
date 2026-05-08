@@ -1,5 +1,6 @@
 from django.contrib import admin
 from django.db.models import Case, When, Value, BooleanField
+from django.utils.html import format_html
 from .models import Post, Category
 
 
@@ -19,8 +20,9 @@ class CategoryAdmin(admin.ModelAdmin):
         )
 
     def has_description(self, obj):
-        return obj.has_description_annotated
-    has_description.boolean = True
+        if obj.has_description_annotated:
+            return format_html('<span style="color: green; font-size: 20px;">✓</span>')
+        return format_html('<span style="color: red; font-size: 20px;">✗</span>')
     has_description.short_description = 'Описание'
     has_description.admin_order_field = 'has_description_annotated'
 
@@ -32,12 +34,19 @@ class CategoryAdmin(admin.ModelAdmin):
 
 @admin.register(Post)
 class PostAdmin(admin.ModelAdmin):
-    list_display = ['title', 'category', 'is_published', 'views_count', 'created_at']
+    list_display = ['title', 'category', 'is_published_display', 'views_count', 'created_at']
     list_filter = ['is_published', 'category']
     search_fields = ['title', 'content']
     prepopulated_fields = {'slug': ('title',)}
     readonly_fields = ['views_count', 'created_at', 'updated_at']
     save_on_top = True
+
+    def is_published_display(self, obj):
+        if obj.is_published:
+            return format_html('<span style="color: green; font-size: 20px;">✓</span>')
+        return format_html('<span style="color: red; font-size: 20px;">✗</span>')
+    is_published_display.short_description = 'Опубликован'
+    is_published_display.admin_order_field = 'is_published'
 
     def view_on_site(self, obj):
         return f'/blog/{obj.slug}/'

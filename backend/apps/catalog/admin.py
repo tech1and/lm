@@ -1,5 +1,6 @@
 from django.contrib import admin
 from django.db.models import Case, When, Value, BooleanField
+from django.utils.html import format_html
 from .models import Category, Product
 from import_export.admin import ImportExportModelAdmin
 
@@ -37,8 +38,9 @@ class CategoryAdmin(ImportExportModelAdmin, admin.ModelAdmin):
         )
 
     def has_description(self, obj):
-        return obj.has_description_annotated
-    has_description.boolean = True
+        if obj.has_description_annotated:
+            return format_html('<span style="color: green; font-size: 20px;">✓</span>')
+        return format_html('<span style="color: red; font-size: 20px;">✗</span>')
     has_description.short_description = 'Описание'
     has_description.admin_order_field = 'has_description_annotated'
 
@@ -48,7 +50,7 @@ class CategoryAdmin(ImportExportModelAdmin, admin.ModelAdmin):
 
 @admin.register(Product)
 class ProductAdmin(ImportExportModelAdmin, admin.ModelAdmin):
-    list_display = ('name', 'xml_id', 'price', 'has_description', 'created_at')
+    list_display = ('name', 'xml_id', 'price', 'has_description', 'in_stock_display', 'created_at')
     list_filter = ('in_stock', 'brand', 'currency', 'pickup_available', 'delivery_available')
     search_fields = ('name', 'xml_id', 'barcode', 'brand', 'description')
     save_on_top = True
@@ -109,10 +111,18 @@ class ProductAdmin(ImportExportModelAdmin, admin.ModelAdmin):
         )
 
     def has_description(self, obj):
-        return obj.has_description_annotated
-    has_description.boolean = True
+        if obj.has_description_annotated:
+            return format_html('<span style="color: green; font-size: 20px;">✓</span>')
+        return format_html('<span style="color: red; font-size: 20px;">✗</span>')
     has_description.short_description = 'Описание'
     has_description.admin_order_field = 'has_description_annotated'
+
+    def in_stock_display(self, obj):
+        if obj.in_stock:
+            return format_html('<span style="color: green; font-size: 20px;">✓</span>')
+        return format_html('<span style="color: red; font-size: 20px;">✗</span>')
+    in_stock_display.short_description = 'В наличии'
+    in_stock_display.admin_order_field = 'in_stock'
 
     def view_on_site(self, obj):
         return f'/p/{obj.slug}/'

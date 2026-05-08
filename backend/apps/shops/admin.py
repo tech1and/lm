@@ -1,5 +1,6 @@
 from django.contrib import admin
 from django.db.models import Case, When, Value, BooleanField
+from django.utils.html import format_html
 from .models import Shop, Like, Comment
 from import_export.admin import ImportExportModelAdmin
 
@@ -7,7 +8,7 @@ from import_export.admin import ImportExportModelAdmin
 
 @admin.register(Shop)
 class ShopAdmin(ImportExportModelAdmin, admin.ModelAdmin):
-    list_display = ['name', 'district', 'rating', 'likes_count', 'views_count', 'is_active', 'has_description']
+    list_display = ['name', 'district', 'rating', 'likes_count', 'views_count', 'is_active_display', 'has_description']
     list_filter = ['is_active', 'district', 'has_delivery', 'has_pickup']
     search_fields = ['name', 'description', 'address']
     save_on_top = True
@@ -66,10 +67,18 @@ class ShopAdmin(ImportExportModelAdmin, admin.ModelAdmin):
         )
 
     def has_description(self, obj):
-        return obj.has_description_annotated
-    has_description.boolean = True
+        if obj.has_description_annotated:
+            return format_html('<span style="color: green; font-size: 20px;">✓</span>')
+        return format_html('<span style="color: red; font-size: 20px;">✗</span>')
     has_description.short_description = 'Описание'
     has_description.admin_order_field = 'has_description_annotated'
+
+    def is_active_display(self, obj):
+        if obj.is_active:
+            return format_html('<span style="color: green; font-size: 20px;">✓</span>')
+        return format_html('<span style="color: red; font-size: 20px;">✗</span>')
+    is_active_display.short_description = 'Активен'
+    is_active_display.admin_order_field = 'is_active'
 
     def view_on_site(self, obj):
         return f'/shops/{obj.slug}/'
@@ -77,11 +86,18 @@ class ShopAdmin(ImportExportModelAdmin, admin.ModelAdmin):
 
 @admin.register(Comment)
 class CommentAdmin(admin.ModelAdmin):
-    list_display = ['author_name', 'shop', 'rating', 'is_approved', 'created_at']
+    list_display = ['author_name', 'shop', 'rating', 'is_approved_display', 'created_at']
     list_filter = ['is_approved', 'rating']
     search_fields = ['author_name', 'text']
     list_editable = ['is_approved']
     readonly_fields = ['ip_address', 'honeypot', 'created_at']
+
+    def is_approved_display(self, obj):
+        if obj.is_approved:
+            return format_html('<span style="color: green; font-size: 20px;">✓</span>')
+        return format_html('<span style="color: red; font-size: 20px;">✗</span>')
+    is_approved_display.short_description = 'Одобрен'
+    is_approved_display.admin_order_field = 'is_approved'
 
 
 @admin.register(Like)

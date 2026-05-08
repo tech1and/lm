@@ -51,4 +51,9 @@ urlpatterns = [
     path('api/blog/', include('apps.blog.urls')),
     path('api/catalog/', include('apps.catalog.urls')),
     path('go/', external_redirect, name='external-redirect'),
-] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+]
+
+# Обслуживание медиа и статических файлов (для разработки)
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+    urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
