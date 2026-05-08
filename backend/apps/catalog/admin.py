@@ -5,7 +5,7 @@ from import_export.admin import ImportExportModelAdmin
 
 @admin.register(Category)
 class CategoryAdmin(ImportExportModelAdmin, admin.ModelAdmin):
-    list_display = ('name', 'slug', 'level', 'products_count')
+    list_display = ('name', 'slug', 'level', 'products_count', 'has_description')
     list_filter = ('level',)
     search_fields = ('name', 'path')
     save_on_top = True
@@ -24,13 +24,18 @@ class CategoryAdmin(ImportExportModelAdmin, admin.ModelAdmin):
         }),
     )
 
+    def has_description(self, obj):
+        return bool(obj.description and obj.description.strip())
+    has_description.boolean = True
+    has_description.short_description = 'Описание'
+
     def view_on_site(self, obj):
         return f'/catalog/categories/{obj.slug}/'
 
 
 @admin.register(Product)
 class ProductAdmin(ImportExportModelAdmin, admin.ModelAdmin):
-    list_display = ('name', 'xml_id', 'price', 'brand', 'in_stock', 'created_at')
+    list_display = ('name', 'xml_id', 'price', 'has_description', 'created_at')
     list_filter = ('in_stock', 'brand', 'currency', 'pickup_available', 'delivery_available')
     search_fields = ('name', 'xml_id', 'barcode', 'brand', 'description')
     save_on_top = True
@@ -78,6 +83,11 @@ class ProductAdmin(ImportExportModelAdmin, admin.ModelAdmin):
             'classes': ('collapse',),
         }),
     )
+
+    def has_description(self, obj):
+        return bool(obj.description and obj.description.strip())
+    has_description.boolean = True
+    has_description.short_description = 'Описание'
 
     def view_on_site(self, obj):
         return f'/p/{obj.slug}/'

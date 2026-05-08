@@ -6,7 +6,7 @@ from import_export.admin import ImportExportModelAdmin
 
 @admin.register(Shop)
 class ShopAdmin(ImportExportModelAdmin, admin.ModelAdmin):
-    list_display = ['name', 'district', 'rating', 'likes_count', 'views_count', 'is_active']
+    list_display = ['name', 'district', 'rating', 'likes_count', 'views_count', 'is_active', 'has_description']
     list_filter = ['is_active', 'district', 'has_delivery', 'has_pickup']
     search_fields = ['name', 'description', 'address']
     save_on_top = True
@@ -52,6 +52,12 @@ class ShopAdmin(ImportExportModelAdmin, admin.ModelAdmin):
         }),
 
     )
+
+    def has_description(self, obj):
+        return bool(obj.description and obj.description.strip())
+    has_description.boolean = True
+    has_description.short_description = 'Описание'
+
     def view_on_site(self, obj):
         return f'/shops/{obj.slug}/'
 

@@ -4,8 +4,13 @@ from .models import Post, Category
 
 @admin.register(Category)
 class CategoryAdmin(admin.ModelAdmin):
-    list_display = ['name', 'slug']
+    list_display = ['name', 'slug', 'has_description']
     prepopulated_fields = {'slug': ('name',)}
+
+    def has_description(self, obj):
+        return bool(obj.description and obj.description.strip())
+    has_description.boolean = True
+    has_description.short_description = 'Описание'
 
     def view_on_site(self, obj):
         return f'/blog/category/{obj.slug}/'
