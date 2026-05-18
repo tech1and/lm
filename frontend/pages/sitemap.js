@@ -1,6 +1,6 @@
-// pages/sitemap.js
 import Head from 'next/head';
 import Logo from '../components/Logo';
+import { FolderOpen } from 'lucide-react';
 
 const staticPages = [
   { path: '/', label: '🏠 Главная' },
@@ -9,6 +9,7 @@ const staticPages = [
   { path: '/about', label: 'ℹ️ О нас' },
   { path: '/privacy', label: '🔒 Политика конфиденциальности' },
   { path: '/sitemap', label: '🗺️ Карта сайта' },
+  { path: '/catalog', label: '📦 Каталог товаров' },
 ];
 
 export async function getServerSideProps() {
@@ -18,9 +19,11 @@ export async function getServerSideProps() {
     const controller = new AbortController();
     const timeout = setTimeout(() => controller.abort(), 8000);
 
-    const [storesRes, blogRes] = await Promise.allSettled([
+    const [storesRes, blogRes, categoriesRes, productsRes] = await Promise.allSettled([
       fetch(`${API_URL}/api/shops/?page_size=50`, { signal: controller.signal }),
       fetch(`${API_URL}/api/blog/posts/?page_size=30`, { signal: controller.signal }),
+      fetch(`${API_URL}/api/catalog/categories/?page_size=50`, { signal: controller.signal }),
+      fetch(`${API_URL}/api/catalog/products/?page_size=50`, { signal: controller.signal }),
     ]);
 
     clearTimeout(timeout);
@@ -33,19 +36,29 @@ export async function getServerSideProps() {
       ? (await blogRes.value.json().catch(() => ({}))).results || []
       : [];
 
+    const categories = categoriesRes.status === 'fulfilled' && categoriesRes.value.ok
+      ? (await categoriesRes.value.json().catch(() => ({}))).results || []
+      : [];
+
+    const products = productsRes.status === 'fulfilled' && productsRes.value.ok
+      ? (await productsRes.value.json().catch(() => ({}))).results || []
+      : [];
+
     return {
       props: {
         stores,
         posts,
+        categories,
+        products,
       },
     };
   } catch (error) {
     console.error('Sitemap page fetch error:', error);
-    return { props: { stores: [], posts: [] } };
+    return { props: { stores: [], posts: [], categories: [], products: [] } };
   }
 }
 
-export default function SitemapPage({ stores, posts }) {
+export default function SitemapPage({ stores, posts, categories, products }) {
   return (
     <>
       <Head>
@@ -93,7 +106,7 @@ export default function SitemapPage({ stores, posts }) {
             </section>
 
             {/* Статьи блога */}
-            <section>
+            <section className="mb-5">
               <h2 className="h4 mb-3">📰 Статьи ({posts.length})</h2>
               {posts.length > 0 ? (
                 <ul className="list-unstyled">
@@ -110,6 +123,52 @@ export default function SitemapPage({ stores, posts }) {
                 </ul>
               ) : (
                 <p className="text-muted">Не удалось загрузить статьи</p>
+              )}
+            </section>
+
+            {/* Каталог товаров */}
+            <section className="mb-5">
+              <h2 className="h4 mb-3 flex items-center gap-2">
+                <FolderOpen className="w-5 h-5 text-primary-500" />
+                Каталог товаров ({categories.length} категорий, {products.length} товаров)
+              </h2>
+              {categories.length > 0 ? (
+                <div className="mb-3">
+                  <h3 className="h6 mb-2">Категории:</h3>
+                  <ul className="list-unstyled">
+                    {categories.slice(0, 20).map((category) => (
+                      <li key={category.id} className="mb-1">
+                        <a href={`/catalog/categories/${category.slug}`} className="text-decoration-none">
+                          {category.name}
+                        </a>
+                      </li>
+                    ))}
+                    {categories.length > 20 && (
+                      <li><a href="/catalog" className="text-muted">→ Все категории</a></li>
+                    )}
+                  </ul>
+                </div>
+              ) : (
+                <p className="text-muted">Не удалось загрузить категории</p>
+              )}
+              {products.length > 0 ? (
+                <div>
+                  <h3 className="h6 mb-2">Товары:</h3>
+                  <ul className="list-unstyled">
+                    {products.slice(0, 20).map((product) => (
+                      <li key={product.id} className="mb-1">
+                        <a href={`/p/${product.slug}`} className="text-decoration-none">
+                          {product.name}
+                        </a>
+                      </li>
+                    ))}
+                    {products.length > 20 && (
+                      <li><a href="/catalog" className="text-muted">→ Все товары</a></li>
+                    )}
+                  </ul>
+                </div>
+              ) : (
+                <p className="text-muted">Не удалось загрузить товары</p>
               )}
             </section>
 

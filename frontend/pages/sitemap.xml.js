@@ -1,4 +1,4 @@
-import { shopsAPI, blogAPI } from '../lib/api';
+import { shopsAPI, blogAPI, catalogAPI } from '../lib/api';
 
 const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://lemanas.ru';
 
@@ -9,6 +9,7 @@ const staticPages = [
   { path: '/about', priority: 0.5, changefreq: 'monthly' },
   { path: '/privacy', priority: 0.3, changefreq: 'yearly' },
   { path: '/sitemap', priority: 0.3, changefreq: 'monthly' },
+  { path: '/catalog', priority: 0.8, changefreq: 'weekly' },
 ];
 
 const formatDate = (date) => {
@@ -18,16 +19,22 @@ const formatDate = (date) => {
 
 export async function getServerSideProps({ res }) {
   try {
-    const [shopsRes, blogRes] = await Promise.allSettled([
+    const [shopsRes, blogRes, categoriesRes, productsRes] = await Promise.allSettled([
       shopsAPI.getList({ page_size: 200 }),
       blogAPI.getPosts({ page_size: 100 }),
+      catalogAPI.getCategories({ page_size: 100 }),
+      catalogAPI.getProducts({ page_size: 200 }),
     ]);
 
     const shopsData = shopsRes.status === 'fulfilled' ? shopsRes.value.data : {};
     const blogData = blogRes.status === 'fulfilled' ? blogRes.value.data : {};
+    const categoriesData = categoriesRes.status === 'fulfilled' ? categoriesRes.value.data : {};
+    const productsData = productsRes.status === 'fulfilled' ? productsRes.value.data : {};
 
     const shops = shopsData.results || shopsData || [];
     const posts = blogData.results || blogData || [];
+    const categories = categoriesData.results || categoriesData || [];
+    const products = productsData.results || productsData || [];
 
     const urls = [
       ...staticPages.map((page) => ({
@@ -45,6 +52,18 @@ export async function getServerSideProps({ res }) {
       ...posts.map((post) => ({
         loc: `${BASE_URL}/blog/${post.slug}`,
         lastmod: formatDate(post.updated_at || post.created_at),
+        changefreq: 'monthly',
+        priority: 0.6,
+      })),
+      ...categories.map((category) => ({
+        loc: `${BASE_URL}/catalog/categories/${category.slug}`,
+        lastmod: formatDate(category.updated_at || category.created_at),
+        changefreq: 'weekly',
+        priority: 0.7,
+      })),
+      ...products.map((product) => ({
+        loc: `${BASE_URL}/p/${product.slug}`,
+        lastmod: formatDate(product.updated_at || product.created_at),
         changefreq: 'monthly',
         priority: 0.6,
       })),
