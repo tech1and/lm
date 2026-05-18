@@ -19,11 +19,14 @@ export async function getServerSideProps() {
     const controller = new AbortController();
     const timeout = setTimeout(() => controller.abort(), 8000);
 
+    // Используем очень большие значения page_size для получения всех записей
+    const MAX_PAGE_SIZE = 10000;
+
     const [storesRes, blogRes, categoriesRes, productsRes] = await Promise.allSettled([
-      fetch(`${API_URL}/api/shops/?page_size=50`, { signal: controller.signal }),
-      fetch(`${API_URL}/api/blog/posts/?page_size=30`, { signal: controller.signal }),
-      fetch(`${API_URL}/api/catalog/categories/?page_size=50`, { signal: controller.signal }),
-      fetch(`${API_URL}/api/catalog/products/?page_size=50`, { signal: controller.signal }),
+      fetch(`${API_URL}/api/shops/?page_size=${MAX_PAGE_SIZE}`, { signal: controller.signal }),
+      fetch(`${API_URL}/api/blog/posts/?page_size=${MAX_PAGE_SIZE}`, { signal: controller.signal }),
+      fetch(`${API_URL}/api/catalog/categories/?page_size=${MAX_PAGE_SIZE}`, { signal: controller.signal }),
+      fetch(`${API_URL}/api/catalog/products/?page_size=${MAX_PAGE_SIZE}`, { signal: controller.signal }),
     ]);
 
     clearTimeout(timeout);
@@ -89,16 +92,13 @@ export default function SitemapPage({ stores, posts, categories, products }) {
               </h2>
               {stores.length > 0 ? (
                 <ul className="list-unstyled">
-                  {stores.slice(0, 30).map((store) => (
+                  {stores.map((store) => (
                     <li key={store.id} className="mb-1">
                       <a href={`/shops/${store.slug}`} className="text-decoration-none">
                         {store.name}
                       </a>
                     </li>
                   ))}
-                  {stores.length > 30 && (
-                    <li><a href="/rating" className="text-muted">→ Все магазины</a></li>
-                  )}
                 </ul>
               ) : (
                 <p className="text-muted">Не удалось загрузить список магазинов</p>
@@ -110,16 +110,13 @@ export default function SitemapPage({ stores, posts, categories, products }) {
               <h2 className="h4 mb-3">📰 Статьи ({posts.length})</h2>
               {posts.length > 0 ? (
                 <ul className="list-unstyled">
-                  {posts.slice(0, 20).map((post) => (
+                  {posts.map((post) => (
                     <li key={post.id} className="mb-2">
                       <a href={`/blog/${post.slug}`} className="text-decoration-none">
                         {post.title}
                       </a>
                     </li>
                   ))}
-                  {posts.length > 20 && (
-                    <li><a href="/blog" className="text-muted">→ Все статьи</a></li>
-                  )}
                 </ul>
               ) : (
                 <p className="text-muted">Не удалось загрузить статьи</p>
@@ -136,16 +133,13 @@ export default function SitemapPage({ stores, posts, categories, products }) {
                 <div className="mb-3">
                   <h3 className="h6 mb-2">Категории:</h3>
                   <ul className="list-unstyled">
-                    {categories.slice(0, 20).map((category) => (
+                    {categories.map((category) => (
                       <li key={category.id} className="mb-1">
                         <a href={`/catalog/categories/${category.slug}`} className="text-decoration-none">
                           {category.name}
                         </a>
                       </li>
                     ))}
-                    {categories.length > 20 && (
-                      <li><a href="/catalog" className="text-muted">→ Все категории</a></li>
-                    )}
                   </ul>
                 </div>
               ) : (
@@ -155,16 +149,13 @@ export default function SitemapPage({ stores, posts, categories, products }) {
                 <div>
                   <h3 className="h6 mb-2">Товары:</h3>
                   <ul className="list-unstyled">
-                    {products.slice(0, 20).map((product) => (
+                    {products.map((product) => (
                       <li key={product.id} className="mb-1">
                         <a href={`/p/${product.slug}`} className="text-decoration-none">
                           {product.name}
                         </a>
                       </li>
                     ))}
-                    {products.length > 20 && (
-                      <li><a href="/catalog" className="text-muted">→ Все товары</a></li>
-                    )}
                   </ul>
                 </div>
               ) : (

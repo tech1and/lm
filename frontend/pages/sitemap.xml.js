@@ -19,11 +19,14 @@ const formatDate = (date) => {
 
 export async function getServerSideProps({ res }) {
   try {
+    // Используем очень большие значения page_size для получения всех записей
+    const MAX_PAGE_SIZE = 10000;
+
     const [shopsRes, blogRes, categoriesRes, productsRes] = await Promise.allSettled([
-      shopsAPI.getList({ page_size: 200 }),
-      blogAPI.getPosts({ page_size: 100 }),
-      catalogAPI.getCategories({ page_size: 100 }),
-      catalogAPI.getProducts({ page_size: 200 }),
+      shopsAPI.getList({ page_size: MAX_PAGE_SIZE }),
+      blogAPI.getPosts({ page_size: MAX_PAGE_SIZE }),
+      catalogAPI.getCategories({ page_size: MAX_PAGE_SIZE }),
+      catalogAPI.getProducts({ page_size: MAX_PAGE_SIZE }),
     ]);
 
     const shopsData = shopsRes.status === 'fulfilled' ? shopsRes.value.data : {};
