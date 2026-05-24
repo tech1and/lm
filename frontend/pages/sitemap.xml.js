@@ -2,7 +2,6 @@ import { shopsAPI, blogAPI, catalogAPI } from '../lib/api';
 
 const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://lemanas.ru';
 const PAGE_SIZE = 10000;
-const API_PAGE_SIZE = 100; // Размер страницы для запросов к API
 
 const staticPages = [
   { path: '/', priority: 1.0, changefreq: 'daily' },
@@ -36,24 +35,34 @@ async function getAllItems(apiFunc, initialParams = {}) {
   let page = 1;
   let hasMore = true;
 
-  while (hasMore) {
-    const response = await apiFunc({ ...initialParams, page, page_size: API_PAGE_SIZE });
-    const data = response.data;
-    const items = Array.isArray(data) ? data : (data.results || data.items || []);
+  // Пробуем разные размеры страницы, которые может поддерживать API
+  // Начнем с большого значения, Django REST Framework обычно поддерживает до 1000
+  const pageSize = 1000;
 
-    if (items.length === 0) {
+  while (hasMore) {
+    try {
+      const response = await apiFunc({ ...initialParams, page, page_size: pageSize });
+      const data = response.data;
+      const items = Array.isArray(data) ? data : (data.results || data.items || []);
+
+      if (items.length === 0) {
+        hasMore = false;
+        break;
+      }
+
+      allItems.push(...items);
+
+      // Проверяем, есть ли еще страницы
+      // Если получили меньше записей чем размер страницы, значит это последняя страница
+      if (items.length < pageSize) {
+        hasMore = false;
+      } else {
+        page++;
+      }
+    } catch (error) {
+      console.error(`Error fetching page ${page} in getAllItems:`, error.message);
       hasMore = false;
       break;
-    }
-
-    allItems.push(...items);
-
-    // Проверяем, есть ли еще страницы
-    // Если получили меньше записей чем размер страницы, значит это последняя страница
-    if (items.length < API_PAGE_SIZE) {
-      hasMore = false;
-    } else {
-      page++;
     }
   }
 
