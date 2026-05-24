@@ -60,7 +60,7 @@ api.interceptors.response.use(
 
 export const shopsAPI = {
   getList: (params = {}) =>
-    api.get('/api/shops/', { params }),
+    api.get('/api/shops/', { params: { ...params, for_sitemap: 'true' } }),
 
   getDetail: (slug) =>
     api.get(`/api/shops/${slug}/`),
@@ -77,7 +77,7 @@ export const shopsAPI = {
 
 export const blogAPI = {
   getPosts: (params = {}) =>
-    api.get('/api/blog/posts/', { params }),
+    api.get('/api/blog/posts/', { params: { ...params, for_sitemap: 'true' } }),
   getPost: (slug) =>
     api.get(`/api/blog/posts/${slug}/`),
   getCategories: () =>
@@ -86,7 +86,7 @@ export const blogAPI = {
 
 export const catalogAPI = {
   getCategories: (params = {}) =>
-    api.get('/api/catalog/categories/', { params }),
+    api.get('/api/catalog/categories/', { params: { ...params, for_sitemap: 'true' } }),
   getCategory: (slug) =>
     api.get(`/api/catalog/categories/${slug}/`),
   getCategoryWithParents: (slug) =>
@@ -94,7 +94,7 @@ export const catalogAPI = {
   getCategoryProducts: (slug, params = {}) =>
     api.get(`/api/catalog/categories/${slug}/products/`, { params }),
   getProducts: (params = {}) =>
-    api.get('/api/catalog/products/', { params }),
+    api.get('/api/catalog/products/', { params: { ...params, for_sitemap: 'true' } }),
   getProduct: (slug) =>
     api.get(`/api/catalog/products/${slug}/`),
   getSimilarProducts: (slug, params = {}) =>

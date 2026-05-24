@@ -16,10 +16,26 @@ class CategoryViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
 
+    def get_queryset(self):
+        """Переопределяем get_queryset для поддержки карты сайта"""
+        queryset = super().get_queryset()
+        # Для карты сайта возвращаем все категории
+        if self.request.query_params.get('for_sitemap') == 'true':
+            return queryset
+        return queryset
+
 
 class PostViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Post.objects.filter(is_published=True).select_related('category')
     lookup_field = 'slug'
+
+    def get_queryset(self):
+        """Переопределяем get_queryset для поддержки карты сайта"""
+        queryset = super().get_queryset()
+        # Для карты сайта возвращаем все посты
+        if self.request.query_params.get('for_sitemap') == 'true':
+            return queryset
+        return queryset
 
     def get_serializer_class(self):
         if self.action == 'retrieve':
@@ -27,26 +43,11 @@ class PostViewSet(viewsets.ReadOnlyModelViewSet):
         return PostListSerializer
 
     def retrieve(self, request, *args, **kwargs):
-        instance = self.get_object()
-        ip = get_client_ip(request)
-        cache_key = f'blog_view_{instance.pk}_{ip}'
-        
-        if not cache.get(cache_key):
-            Post.objects.filter(pk=instance.pk).update(
-                views_count=F('views_count') + 1
-            )
-            cache.set(cache_key, True, 60 * 60)
-            instance.refresh_from_db()
-
-        serializer = self.get_serializer(instance)
-        return Response(serializer.data)
-
-    def retrieve(self, request, *args, **kwargs):
         from rest_framework.response import Response
         instance = self.get_object()
         ip = get_client_ip(request)
         cache_key = f'blog_view_{instance.pk}_{ip}'
-        
+
         if not cache.get(cache_key):
             Post.objects.filter(pk=instance.pk).update(
                 views_count=F('views_count') + 1

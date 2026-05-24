@@ -35,13 +35,12 @@ async function getAllItems(apiFunc, initialParams = {}) {
   let page = 1;
   let hasMore = true;
 
-  // Пробуем разные размеры страницы, которые может поддерживать API
-  // Начнем с большого значения, Django REST Framework обычно поддерживает до 1000
-  const pageSize = 1000;
+  // Размер страницы API - Django REST Framework настроен на MAX_PAGE_SIZE = 1000
+  const API_PAGE_SIZE = 1000;
 
   while (hasMore) {
     try {
-      const response = await apiFunc({ ...initialParams, page, page_size: pageSize });
+      const response = await apiFunc({ ...initialParams, page, page_size: API_PAGE_SIZE });
       const data = response.data;
       const items = Array.isArray(data) ? data : (data.results || data.items || []);
 
@@ -54,7 +53,7 @@ async function getAllItems(apiFunc, initialParams = {}) {
 
       // Проверяем, есть ли еще страницы
       // Если получили меньше записей чем размер страницы, значит это последняя страница
-      if (items.length < pageSize) {
+      if (items.length < API_PAGE_SIZE) {
         hasMore = false;
       } else {
         page++;

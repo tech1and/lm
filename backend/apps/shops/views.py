@@ -39,14 +39,12 @@ class ShopViewSet(viewsets.ReadOnlyModelViewSet):
     ordering_fields = ['likes_count', 'views_count', 'rating', 'created_at']
     ordering = ['-rating', '-likes_count']
 
-    def get_serializer_class(self):
-        if self.action == 'retrieve':
-            return ShopDetailSerializer
-        return ShopListSerializer
-
     def get_queryset(self):
         qs = super().get_queryset()
-        # Аннотируем количество одобренных комментариев
+        # Для карты сайта возвращаем все магазины без дополнительных аннотаций
+        if self.request.query_params.get('for_sitemap') == 'true':
+            return qs
+        # Аннотируем количество одобренных комментариев для обычных запросов
         qs = qs.annotate(
             approved_comments_count=Count(
                 'comments',
@@ -58,12 +56,17 @@ class ShopViewSet(viewsets.ReadOnlyModelViewSet):
             qs = qs.order_by('-approved_comments_count')
         return qs
 
+    def get_serializer_class(self):
+        if self.action == 'retrieve':
+            return ShopDetailSerializer
+        return ShopListSerializer
+
     def retrieve(self, request, *args, **kwargs):
         """Переопределяем retrieve для подсчёта просмотров"""
         instance = self.get_object()
         ip = get_client_ip(request)
         cache_key = f'view_{instance.pk}_{ip}'
-        
+
         if not cache.get(cache_key):
             Shop.objects.filter(pk=instance.pk).update(
                 views_count=F('views_count') + 1
@@ -118,7 +121,7 @@ class ShopViewSet(viewsets.ReadOnlyModelViewSet):
         """Добавление комментария к магазину"""
         shop = self.get_object()
         serializer = CommentSerializer(data=request.data)
-        
+
         if serializer.is_valid():
             # Анти-бот: проверка времени заполнения формы
             form_time = request.data.get('form_time', 0)
@@ -136,7 +139,7 @@ class ShopViewSet(viewsets.ReadOnlyModelViewSet):
                 ip_address=get_client_ip(request),
             )
             return Response(serializer.data, status=status.HTTP_201_CREATED)
-        
+
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     @action(detail=True, methods=['get'], url_path='similar', permission_classes=[])

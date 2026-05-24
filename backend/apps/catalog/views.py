@@ -36,20 +36,20 @@ class CategoryViewSet(viewsets.ReadOnlyModelViewSet):
     def products(self, request, slug=None):
         """Товары категории + дочерние категории"""
         category = get_object_or_404(Category, slug=slug)
-        
+
         # Дочерние категории
         children = Category.objects.filter(parent=category)
         children_data = CategorySerializer(children, many=True).data
-        
+
         # Собираем все категории для фильтрации (родитель + дочерние)
         cat_ids = [category.id] + list(children.values_list('id', flat=True))
-        
+
         # Товары
         qs = Product.objects.filter(
             is_active=True,
             categories__in=cat_ids
         ).distinct()
-        
+
         sort_by = request.query_params.get('sort_by', '')
         if sort_by == 'reviews':
             qs = qs.order_by('-reviews_count')
@@ -60,7 +60,7 @@ class CategoryViewSet(viewsets.ReadOnlyModelViewSet):
                 qs = qs.order_by('?')
             else:
                 qs = qs.order_by(ordering)
-        
+
         # Пагинация - override page size if specified
         page_size = request.query_params.get('page_size')
         if page_size:
@@ -69,7 +69,7 @@ class CategoryViewSet(viewsets.ReadOnlyModelViewSet):
                 self.paginator.page_size = page_size
             except (ValueError, TypeError):
                 pass  # Use default page size if invalid
-        
+
         page = self.paginate_queryset(qs)
         if page is not None:
             serializer = ProductListSerializer(page, many=True)
@@ -77,7 +77,7 @@ class CategoryViewSet(viewsets.ReadOnlyModelViewSet):
         else:
             serializer = ProductListSerializer(qs, many=True)
             result = Response(serializer.data)
-        
+
         # Добавляем мета-информацию
         result.data['category'] = CategorySerializer(category).data
         result.data['children'] = children_data
@@ -93,6 +93,14 @@ class ProductViewSet(viewsets.ReadOnlyModelViewSet):
     ordering_fields = ['price', 'created_at', 'views_count', 'avg_rating', 'likes_count', 'reviews_count']
     ordering = ['-avg_rating']
 
+    def get_queryset(self):
+        """Переопределяем get_queryset для поддержки карты сайта"""
+        queryset = super().get_queryset()
+        # Для карты сайта возвращаем все товары без ограничений пагинации на уровне viewset
+        if self.request.query_params.get('for_sitemap') == 'true':
+            return queryset
+        return queryset
+
     def get_serializer_class(self):
         if self.action == 'retrieve':
             return ProductDetailSerializer
@@ -103,7 +111,7 @@ class ProductViewSet(viewsets.ReadOnlyModelViewSet):
         instance = self.get_object()
         ip = get_client_ip(request)
         cache_key = f'view_product_{instance.pk}_{ip}'
-        
+
         if not cache.get(cache_key):
             Product.objects.filter(pk=instance.pk).update(
                 views_count=F('views_count') + 1
@@ -151,21 +159,21 @@ class ProductViewSet(viewsets.ReadOnlyModelViewSet):
     def similar(self, request, slug=None):
         """Похожие товары из той же категории"""
         product = get_object_or_404(Product, slug=slug)
-        
+
         # Получаем категории товара
         categories = product.categories.all()
         if not categories.exists():
             return Response([])
-        
+
         # Собираем похожие товары из тех же категорий (исключая текущий товар)
         similar_qs = Product.objects.filter(
             is_active=True,
             categories__in=categories
         ).exclude(pk=product.pk).distinct()
-        
+
         # Ограничиваем количество
         limit = int(request.query_params.get('limit', 6))
         similar_qs = similar_qs[:limit]
-        
+
         serializer = ProductListSerializer(similar_qs, many=True)
         return Response(serializer.data)

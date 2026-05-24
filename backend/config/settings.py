@@ -143,6 +143,7 @@ REST_FRAMEWORK = {
     ],
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
     'PAGE_SIZE': 20,
+    'MAX_PAGE_SIZE': 1000,  # Максимальный размер страницы для обычных запросов
     'DEFAULT_THROTTLE_CLASSES': [
         'rest_framework.throttling.AnonRateThrottle',
         'rest_framework.throttling.UserRateThrottle',
@@ -151,6 +152,7 @@ REST_FRAMEWORK = {
         'anon':    '600/hour',
         'user':    '2000/hour',
         'comment': '20/hour',
+        'sitemap': '100/hour',  # Отдельный лимит для карты сайта
     }
 }
 
