@@ -2,6 +2,7 @@ import { shopsAPI, blogAPI, catalogAPI } from '../lib/api';
 
 const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://lemanas.ru';
 const PAGE_SIZE = 10000;
+const API_PAGE_SIZE = 100; // Размер страницы для запросов к API
 
 const staticPages = [
   { path: '/', priority: 1.0, changefreq: 'daily' },
@@ -36,16 +37,23 @@ async function getAllItems(apiFunc, initialParams = {}) {
   let hasMore = true;
 
   while (hasMore) {
-    const response = await apiFunc({ ...initialParams, page, page_size: PAGE_SIZE });
+    const response = await apiFunc({ ...initialParams, page, page_size: API_PAGE_SIZE });
     const data = response.data;
-    const items = data.results || data || [];
+    const items = Array.isArray(data) ? data : (data.results || data.items || []);
+
+    if (items.length === 0) {
+      hasMore = false;
+      break;
+    }
+
     allItems.push(...items);
 
     // Проверяем, есть ли еще страницы
-    if (data.next && items.length === PAGE_SIZE) {
-      page++;
-    } else {
+    // Если получили меньше записей чем размер страницы, значит это последняя страница
+    if (items.length < API_PAGE_SIZE) {
       hasMore = false;
+    } else {
+      page++;
     }
   }
 
