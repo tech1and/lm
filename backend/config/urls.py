@@ -6,6 +6,16 @@ from django.http import JsonResponse, HttpResponseRedirect
 from django.shortcuts import get_object_or_404
 from urllib.parse import urlparse
 
+from django.contrib.sitemaps.views import index
+from .sitemaps import PostSitemap, ProductSitemap, ProductCategorySitemap, ShopSitemap
+
+sitemaps = {    
+    'products': ProductSitemap,
+    'categories': ProductCategorySitemap,
+    'shops': ShopSitemap,
+    'blog': PostSitemap,
+}
+
 def api_health_check(request):
     """Health-check endpoint для API."""
     return JsonResponse({
@@ -51,6 +61,7 @@ urlpatterns = [
     path('api/blog/', include('apps.blog.urls')),
     path('api/catalog/', include('apps.catalog.urls')),
     path('go/', external_redirect, name='external-redirect'),
+    path('sitemap.xml', index, {'sitemaps': sitemaps}),
 ]
 
 # Обслуживание медиа и статических файлов (для разработки)
