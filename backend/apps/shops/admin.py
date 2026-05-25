@@ -89,8 +89,7 @@ class CommentAdmin(admin.ModelAdmin):
     list_display = ['author_name', 'shop', 'rating', 'is_approved_display', 'created_at']
     list_filter = ['is_approved', 'rating']
     search_fields = ['author_name', 'text']
-    list_editable = ['is_approved']
-    readonly_fields = ['ip_address', 'honeypot', 'created_at']
+    readonly_fields = ['ip_address', 'honeypot', 'created_at', 'is_approved_display']
 
     def is_approved_display(self, obj):
         if obj.is_approved:

@@ -9,7 +9,7 @@ from urllib.parse import urlparse
 from django.contrib.sitemaps.views import sitemap
 from .sitemaps import PostSitemap, ProductSitemap, ProductCategorySitemap, ShopSitemap
 
-sitemaps = {    
+sitemaps = {
     'products': ProductSitemap,
     'categories': ProductCategorySitemap,
     'shops': ShopSitemap,
