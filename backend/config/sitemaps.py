@@ -23,7 +23,7 @@ class ProductSitemap(Sitemap):
     priority = 0.8
 
     def items(self):
-        return Product.objects.filter(is_published=True)
+        return Product.objects.filter(is_active=True)
 
     def lastmod(self, obj):
         return obj.updated_at
@@ -36,10 +36,10 @@ class ProductCategorySitemap(Sitemap):
     priority = 0.7
 
     def items(self):
-        return ProductCategory.objects.filter(is_published=True)
+        return ProductCategory.objects.all()
 
     def lastmod(self, obj):
-        return obj.updated_at
+        return obj.updated_at if hasattr(obj, 'updated_at') else None
 
     def location(self, obj):
         return f'/catalog/categories/{obj.slug}/'
@@ -49,11 +49,10 @@ class ShopSitemap(Sitemap):
     priority = 0.6
 
     def items(self):
-        return Shop.objects.filter(is_published=True)
+        return Shop.objects.filter(is_active=True)
 
     def lastmod(self, obj):
         return obj.updated_at
 
     def location(self, obj):
         return f'/shop/{obj.slug}/'
-
