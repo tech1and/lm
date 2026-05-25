@@ -6,7 +6,7 @@ from django.http import JsonResponse, HttpResponseRedirect
 from django.shortcuts import get_object_or_404
 from urllib.parse import urlparse
 
-from django.contrib.sitemaps.views import index
+from django.contrib.sitemaps.views import sitemap
 from .sitemaps import PostSitemap, ProductSitemap, ProductCategorySitemap, ShopSitemap
 
 sitemaps = {    
@@ -61,7 +61,7 @@ urlpatterns = [
     path('api/blog/', include('apps.blog.urls')),
     path('api/catalog/', include('apps.catalog.urls')),
     path('go/', external_redirect, name='external-redirect'),
-    path('sitemap.xml', index, {'sitemaps': sitemaps}),
+    path('sitemap.xml', sitemap, {'sitemaps': sitemaps}),
 ]
 
 # Обслуживание медиа и статических файлов (для разработки)
