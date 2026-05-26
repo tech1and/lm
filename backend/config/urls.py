@@ -6,15 +6,9 @@ from django.http import JsonResponse, HttpResponseRedirect
 from django.shortcuts import get_object_or_404
 from urllib.parse import urlparse
 
-from django.contrib.sitemaps.views import sitemap
-from .sitemaps import PostSitemap, ProductSitemap, ProductCategorySitemap, ShopSitemap
+from django.contrib.sitemaps.views import sitemap, index
+from .sitemaps import sitemaps
 
-sitemaps = {
-    'products': ProductSitemap,
-    'categories': ProductCategorySitemap,
-    'shops': ShopSitemap,
-    'blog': PostSitemap,
-}
 
 def api_health_check(request):
     """Health-check endpoint для API."""
@@ -61,7 +55,8 @@ urlpatterns = [
     path('api/blog/', include('apps.blog.urls')),
     path('api/catalog/', include('apps.catalog.urls')),
     path('go/', external_redirect, name='external-redirect'),
-    path('sitemap.xml', sitemap, {'sitemaps': sitemaps}),
+    path('sitemap.xml', index, {'sitemaps': sitemaps}),
+    path('sitemap-<section>.xml', sitemap, {'sitemaps': sitemaps}, name='django.contrib.sitemaps.views.sitemap'),
 ]
 
 # Обслуживание медиа и статических файлов (для разработки)
