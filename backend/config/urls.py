@@ -6,8 +6,24 @@ from django.http import JsonResponse, HttpResponseRedirect
 from django.shortcuts import get_object_or_404
 from urllib.parse import urlparse
 
-from django.contrib.sitemaps.views import sitemap, index
+from django.contrib.sitemaps.views import sitemap
+from django.http import HttpResponse
 from .sitemaps import sitemaps
+
+
+def sitemap_index(request):
+    """Главная карта сайта с ссылками на дочерние карты."""
+    xml = [
+        '<?xml version="1.0" encoding="UTF-8"?>',
+        '<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">',
+    ]
+
+    for section in sitemaps.keys():
+        xml.append(f'<sitemap><loc>https://{request.get_host()}/sitemap-{section}.xml</loc></sitemap>')
+
+    xml.append('</sitemapindex>')
+
+    return HttpResponse('\n'.join(xml), content_type='application/xml')
 
 
 def api_health_check(request):
@@ -55,7 +71,7 @@ urlpatterns = [
     path('api/blog/', include('apps.blog.urls')),
     path('api/catalog/', include('apps.catalog.urls')),
     path('go/', external_redirect, name='external-redirect'),
-    path('sitemap.xml', index, {'sitemaps': sitemaps}),
+    path('sitemap.xml', sitemap_index),
     path('sitemap-<section>.xml', sitemap, {'sitemaps': sitemaps}),
 ]
 

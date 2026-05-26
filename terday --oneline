@@ -1,0 +1,472 @@
+[33mcommit aa7345f6771547190aefc271985070e06119b4d7[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m)[m
+Author: Макеева Олеся <makeeva.o.a@yandex.ru>
+Date:   Sat Jun 13 22:35:12 2026 +0300
+
+    search2
+
+[33mcommit 49f5da08e0ecc12afb7bd647f80e701115a4adeb[m
+Author: Макеева Олеся <makeeva.o.a@yandex.ru>
+Date:   Sat Jun 13 22:18:35 2026 +0300
+
+    search
+
+[33mcommit f2a680e50cdab2d241f64297e28f1f76771a9e9c[m
+Author: Макеева Олеся <makeeva.o.a@yandex.ru>
+Date:   Tue May 26 05:54:56 2026 +0300
+
+    sitemap-sections
+
+[33mcommit 2d61d57d6eaf6fe049b4d5e64795c0a64f356b18[m
+Author: Макеева Олеся <makeeva.o.a@yandex.ru>
+Date:   Tue May 26 05:50:40 2026 +0300
+
+    sitemap-sections
+
+[33mcommit 7c7aa3fcb147497de7a5fe8d2499ffdb8845fa24[m
+Author: Макеева Олеся <makeeva.o.a@yandex.ru>
+Date:   Tue May 26 05:36:55 2026 +0300
+
+    sitemap-sections
+
+[33mcommit 12ac0fea276ce7a73fe40b3b30b162989e54aaf8[m
+Author: Макеева Олеся <makeeva.o.a@yandex.ru>
+Date:   Tue May 26 05:24:26 2026 +0300
+
+    sitemap-sections
+
+[33mcommit eafa32a04768be065f018111e1ee621fe6eaa5dd[m
+Author: Макеева Олеся <makeeva.o.a@yandex.ru>
+Date:   Tue May 26 05:07:13 2026 +0300
+
+    sitemap-sections
+
+[33mcommit 49b0a401be10fff39f5dc23a4b5dce1226756a75[m
+Author: Макеева Олеся <makeeva.o.a@yandex.ru>
+Date:   Tue May 26 05:02:54 2026 +0300
+
+    sitemap-sections
+
+[33mcommit 316274ecf6a2b3d98a499b5792f842b431ee2fa8[m
+Author: Макеева Олеся <makeeva.o.a@yandex.ru>
+Date:   Mon May 25 22:55:50 2026 +0300
+
+    sitemaps django12
+
+[33mcommit 2e061cf27a0acfdb4a776c50823fad467ce7fa4d[m
+Author: Макеева Олеся <makeeva.o.a@yandex.ru>
+Date:   Mon May 25 22:24:34 2026 +0300
+
+    sitemaps django10
+
+[33mcommit 7bf9c3e383a2a4a8eba9a7c7404c32fc566a7d05[m
+Author: Макеева Олеся <makeeva.o.a@yandex.ru>
+Date:   Mon May 25 22:11:43 2026 +0300
+
+    sitemaps django8
+
+[33mcommit 2090fa5691c83cc119dd4524f385c9c6c03eef20[m
+Author: Макеева Олеся <makeeva.o.a@yandex.ru>
+Date:   Mon May 25 22:02:11 2026 +0300
+
+    sitemaps django7
+
+[33mcommit af6765842ae541e30a2e7189cc5f6de5fa578687[m
+Author: Макеева Олеся <makeeva.o.a@yandex.ru>
+Date:   Mon May 25 21:50:52 2026 +0300
+
+    sitemaps django5
+
+[33mcommit 93339848623cf7d1098ebee479e86ea82d3b6b4d[m
+Author: Макеева Олеся <makeeva.o.a@yandex.ru>
+Date:   Mon May 25 21:47:21 2026 +0300
+
+    sitemaps django4
+
+[33mcommit 399fe0857ede6b049d1663f26d844c81ce1b0f57[m
+Author: Макеева Олеся <makeeva.o.a@yandex.ru>
+Date:   Mon May 25 20:28:05 2026 +0300
+
+    sitemaps django3
+
+[33mcommit fb6a8046b5038420cf13a1f96cca7b45a8a08241[m
+Author: Макеева Олеся <makeeva.o.a@yandex.ru>
+Date:   Mon May 25 20:14:17 2026 +0300
+
+    sitemaps django2
+
+[33mcommit a3ade170e1bfd824c7d20c88566aad0714afca65[m
+Author: Макеева Олеся <makeeva.o.a@yandex.ru>
+Date:   Mon May 25 19:57:49 2026 +0300
+
+    sitemaps django
+
+[33mcommit b11ceac28ce5f00f3b846352e0eaaaa54ce4290d[m
+Author: Макеева Олеся <makeeva.o.a@yandex.ru>
+Date:   Sun May 24 07:12:10 2026 +0300
+
+    sitemap.xml
+
+[33mcommit a28f1c7a237ccc33eaf8d5e3454e1eab07b560ac[m
+Author: Макеева Олеся <makeeva.o.a@yandex.ru>
+Date:   Sun May 24 07:10:08 2026 +0300
+
+    sitemap.xml
+
+[33mcommit b37897e2c1f2af7834b16cbd76548b875d74ab24[m
+Author: Макеева Олеся <makeeva.o.a@yandex.ru>
+Date:   Sun May 24 06:59:46 2026 +0300
+
+    sitemap.xml
+
+[33mcommit 33be5f138e54fac63283038202c0eb97c1c6568a[m
+Author: Макеева Олеся <makeeva.o.a@yandex.ru>
+Date:   Sun May 24 06:46:00 2026 +0300
+
+    sitemap.xml
+
+[33mcommit 9a0d3dd5bf2e8565d722419de3e5ca4ef4d1cb07[m
+Author: Макеева Олеся <makeeva.o.a@yandex.ru>
+Date:   Sun May 24 06:40:00 2026 +0300
+
+    sitemap.xml
+
+[33mcommit 0366466bbcba4a6a45ee684e899eac4ebb301d93[m
+Author: Макеева Олеся <makeeva.o.a@yandex.ru>
+Date:   Sun May 24 06:33:22 2026 +0300
+
+    sitemap.xml
+
+[33mcommit f043bdd5b052e3fc5577bc67890d7b1914cbf9bf[m
+Author: Макеева Олеся <makeeva.o.a@yandex.ru>
+Date:   Sun May 24 06:28:34 2026 +0300
+
+    sitemap.xml
+
+[33mcommit 21c48e880ee20c3bc2f48766b607f891122abcf4[m
+Author: Макеева Олеся <makeeva.o.a@yandex.ru>
+Date:   Mon May 18 22:58:58 2026 +0300
+
+    sitemap fix
+
+[33mcommit f52823e10553a750b1ef70e285ab313382d19583[m
+Author: Макеева Олеся <makeeva.o.a@yandex.ru>
+Date:   Mon May 18 22:33:15 2026 +0300
+
+    google ver
+
+[33mcommit 1cb6521c75e4d67b7fd0ded60c1ab278a5cd3b7d[m
+Author: Макеева Олеся <makeeva.o.a@yandex.ru>
+Date:   Mon May 18 22:19:08 2026 +0300
+
+    sitemap fix
+
+[33mcommit 1dc99dcff5897fb61e557844f1ea767acaeefe24[m
+Author: Макеева Олеся <makeeva.o.a@yandex.ru>
+Date:   Fri May 8 22:56:51 2026 +0300
+
+    admin html-icons
+
+[33mcommit 04a4aee2169ffb65d6cbde195dfb676c7dd01e62[m
+Author: Макеева Олеся <makeeva.o.a@yandex.ru>
+Date:   Fri May 8 22:44:41 2026 +0300
+
+    has description sort
+
+[33mcommit 508c5085e8f169dd5078d6e238eac760e5e95ec7[m
+Author: Макеева Олеся <makeeva.o.a@yandex.ru>
+Date:   Fri May 8 22:34:10 2026 +0300
+
+    has description
+
+[33mcommit 53720d1658a55470a38c7b4b8c52d0366ea560d8[m
+Author: Макеева Олеся <makeeva.o.a@yandex.ru>
+Date:   Tue May 5 15:08:28 2026 +0300
+
+    +каталог
+
+[33mcommit 9bc994f72ec6794d8686b82b32349e9010f7fc37[m
+Author: Макеева Олеся <makeeva.o.a@yandex.ru>
+Date:   Sun May 3 00:08:31 2026 +0300
+
+    выборка 6 товаров
+
+[33mcommit 860046f5fbbc56cd67abedd9e3b39ff7d4b736da[m
+Author: Макеева Олеся <makeeva.o.a@yandex.ru>
+Date:   Sat May 2 23:30:22 2026 +0300
+
+    grid-3
+
+[33mcommit fdfc05878c508d4a7a979bdaa6a2e0f87ee19949[m
+Author: Макеева Олеся <makeeva.o.a@yandex.ru>
+Date:   Sat May 2 23:21:39 2026 +0300
+
+    shopcategoryproducts
+
+[33mcommit 172a29be149c7bc35d1e7777c7038f7346006336[m
+Author: Макеева Олеся <makeeva.o.a@yandex.ru>
+Date:   Sat May 2 23:13:44 2026 +0300
+
+    товары в магазе
+
+[33mcommit 351e7e946ce3748398a338a347c920be0453358b[m
+Author: Макеева Олеся <makeeva.o.a@yandex.ru>
+Date:   Thu Apr 30 23:49:13 2026 +0300
+
+    ERR_CONNECTION_RESET
+
+[33mcommit 12f7f2eaff84e05f466563a3d52cccc9f5cdfd2e[m
+Merge: 29e207c 56ddd21
+Author: tech1and <53649031+tech1and@users.noreply.github.com>
+Date:   Thu Apr 30 20:52:37 2026 +0300
+
+    Merge pull request #36 from tech1and/баг-в-хлебных-крошках-bbc80
+    
+    Update from task dea8bcc9-531b-4c1a-8112-dd976b9bbc80
+
+[33mcommit 56ddd21323c1529f2baa8aee7c9cfdec82e90729[m[33m ([m[1;31morigin/баг-в-хлебных-крошках-bbc80[m[33m)[m
+Author: qwen.ai[bot] <qwenlm-intl@service.alibaba.com>
+Date:   Thu Apr 30 17:52:22 2026 +0000
+
+    Fix breadcrumb display on multiple pages
+    
+    - Update .gitignore with comprehensive ignore patterns for Python/Node.js projects
+    - Add complete breadcrumb navigation to about.js including Home link and ChevronRight separators
+    - Implement full breadcrumb trail in blog/index.js with proper Home navigation
+    - Fix category page breadcrumbs in catalog/categories/[slug].js to show complete parent hierarchy with proper ChevronRight separators
+    - Add breadcrumb navigation to rating.js page with Home link
+    - Import necessary icons (Home, ChevronRight) across all modified pages for consistent breadcrumb display
+
+[33mcommit 29e207ca3cbb6dea4ba658408f572b21ff82a7b6[m
+Merge: cf40fc6 47d6e68
+Author: tech1and <53649031+tech1and@users.noreply.github.com>
+Date:   Thu Apr 30 19:57:11 2026 +0300
+
+    Merge pull request #35 from tech1and/git-ignore-rules-89bf5
+    
+    Update from task eda7145a-2475-4659-9647-536ba2389bf5
+
+[33mcommit 47d6e68be2199a9368f5ffcd1a4c997ac8ba70d3[m[33m ([m[1;31morigin/git-ignore-rules-89bf5[m[33m)[m
+Author: qwen.ai[bot] <qwenlm-intl@service.alibaba.com>
+Date:   Thu Apr 30 16:56:51 2026 +0000
+
+    update branch
+
+[33mcommit cf40fc69bfbd6c4ec98a9270f344f58e3509d07f[m
+Merge: 568e7dd 59ba8eb
+Author: tech1and <53649031+tech1and@users.noreply.github.com>
+Date:   Thu Apr 30 19:32:58 2026 +0300
+
+    Merge pull request #34 from tech1and/git-ignore-rules-89bf5
+    
+    Update from task eda7145a-2475-4659-9647-536ba2389bf5
+
+[33mcommit 59ba8eb49c14e1e03e9eafa4377ed733a83dd084[m
+Author: qwen.ai[bot] <qwenlm-intl@service.alibaba.com>
+Date:   Thu Apr 30 16:32:40 2026 +0000
+
+    update branch
+
+[33mcommit 568e7ddf470bb0904990390ff05190c4f62cb634[m
+Merge: b3afa0e f5830d4
+Author: tech1and <53649031+tech1and@users.noreply.github.com>
+Date:   Thu Apr 30 18:42:40 2026 +0300
+
+    Merge pull request #33 from tech1and/git-ignore-rules-89bf5
+    
+    Update from task eda7145a-2475-4659-9647-536ba2389bf5
+
+[33mcommit f5830d4848333f342c06e38d97747ed37b9073e6[m
+Author: qwen.ai[bot] <qwenlm-intl@service.alibaba.com>
+Date:   Thu Apr 30 15:42:23 2026 +0000
+
+    update branch
+
+[33mcommit b3afa0e160e76ae5c42f117a11c735cfad92bd8f[m
+Merge: 3aec596 ed8caf9
+Author: tech1and <53649031+tech1and@users.noreply.github.com>
+Date:   Thu Apr 30 18:35:37 2026 +0300
+
+    Merge pull request #32 from tech1and/git-ignore-rules-89bf5
+    
+    Update from task eda7145a-2475-4659-9647-536ba2389bf5
+
+[33mcommit ed8caf957a7bf8c5105860ea6176c6dfba467c45[m
+Author: qwen.ai[bot] <qwenlm-intl@service.alibaba.com>
+Date:   Thu Apr 30 15:35:15 2026 +0000
+
+    update branch
+
+[33mcommit 3aec5962d0a473aea88a8e3846f1684379392218[m
+Merge: cb6b9f3 279bceb
+Author: tech1and <53649031+tech1and@users.noreply.github.com>
+Date:   Thu Apr 30 18:24:09 2026 +0300
+
+    Merge pull request #31 from tech1and/git-ignore-rules-89bf5
+    
+    Update from task eda7145a-2475-4659-9647-536ba2389bf5
+
+[33mcommit 279bceb732baa95ba915e35e7475837b63b584a5[m
+Author: qwen.ai[bot] <qwenlm-intl@service.alibaba.com>
+Date:   Thu Apr 30 15:23:52 2026 +0000
+
+    Title: Change product URL structure from /catalog/products/ to /p/
+    
+    Key features implemented:
+    - Create new dynamic route at frontend/pages/p/[slug].js to handle /p/{slug} URLs for product pages
+    - Update CatalogProductList.js to change product links from /catalog/products/{slug} to /p/{slug}
+    - Remove old /catalog/products/[slug].js route file
+    - Add /p/[slug].js to .gitignore to prevent accidental commits
+    
+    The changes implement a shorter URL structure for products while maintaining all functionality and updating internal linking throughout the application.
+
+[33mcommit cb6b9f33308e292e9f9bcf40ff990e6a894bffbd[m
+Author: Макеева Олеся <makeeva.o.a@yandex.ru>
+Date:   Thu Apr 30 16:50:28 2026 +0300
+
+    return gitignore
+
+[33mcommit 0ea15c8310b0995ca8176e3e89afda350be1e702[m
+Merge: f8e417f 6aba742
+Author: tech1and <53649031+tech1and@users.noreply.github.com>
+Date:   Wed Apr 29 04:50:32 2026 +0300
+
+    Merge pull request #28 from tech1and/nginx-connection-reset-при-кликах-d2913
+    
+    Update from task ef95c9f2-2048-47fd-b5ae-a82ed3dd2913
+
+[33mcommit 6aba7423163f723ac8e033107df0c8b116e7f1ca[m[33m ([m[1;31morigin/nginx-connection-reset-при-кликах-d2913[m[33m)[m
+Author: qwen.ai[bot] <qwenlm-intl@service.alibaba.com>
+Date:   Wed Apr 29 01:50:12 2026 +0000
+
+    Fix frequent click issues causing ERR_CONNECTION_RESET in production
+    
+    Key features implemented:
+    - Updated .gitignore with comprehensive file patterns to exclude temporary, compiled, and cache files
+    - Enhanced nginx configuration with increased worker connections from 1024 to 4096
+    - Added connection optimization settings including reset_timedout_connection on and improved buffer management
+    - Implemented rate limiting zones with higher thresholds (api: 300r/m, comment: 30r/m) to handle frequent clicks
+    - Added connection limiting with 20-30 concurrent connections per IP to prevent resource exhaustion
+    - Increased upstream keepalive connections from 16 to 32 for better connection reuse
+    - Added timeout configurations for client requests and proxy operations to handle high-frequency requests
+    - Enhanced security headers and vulnerability scanner blocking rules
+    
+    The changes address the ERR_CONNECTION_RESET issue by optimizing nginx's handling of concurrent connections and implementing proper rate limiting to prevent server overload during frequent user interactions.
+
+[33mcommit f8e417f5b354b20fa3199f9964a465aa1318f988[m
+Author: tech1and <53649031+tech1and@users.noreply.github.com>
+Date:   Tue Apr 28 22:54:21 2026 +0300
+
+    Update CommentForm.js
+
+[33mcommit 436891e4194e101a2978bf9acd552344d0780d99[m
+Author: tech1and <53649031+tech1and@users.noreply.github.com>
+Date:   Tue Apr 28 22:53:23 2026 +0300
+
+    Update CookieNotice.js
+
+[33mcommit 163e63024c3fc7ac20d531c05deba96f1c01f1ed[m
+Author: tech1and <53649031+tech1and@users.noreply.github.com>
+Date:   Tue Apr 28 22:52:15 2026 +0300
+
+    Update LikeButton.js
+
+[33mcommit 2f4b33ac08b3c72f03496b6b084812232a4de80e[m
+Author: tech1and <53649031+tech1and@users.noreply.github.com>
+Date:   Tue Apr 28 22:51:08 2026 +0300
+
+    Update usePageView.js
+
+[33mcommit 57d2ccc0a06ceed2ea624727b38280066b2cb801[m
+Author: tech1and <53649031+tech1and@users.noreply.github.com>
+Date:   Tue Apr 28 22:42:22 2026 +0300
+
+    Update api.js
+
+[33mcommit 82d93b821d6134e15bc69e98a4e0b3c781d70ad9[m[33m ([m[1;31morigin/проблемы-с-кликами-на-ссылки-bdc2e[m[33m)[m
+Author: tech1and <53649031+tech1and@users.noreply.github.com>
+Date:   Tue Apr 28 19:26:05 2026 +0300
+
+    Update [slug].js order-1 и order-2
+
+[33mcommit 306ae0e02494173705e06be7f8f6420db0590a59[m
+Author: tech1and <53649031+tech1and@users.noreply.github.com>
+Date:   Tue Apr 28 19:18:52 2026 +0300
+
+    lg:order-1 и lg:order-2
+
+[33mcommit b9e2372a1c1e1bd6ee5feeb86da694dae6e66dfe[m
+Author: tech1and <53649031+tech1and@users.noreply.github.com>
+Date:   Mon Apr 27 23:43:03 2026 +0300
+
+    Update [slug].js
+
+[33mcommit c70f961a9449b901684eb23d502901af4640e64f[m
+Merge: e534734 1d8520c
+Author: tech1and <53649031+tech1and@users.noreply.github.com>
+Date:   Mon Apr 27 23:37:55 2026 +0300
+
+    Merge pull request #27 from tech1and/изменения-в-верстке-и-контенте-товара-610da
+    
+    Update from task f4462c2d-66da-47de-a3f6-404fc40610da
+
+[33mcommit 1d8520cf1a427ac0dfb51c951c2604f15026b7fb[m
+Author: qwen.ai[bot] <qwenlm-intl@service.alibaba.com>
+Date:   Mon Apr 27 20:37:38 2026 +0000
+
+    update branch
+
+[33mcommit e53473436b9ca80a30963e5272fac8f81c870e08[m
+Merge: 83164b4 038e793
+Author: tech1and <53649031+tech1and@users.noreply.github.com>
+Date:   Mon Apr 27 23:19:31 2026 +0300
+
+    Merge pull request #26 from tech1and/изменения-в-верстке-и-контенте-товара-610da
+    
+    Update from task f4462c2d-66da-47de-a3f6-404fc40610da
+
+[33mcommit 038e7934a20ba821321be17734e5d30b5145569c[m
+Author: qwen.ai[bot] <qwenlm-intl@service.alibaba.com>
+Date:   Mon Apr 27 20:19:14 2026 +0000
+
+    update branch
+
+[33mcommit 83164b406f529b4b39749dcc4bb57540034acf90[m
+Merge: b99f27b 51ff83d
+Author: tech1and <53649031+tech1and@users.noreply.github.com>
+Date:   Mon Apr 27 23:05:33 2026 +0300
+
+    Merge pull request #25 from tech1and/изменения-в-верстке-и-контенте-товара-610da
+    
+    Update from task f4462c2d-66da-47de-a3f6-404fc40610da
+
+[33mcommit 51ff83dae79cebdd1a484e23d1df1e6049742911[m
+Author: qwen.ai[bot] <qwenlm-intl@service.alibaba.com>
+Date:   Mon Apr 27 20:05:14 2026 +0000
+
+    update branch
+
+[33mcommit b99f27b61a55afce81d143238fb9f764fc61c78f[m
+Merge: b7c3758 296dba5
+Author: tech1and <53649031+tech1and@users.noreply.github.com>
+Date:   Mon Apr 27 22:51:22 2026 +0300
+
+    Merge pull request #24 from tech1and/изменения-в-верстке-и-контенте-товара-610da
+    
+    Update from task f4462c2d-66da-47de-a3f6-404fc40610da
+
+[33mcommit 296dba523015122a42b22392a2646695970c589a[m
+Author: qwen.ai[bot] <qwenlm-intl@service.alibaba.com>
+Date:   Mon Apr 27 19:51:07 2026 +0000
+
+    ### Commit Description
+    
+    **Title:** Improve Product Page SEO and Update Information Blocks
+    
+    **Key features implemented:**
+    - Reordered product page layout to move Buy Card section higher in source code for better SEO
+    - Removed duplicate views information from Additional Info block
+    - Added clickable product article (xml_id) that copies to clipboard when clicked
+    - Updated Delivery Info block to match Specifications formatting style with consistent dt/dd structure
+    - Modified grid column ordering using order-first/order-last classes for SEO-friendly DOM structure
+    
+    The changes improve search engine optimization by placing the product name higher in the HTML while maintaining visual presentation, and enhance user experience with a clickable product article field.
