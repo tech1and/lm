@@ -63,8 +63,8 @@ class ShopSitemap(Sitemap):
 
 # Словарь с sitemap-классами для использования в индексной карте
 sitemaps = {
-    'products': ProductSitemap,
-    'categories': ProductCategorySitemap,
-    'shops': ShopSitemap,
-    'blog': PostSitemap,
+    'products': ProductSitemap(),
+    'categories': ProductCategorySitemap(),
+    'shops': ShopSitemap(),
+    'blog': PostSitemap(),
 }
