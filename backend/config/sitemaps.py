@@ -18,6 +18,7 @@ class PostSitemap(Sitemap):
     def location(self, obj):
         return f'/blog/{obj.slug}/'
 
+
 class ProductSitemap(Sitemap):
     changefreq = "daily"
     priority = 0.8
@@ -30,6 +31,7 @@ class ProductSitemap(Sitemap):
 
     def location(self, obj):
         return f'/product/{obj.slug}/'
+
 
 class ProductCategorySitemap(Sitemap):
     changefreq = "weekly"
@@ -44,6 +46,7 @@ class ProductCategorySitemap(Sitemap):
     def location(self, obj):
         return f'/catalog/categories/{obj.slug}/'
 
+
 class ShopSitemap(Sitemap):
     changefreq = "monthly"
     priority = 0.6
@@ -56,3 +59,12 @@ class ShopSitemap(Sitemap):
 
     def location(self, obj):
         return f'/shop/{obj.slug}/'
+
+
+# Словарь с sitemap-классами для использования в индексной карте
+sitemaps = {
+    'products': ProductSitemap,
+    'categories': ProductCategorySitemap,
+    'shops': ShopSitemap,
+    'blog': PostSitemap,
+}
