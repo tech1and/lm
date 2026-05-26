@@ -56,7 +56,7 @@ urlpatterns = [
     path('api/catalog/', include('apps.catalog.urls')),
     path('go/', external_redirect, name='external-redirect'),
     path('sitemap.xml', index, {'sitemaps': sitemaps}),
-    path('sitemap-<section>.xml', sitemap, {'sitemaps': sitemaps}, name='django.contrib.sitemaps.views.sitemap'),
+    path('sitemap-<section>.xml', sitemap, {'sitemaps': sitemaps}),
 ]
 
 # Обслуживание медиа и статических файлов (для разработки)
