@@ -177,3 +177,53 @@ class ProductViewSet(viewsets.ReadOnlyModelViewSet):
 
         serializer = ProductListSerializer(similar_qs, many=True)
         return Response(serializer.data)
+        
+    # views.py — добавить в конец файла, внутри ProductViewSet
+
+    @action(detail=False, methods=['get'], url_path='search')
+    def search(self, request):
+        """Полнотекстовый поиск товаров через PostgreSQL search_vector"""
+        from django.contrib.postgres.search import SearchQuery, SearchRank
+
+        query = request.query_params.get('q', '').strip()
+        if not query:
+            return Response({'results': [], 'count': 0, 'query': ''})
+
+        # Полнотекстовый поиск через search_vector
+        search_query = SearchQuery(query, config='russian')
+        qs = Product.objects.filter(
+            is_active=True,
+            search_vector=search_query
+        ).annotate(
+            rank=SearchRank(F('search_vector'), search_query)
+        ).order_by('-rank', '-avg_rating')
+
+        # Если search_vector не заполнен — fallback на обычный поиск
+        if not qs.exists():
+            qs = Product.objects.filter(
+                is_active=True
+            ).filter(
+                Q(name__icontains=query) |
+                Q(brand__icontains=query) |
+                Q(description__icontains=query) |
+                Q(barcode__icontains=query)
+            ).order_by('-avg_rating')
+
+        # Пагинация
+        page_size = request.query_params.get('page_size', 20)
+        try:
+            page_size = int(page_size)
+            self.paginator.page_size = page_size
+        except (ValueError, TypeError):
+            pass
+
+        page = self.paginate_queryset(qs)
+        if page is not None:
+            serializer = ProductListSerializer(page, many=True)
+            response = self.get_paginated_response(serializer.data)
+        else:
+            serializer = ProductListSerializer(qs, many=True)
+            response = Response(serializer.data)
+
+        response.data['query'] = query
+        return response

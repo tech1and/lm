@@ -1,109 +1,150 @@
 import Head from 'next/head';
 import Link from 'next/link';
 import { useState } from 'react';
-import { Home, Trophy, BookOpen, Info, Menu, X, Mail, MapPin, Layers } from 'lucide-react';
+import { useRouter } from 'next/router';
+import { Home, Trophy, BookOpen, Info, Menu, X, Mail, MapPin, Layers, Search } from 'lucide-react';
 import Logo from './Logo';
 
 export default function Layout({ children, title, description, canonical, schema, keywords }) {
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+    const router = useRouter();
+    const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+    const [searchQuery, setSearchQuery] = useState('');
 
-  const siteTitle = title
-    ? `${title} | lemanas.ru`
-    : 'Рейтинг lemanas.ru';
+    const siteTitle = title
+        ? `${title} | lemanas.ru`
+        : 'Рейтинг lemanas.ru';
 
-  const siteDescription = description ||
-    'Рейтинг лучших магазинов Лемана Про 2026. Читайте отзывы, сравнивайте цены и выбирайте лучший магазин.';
+    const siteDescription = description ||
+        'Рейтинг лучших магазинов Лемана Про 2026. Читайте отзывы, сравнивайте цены и выбирайте лучший магазин.';
 
-  const navLinks = [
-    { href: '/', label: 'Главная', icon: Home },
-    { href: '/catalog', label: 'Каталог', icon: Layers },
-    { href: '/rating', label: 'Рейтинг', icon: Trophy },
-    { href: '/blog', label: 'Блог', icon: BookOpen },
-    { href: '/about', label: 'О нас', icon: Info },
-  ];
+    const navLinks = [
+        { href: '/', label: 'Главная', icon: Home },
+        { href: '/catalog', label: 'Каталог', icon: Layers },
+        { href: '/rating', label: 'Рейтинг', icon: Trophy },
+        { href: '/blog', label: 'Блог', icon: BookOpen },
+        { href: '/about', label: 'О нас', icon: Info },
+    ];
 
-  return (
-    <>
-      <Head>
-        <title>{siteTitle}</title>
-        <meta name="description" content={siteDescription} />
-        {canonical && <link rel="canonical" href={canonical} />}
-        {keywords && <meta name="keywords" content={keywords} />}
-        <meta property="og:title" content={siteTitle} />
-        <meta property="og:description" content={siteDescription} />
-        {schema && (
-          <script
-            type="application/ld+json"
-            dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
-          />
-        )}
-      </Head>
+    const handleSearch = (e) => {
+        e.preventDefault();
+        const q = searchQuery.trim();
+        if (q) {
+            router.push(`/search?q=${encodeURIComponent(q)}`);
+            setSearchQuery('');
+            setMobileMenuOpen(false);
+        }
+    };
 
-      {/* Header */}
-      <header className="bg-dark-800 sticky top-0 z-50 shadow-lg">
-        <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-16">
-            {/* Logo */}
-            <Link href="/" className="flex items-center gap-2 text-white font-bold text-xl">
-              <Logo size={32} />
-              <span>ЛеманаРейтинг</span>
-            </Link>
+    return (
+        <>
+            <Head>
+                <title>{siteTitle}</title>
+                <meta name="description" content={siteDescription} />
+                {canonical && <link rel="canonical" href={canonical} />}
+                {keywords && <meta name="keywords" content={keywords} />}
+                <meta property="og:title" content={siteTitle} />
+                <meta property="og:description" content={siteDescription} />
+                {schema && (
+                    <script
+                        type="application/ld+json"
+                        dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
+                    />
+                )}
+            </Head>
 
-            {/* Desktop nav */}
-            <div className="hidden md:flex items-center gap-1">
-              {navLinks.map(link => {
-                const Icon = link.icon;
-                return (
-                  <Link
-                    key={link.href}
-                    href={link.href}
-                    className="px-4 py-2 text-gray-300 hover:text-white hover:bg-white/10 rounded-lg transition-colors flex items-center gap-2"
-                  >
-                    <Icon className="w-4 h-4" />
-                    {link.label}
-                  </Link>
-                );
-              })}
-            </div>
+            {/* Header */}
+            <header className="bg-dark-800 sticky top-0 z-50 shadow-lg">
+                <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div className="flex items-center justify-between h-16 gap-4">
+                        {/* Logo */}
+                        <Link href="/" className="flex items-center gap-2 text-white font-bold text-xl flex-shrink-0">
+                            <Logo size={32} />
+                            <span className="hidden sm:inline">ЛеманаРейтинг</span>
+                        </Link>
 
-            {/* Mobile menu button */}
-            <button
-              className="md:hidden text-white p-2"
-              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              aria-label="Toggle menu"
-            >
-              {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
-            </button>
-          </div>
+                        {/* Desktop nav */}
+                        <div className="hidden md:flex items-center gap-1">
+                            {navLinks.map(link => {
+                                const Icon = link.icon;
+                                return (
+                                    <Link
+                                        key={link.href}
+                                        href={link.href}
+                                        className="px-3 py-2 text-gray-300 hover:text-white hover:bg-white/10 rounded-lg transition-colors flex items-center gap-1.5 text-sm"
+                                    >
+                                        <Icon className="w-4 h-4" />
+                                        {link.label}
+                                    </Link>
+                                );
+                            })}
+                        </div>
 
-          {/* Mobile menu */}
-          {mobileMenuOpen && (
-            <div className="md:hidden py-4 border-t border-white/10">
-              <div className="flex flex-col gap-2">
-                {navLinks.map(link => {
-                  const Icon = link.icon;
-                  return (
-                    <Link
-                      key={link.href}
-                      href={link.href}
-                      className="px-4 py-3 text-gray-300 hover:text-white hover:bg-white/10 rounded-lg transition-colors flex items-center gap-3"
-                      onClick={() => setMobileMenuOpen(false)}
-                    >
-                      <Icon className="w-5 h-5" />
-                      {link.label}
-                    </Link>
-                  );
-                })}
-              </div>
-            </div>
-          )}
-        </nav>
-      </header>
+                        {/* Search form — desktop */}
+                        <form onSubmit={handleSearch} className="hidden md:flex items-center flex-shrink-0">
+                            <div className="relative">
+                                <input
+                                    type="text"
+                                    value={searchQuery}
+                                    onChange={(e) => setSearchQuery(e.target.value)}
+                                    placeholder="Поиск товаров..."
+                                    className="w-48 lg:w-64 pl-9 pr-3 py-1.5 bg-white/10 border border-white/20 rounded-lg text-sm text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-400 focus:bg-white/15 transition-all"
+                                />
+                                <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+                            </div>
+                        </form>
 
-      <main>{children}</main>
+                        {/* Mobile menu button */}
+                        <button
+                            className="md:hidden text-white p-2"
+                            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+                            aria-label="Toggle menu"
+                        >
+                            {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+                        </button>
+                    </div>
 
-      {/* Footer */}
-      <footer className="bg-dark-800 text-gray-300 py-12 mt-16">
+                    {/* Mobile menu */}
+                    {mobileMenuOpen && (
+                        <div className="md:hidden py-4 border-t border-white/10">
+                            {/* Mobile search */}
+                            <form onSubmit={handleSearch} className="mb-3 px-1">
+                                <div className="relative">
+                                    <input
+                                        type="text"
+                                        value={searchQuery}
+                                        onChange={(e) => setSearchQuery(e.target.value)}
+                                        placeholder="Поиск товаров..."
+                                        className="w-full pl-9 pr-3 py-2.5 bg-white/10 border border-white/20 rounded-lg text-sm text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-400 transition-all"
+                                    />
+                                    <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+                                </div>
+                            </form>
+
+                            <div className="flex flex-col gap-2">
+                                {navLinks.map(link => {
+                                    const Icon = link.icon;
+                                    return (
+                                        <Link
+                                            key={link.href}
+                                            href={link.href}
+                                            className="px-4 py-3 text-gray-300 hover:text-white hover:bg-white/10 rounded-lg transition-colors flex items-center gap-3"
+                                            onClick={() => setMobileMenuOpen(false)}
+                                        >
+                                            <Icon className="w-5 h-5" />
+                                            {link.label}
+                                        </Link>
+                                    );
+                                })}
+                            </div>
+                        </div>
+                    )}
+                </nav>
+            </header>
+
+            <main>{children}</main>
+
+            {/* Footer — без изменений */}
+            <footer className="bg-dark-800 text-gray-300 py-12 mt-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-8">
             {/* About */}
@@ -170,6 +211,6 @@ export default function Layout({ children, title, description, canonical, schema
           </div>
         </div>
       </footer>
-    </>
-  );
+        </>
+    );
 }
