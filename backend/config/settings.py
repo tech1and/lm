@@ -146,19 +146,15 @@ REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
     'PAGE_SIZE': 20,
     'MAX_PAGE_SIZE': 1000,
-    'DEFAULT_THROTTLE_CLASSES': [
-        'rest_framework.throttling.AnonRateThrottle',
-        'rest_framework.throttling.UserRateThrottle',
-    ],
+    
+    # ⚡ ГЛОБАЛЬНО ОТКЛЮЧАЕМ ТРОТТЛИНГ ДЛЯ ВСЕХ ЭНДПОИНТОВ
+    'DEFAULT_THROTTLE_CLASSES': [], 
+    
     'DEFAULT_THROTTLE_RATES': {
-        'anon':         '5000/minute',   # Строгий лимит для форм входа/регистрации
-        'user':         '2000/hour',    # Лимит для личного кабинета
-        'comment':      '20/hour',
-        'sitemap':      '100/hour',
-        'catalog_anon': '1000/minute',  # Высокий лимит для каталога (анонимные)
-        'catalog_user': '5000/hour',    # Высокий лимит для каталога (авторизованные)
-        'shop_anon':    '1000/minute',  # Высокий лимит для магазинов (анонимные)
-        'shop_user':    '5000/hour',    # Высокий лимит для магазинов (авторизованные)
+        # Убираем 'anon' и 'user', они больше не нужны.
+        # Оставляем только специфичные скоупы для локальных ограничений:
+        'comment': '5/hour',   # Защита от спама в комментариях (используется в CommentThrottle)
+        'sitemap': '100/hour', # Лимит для парсеров карты сайта
     }
 }
 
