@@ -32,6 +32,7 @@ def get_client_ip(request):
 
 class ShopViewSet(viewsets.ReadOnlyModelViewSet):
     """ViewSet для магазинов"""
+    throttle_classes = []  # ⚡ Отключаем для магазинов
     queryset = Shop.objects.filter(is_active=True)
     lookup_field = 'slug'  # 🔥 Используем slug вместо pk в URL
     filter_backends = [DjangoFilterBackend, OrderingFilter]

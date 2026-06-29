@@ -2,6 +2,7 @@ from django.contrib import admin
 from django.db.models import Case, When, Value, BooleanField
 from django.utils.html import format_html
 from .models import Category, Product
+from import_export.admin import ImportExportModelAdmin
 
 
 @admin.register(Category)
@@ -22,8 +23,8 @@ class CategoryAdmin(admin.ModelAdmin):
 
 
 @admin.register(Product)
-class ProductAdmin(admin.ModelAdmin):
-    list_display = ('name', 'xml_id', 'price', 'has_description', 'in_stock_display', 'created_at')
+class ProductAdmin(ImportExportModelAdmin, admin.ModelAdmin):
+    list_display = ('name', 'is_active', 'price', 'has_description', 'created_at')
     list_filter = ('in_stock', 'brand', 'currency', 'pickup_available', 'delivery_available')
     search_fields = ('name', 'xml_id', 'barcode', 'brand', 'description')
     save_on_top = True
