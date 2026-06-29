@@ -26,7 +26,7 @@ def get_client_ip(request):
 
 
 class CategoryViewSet(viewsets.ReadOnlyModelViewSet):
-    throttle_classes = []  # ⚡ Отключаем для категорий
+    
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
     lookup_field = 'slug'
@@ -86,7 +86,7 @@ class CategoryViewSet(viewsets.ReadOnlyModelViewSet):
 
 
 class ProductViewSet(viewsets.ReadOnlyModelViewSet):
-    throttle_classes = []  # ⚡ Полностью отключаем лимиты для товаров
+   
     queryset = Product.objects.filter(is_active=True)
     lookup_field = 'slug'
     filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]

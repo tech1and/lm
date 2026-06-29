@@ -145,16 +145,16 @@ REST_FRAMEWORK = {
     ],
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
     'PAGE_SIZE': 20,
-    'MAX_PAGE_SIZE': 1000,  # Максимальный размер страницы для обычных запросов
+    'MAX_PAGE_SIZE': 1000,
     'DEFAULT_THROTTLE_CLASSES': [
         'rest_framework.throttling.AnonRateThrottle',
         'rest_framework.throttling.UserRateThrottle',
     ],
     'DEFAULT_THROTTLE_RATES': {
-        'anon':    '600/hour',
-        'user':    '2000/hour',
+        'anon':    '600/hour',   # Строгий лимит для форм входа/регистрации
+        'user':    '2000/hour',  # Лимит для личного кабинета
         'comment': '20/hour',
-        'sitemap': '100/hour',  # Отдельный лимит для карты сайта
+        'sitemap': '100/hour',
     }
 }
 
