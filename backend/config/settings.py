@@ -151,10 +151,14 @@ REST_FRAMEWORK = {
         'rest_framework.throttling.UserRateThrottle',
     ],
     'DEFAULT_THROTTLE_RATES': {
-        'anon':    '200/minute',   # Строгий лимит для форм входа/регистрации
-        'user':    '2000/hour',  # Лимит для личного кабинета
-        'comment': '20/hour',
-        'sitemap': '100/hour',
+        'anon':         '5000/minute',   # Строгий лимит для форм входа/регистрации
+        'user':         '2000/hour',    # Лимит для личного кабинета
+        'comment':      '20/hour',
+        'sitemap':      '100/hour',
+        'catalog_anon': '1000/minute',  # Высокий лимит для каталога (анонимные)
+        'catalog_user': '5000/hour',    # Высокий лимит для каталога (авторизованные)
+        'shop_anon':    '1000/minute',  # Высокий лимит для магазинов (анонимные)
+        'shop_user':    '5000/hour',    # Высокий лимит для магазинов (авторизованные)
     }
 }
 

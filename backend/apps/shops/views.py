@@ -1,7 +1,7 @@
 from rest_framework import viewsets, status
 from rest_framework.decorators import action
 from rest_framework.response import Response
-from rest_framework.throttling import AnonRateThrottle
+from rest_framework.throttling import AnonRateThrottle, UserRateThrottle
 from django.db.models import F, Count, Q
 from django.core.cache import cache
 from django_filters.rest_framework import DjangoFilterBackend
@@ -22,6 +22,18 @@ class CommentThrottle(AnonRateThrottle):
     scope = 'comment'
 
 
+class ShopAnonRateThrottle(AnonRateThrottle):
+    """Throttle для анонимных пользователей магазинов - более высокие лимиты"""
+    scope = 'shop_anon'
+    rate = '1000/minute'
+
+
+class ShopUserRateThrottle(UserRateThrottle):
+    """Throttle для авторизованных пользователей магазинов"""
+    scope = 'shop_user'
+    rate = '5000/hour'
+
+
 def get_client_ip(request):
     """Получение реального IP-адреса клиента"""
     x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
@@ -39,6 +51,7 @@ class ShopViewSet(viewsets.ReadOnlyModelViewSet):
     filterset_fields = ['district']
     ordering_fields = ['likes_count', 'views_count', 'rating', 'created_at']
     ordering = ['-rating', '-likes_count']
+    throttle_classes = [ShopAnonRateThrottle, ShopUserRateThrottle]
 
     def get_queryset(self):
         qs = super().get_queryset()

@@ -2,6 +2,7 @@ from rest_framework import viewsets, status
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework.filters import SearchFilter, OrderingFilter
+from rest_framework.throttling import AnonRateThrottle, UserRateThrottle
 from django_filters.rest_framework import DjangoFilterBackend
 from django.shortcuts import get_object_or_404
 from django.db.models import F, Count, Q
@@ -17,6 +18,18 @@ import logging
 logger = logging.getLogger(__name__)
 
 
+class CatalogAnonRateThrottle(AnonRateThrottle):
+    """Throttle для анонимных пользователей каталога - более высокие лимиты"""
+    scope = 'catalog_anon'
+    rate = '1000/minute'
+
+
+class CatalogUserRateThrottle(UserRateThrottle):
+    """Throttle для авторизованных пользователей каталога"""
+    scope = 'catalog_user'
+    rate = '5000/hour'
+
+
 def get_client_ip(request):
     """Получение реального IP-адреса клиента"""
     x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
@@ -26,12 +39,13 @@ def get_client_ip(request):
 
 
 class CategoryViewSet(viewsets.ReadOnlyModelViewSet):
-    
+     
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
     lookup_field = 'slug'
     filter_backends = [DjangoFilterBackend]
     filterset_fields = ['level', 'parent']
+    throttle_classes = [CatalogAnonRateThrottle, CatalogUserRateThrottle]
 
     @action(detail=True, methods=['get'])
     def products(self, request, slug=None):
@@ -94,6 +108,7 @@ class ProductViewSet(viewsets.ReadOnlyModelViewSet):
     search_fields = ['name', 'brand', 'description', 'barcode']
     ordering_fields = ['price', 'created_at', 'views_count', 'avg_rating', 'likes_count', 'reviews_count']
     ordering = ['-avg_rating']
+    throttle_classes = [CatalogAnonRateThrottle, CatalogUserRateThrottle]
 
     def get_queryset(self):
         """Переопределяем get_queryset для поддержки карты сайта"""
