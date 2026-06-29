@@ -151,7 +151,7 @@ REST_FRAMEWORK = {
         'rest_framework.throttling.UserRateThrottle',
     ],
     'DEFAULT_THROTTLE_RATES': {
-        'anon':    '600/hour',   # Строгий лимит для форм входа/регистрации
+        'anon':    '200/minute',   # Строгий лимит для форм входа/регистрации
         'user':    '2000/hour',  # Лимит для личного кабинета
         'comment': '20/hour',
         'sitemap': '100/hour',
