@@ -105,4 +105,9 @@ export const catalogAPI = {
     api.get('/api/catalog/products/search/', { params: { q: query, ...params } }),
 };
 
+export const pagesAPI = {
+  getPages: () => api.get('/api/pages/items/'),
+  getPage: (slug) => api.get(`/api/pages/items/${slug}/`),
+};
+
 export default api;

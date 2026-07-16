@@ -70,6 +70,7 @@ urlpatterns = [
     path('api/shops/', include('apps.shops.urls')),
     path('api/blog/', include('apps.blog.urls')),
     path('api/catalog/', include('apps.catalog.urls')),
+    path('api/pages/', include('apps.pages.urls')),
     path('go/', external_redirect, name='external-redirect'),
     path('sitemap.xml', sitemap_index),
     path('sitemap-<section>.xml', sitemap, {'sitemaps': sitemaps}),

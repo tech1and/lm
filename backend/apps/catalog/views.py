@@ -26,7 +26,6 @@ def get_client_ip(request):
 
 
 class CategoryViewSet(viewsets.ReadOnlyModelViewSet):
-     
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
     lookup_field = 'slug'
@@ -86,7 +85,6 @@ class CategoryViewSet(viewsets.ReadOnlyModelViewSet):
 
 
 class ProductViewSet(viewsets.ReadOnlyModelViewSet):
-   
     queryset = Product.objects.filter(is_active=True)
     lookup_field = 'slug'
     filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
@@ -180,7 +178,7 @@ class ProductViewSet(viewsets.ReadOnlyModelViewSet):
         serializer = ProductListSerializer(similar_qs, many=True)
         return Response(serializer.data)
         
-    
+    # views.py — добавить в конец файла, внутри ProductViewSet
 
     @action(detail=False, methods=['get'], url_path='search')
     def search(self, request):
