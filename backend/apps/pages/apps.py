@@ -1,5 +1,7 @@
 from django.apps import AppConfig
 
 
-class BlogConfig(AppConfig):
-    name = 'pages'
+class PagesConfig(AppConfig):
+    name = 'apps.pages'
+    default_auto_field = 'django.db.models.BigAutoField'    
+    verbose_name = 'Статические страницы'
